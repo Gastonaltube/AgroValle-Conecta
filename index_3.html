@@ -1,0 +1,307 @@
+<!DOCTYPE html>
+<html lang="es-AR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>AgroValle Conecta — Vinculamos al Valle de Uco</title>
+<meta name="description" content="La plataforma B2B que conecta productores, empresas compradoras y prestadores de servicios del Valle de Uco: nuez, durazno, manzana, pera, uva y pistacho.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700&family=Work+Sans:wght@400;500;600&family=Space+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --green-deep: #1E3A2B;
+    --green-deep-2: #16301F;
+    --green-sage: #6C8F53;
+    --green-sage-light: #9BB984;
+    --white: #FFFFFF;
+    --paper: #F5F7F1;
+    --ink: #1B2119;
+    --ink-soft: #4B564A;
+    --line: rgba(30,58,43,0.14);
+    --shadow: 0 12px 32px rgba(20,40,28,0.10);
+    --radius: 4px;
+  }
+  *{box-sizing:border-box;}
+  html{scroll-behavior:smooth;}
+  body{
+    margin:0;
+    background:var(--paper);
+    color:var(--ink);
+    font-family:'Work Sans',sans-serif;
+    font-size:16px;
+    line-height:1.6;
+    -webkit-font-smoothing:antialiased;
+  }
+  h1,h2,h3,h4{
+    font-family:'Space Grotesk',sans-serif;
+    font-weight:600;
+    margin:0;
+    color:var(--green-deep-2);
+    letter-spacing:-0.02em;
+  }
+  .eyebrow{
+    font-family:'Space Mono',monospace;
+    font-size:12.5px;
+    letter-spacing:0.14em;
+    text-transform:uppercase;
+    color:var(--green-sage);
+    font-weight:500;
+  }
+  p{color:var(--ink-soft);}
+  a{color:inherit;}
+  .wrap{max-width:1120px; margin:0 auto; padding:0 32px;}
+  @media(max-width:720px){.wrap{padding:0 20px;}}
+
+  /* NAV */
+  header.nav{
+    position:sticky; top:0; z-index:50;
+    background:rgba(245,247,241,0.92);
+    backdrop-filter:blur(8px);
+    border-bottom:1px solid var(--line);
+  }
+  .nav-inner{
+    display:flex; align-items:center; justify-content:space-between;
+    padding:16px 0;
+  }
+  .logo{
+    display:flex; align-items:center; gap:10px;
+    font-family:'Space Grotesk',sans-serif; font-weight:600; font-size:19px;
+    color:var(--green-deep-2); text-decoration:none;
+  }
+  .logo-mark{width:26px;height:26px;flex-shrink:0;}
+  .nav-links{display:flex; gap:28px; font-size:14.5px; font-weight:500; color:var(--green-deep-2);}
+  .nav-links a{text-decoration:none; opacity:0.75; transition:opacity .15s;}
+  .nav-links a:hover{opacity:1;}
+  .nav-cta{
+    background:var(--green-deep); color:var(--white);
+    padding:10px 18px; border-radius:var(--radius);
+    font-size:14px; font-weight:600; text-decoration:none;
+    white-space:nowrap;
+  }
+  @media(max-width:860px){.nav-links{display:none;}}
+
+  /* HERO */
+  .hero{
+    position:relative; overflow:hidden;
+    padding:88px 0 64px;
+    background:var(--white);
+    border-bottom:1px solid var(--line);
+  }
+  .hero-contours{position:absolute; inset:0; z-index:0; opacity:0.5;}
+  .hero-inner{position:relative; z-index:1; max-width:720px;}
+  .hero h1{font-size:44px; line-height:1.12; letter-spacing:-0.02em;}
+  .hero h1 em{font-style:normal; color:var(--green-sage);}
+  .hero p.lead{font-size:17.5px; max-width:540px; margin-top:18px;}
+  .hero-actions{display:flex; gap:14px; margin-top:32px; flex-wrap:wrap;}
+  .btn-primary{
+    background:var(--green-deep); color:var(--white); text-decoration:none;
+    padding:14px 26px; border-radius:var(--radius); font-weight:600; font-size:15px;
+    display:inline-block; border:none; cursor:pointer; font-family:'Work Sans',sans-serif;
+  }
+  .btn-ghost{
+    border:1px solid var(--green-deep); color:var(--green-deep-2); text-decoration:none;
+    padding:13px 25px; border-radius:var(--radius); font-weight:600; font-size:15px;
+    display:inline-block;
+  }
+  .hero-crops{
+    display:flex; gap:10px; margin-top:40px; flex-wrap:wrap;
+  }
+  .crop-chip{
+    font-family:'Space Mono',monospace; font-size:12px; text-transform:uppercase;
+    letter-spacing:0.06em; padding:7px 13px; border-radius:20px; border:1px solid var(--line);
+    color:var(--ink-soft); background:var(--paper);
+  }
+
+  /* SECTION GENERIC */
+  section{padding:80px 0;}
+  .section-head{max-width:620px; margin-bottom:48px;}
+  .section-head h2{font-size:32px; margin-top:12px; letter-spacing:-0.01em;}
+  .section-alt{background:var(--white); border-top:1px solid var(--line); border-bottom:1px solid var(--line);}
+
+  /* COMO FUNCIONA - proceso real, por eso lleva numeración */
+  .pasos{display:grid; grid-template-columns:repeat(3,1fr); gap:32px; counter-reset:paso;}
+  @media(max-width:860px){.pasos{grid-template-columns:1fr;}}
+  .paso{position:relative; padding-top:8px;}
+  .paso .num{
+    font-family:'Space Grotesk',sans-serif; font-size:38px; font-weight:700;
+    color:var(--green-sage-light); line-height:1; margin-bottom:14px;
+  }
+  .paso h3{font-size:18px; margin-bottom:8px;}
+  .paso p{font-size:14.5px;}
+
+  /* PERFILES */
+  .perfiles{display:grid; grid-template-columns:repeat(3,1fr); gap:24px;}
+  @media(max-width:900px){.perfiles{grid-template-columns:1fr;}}
+  .perfil-card{
+    border-radius:var(--radius); padding:32px 28px; background:var(--green-deep); color:var(--white);
+    display:flex; flex-direction:column;
+  }
+  .perfil-card.alt2{background:var(--green-deep-2);}
+  .perfil-card.alt3{background:var(--green-sage);}
+  .perfil-card .eyebrow{color:rgba(255,255,255,0.65);}
+  .perfil-card h3{color:var(--white); font-size:20px; margin-top:10px;}
+  .perfil-card p{color:rgba(255,255,255,0.82); font-size:14.5px; margin-top:10px; flex-grow:1;}
+  .perfil-card .comision-tag{
+    font-family:'Space Mono',monospace; font-size:11px; text-transform:uppercase;
+    letter-spacing:0.05em; color:rgba(255,255,255,0.7); margin-top:16px;
+  }
+  .perfil-card .btn-primary{margin-top:20px; background:var(--white); color:var(--green-deep-2); align-self:flex-start;}
+
+  /* CIFRAS / CONTEXTO REGIONAL */
+  .cifras{display:grid; grid-template-columns:repeat(4,1fr); gap:28px;}
+  @media(max-width:860px){.cifras{grid-template-columns:repeat(2,1fr);}}
+  .cifra{border-top:2px solid var(--green-sage); padding-top:14px;}
+  .cifra .valor{font-family:'Space Grotesk',sans-serif; font-size:30px; font-weight:700; color:var(--green-deep-2);}
+  .cifra .etiqueta{font-size:13px; color:var(--ink-soft); margin-top:4px;}
+
+  footer{
+    background:var(--green-deep-2); color:rgba(255,255,255,0.6); padding:40px 0; font-size:13.5px;
+  }
+  .footer-inner{display:flex; justify-content:space-between; flex-wrap:wrap; gap:16px;}
+  footer a{color:rgba(255,255,255,0.85); text-decoration:none;}
+
+  @media (prefers-reduced-motion: reduce){
+    html{scroll-behavior:auto;}
+  }
+</style>
+</head>
+<body>
+
+<header class="nav" id="top">
+  <div class="wrap nav-inner">
+    <a href="#top" class="logo" aria-label="Ir al inicio">
+      <svg class="logo-mark" viewBox="0 0 32 32" fill="none">
+        <circle cx="16" cy="16" r="15" stroke="#1E3A2B" stroke-width="1.4"/>
+        <path d="M16 6C16 6 10 12 10 18C10 21.3 12.7 24 16 24C19.3 24 22 21.3 22 18C22 12 16 6 16 6Z" fill="#6C8F53"/>
+        <path d="M16 24V9" stroke="#F5F7F1" stroke-width="1" stroke-linecap="round"/>
+      </svg>
+      AgroValle Conecta
+    </a>
+    <nav class="nav-links">
+      <a href="#como-funciona">Cómo funciona</a>
+      <a href="#perfiles">Perfiles</a>
+      <a href="panel.html#contacto">Contacto</a>
+    </nav>
+    <a class="nav-cta" href="panel.html#cuenta">Ingresar / Crear cuenta</a>
+  </div>
+</header>
+
+<section class="hero">
+  <svg class="hero-contours" viewBox="0 0 1120 340" preserveAspectRatio="none" xmlns="http://www.w3.org/2000/svg">
+    <path d="M-20 300 C 180 270, 260 320, 420 290 S 700 250, 900 290 S 1100 270, 1160 290" stroke="#6C8F53" stroke-width="1" fill="none" opacity="0.3"/>
+    <path d="M-20 250 C 200 210, 300 260, 460 230 S 720 190, 920 230 S 1080 210, 1160 230" stroke="#1E3A2B" stroke-width="1" fill="none" opacity="0.15"/>
+  </svg>
+  <div class="wrap hero-inner">
+    <span class="eyebrow">Valle de Uco · Mendoza</span>
+    <h1>El puente comercial entre <em>quien produce</em> y quien compra en el Valle de Uco</h1>
+    <p class="lead">AgroValle Conecta une a productores, empresas compradoras y prestadores de servicios de la cadena agrícola regional en un solo lugar, para que cerrar un trato sea cuestión de días, no de semanas de llamados.</p>
+    <div class="hero-actions">
+      <a class="btn-primary" href="panel.html#cuenta">Crear mi cuenta</a>
+      <a class="btn-ghost" href="#como-funciona">Ver cómo funciona</a>
+    </div>
+    <div class="hero-crops">
+      <span class="crop-chip">Nuez</span>
+      <span class="crop-chip">Durazno</span>
+      <span class="crop-chip">Manzana</span>
+      <span class="crop-chip">Pera</span>
+      <span class="crop-chip">Uva</span>
+      <span class="crop-chip">Pistacho</span>
+    </div>
+  </div>
+</section>
+
+<section id="como-funciona" class="section-alt">
+  <div class="wrap">
+    <div class="section-head">
+      <span class="eyebrow">El proceso</span>
+      <h2>De la finca al comprador, en tres pasos</h2>
+    </div>
+    <div class="pasos">
+      <div class="paso">
+        <div class="num">01</div>
+        <h3>Creás tu perfil</h3>
+        <p>Te registrás como productor, empresa compradora o prestador de servicios. Cada perfil ve la plataforma a su medida.</p>
+      </div>
+      <div class="paso">
+        <div class="num">02</div>
+        <h3>Publicás o buscás</h3>
+        <p>Los productores publican su cosecha disponible. Las empresas buscan por cultivo, volumen y zona. Los prestadores ofrecen sus servicios.</p>
+      </div>
+      <div class="paso">
+        <div class="num">03</div>
+        <h3>Cerrás el trato</h3>
+        <p>Coordinás directo con la otra parte. AgroValle Conecta cobra una comisión solo cuando la transacción se concreta.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section id="perfiles">
+  <div class="wrap">
+    <div class="section-head">
+      <span class="eyebrow">Tres perfiles, un mismo mercado</span>
+      <h2>Elegí cómo participás</h2>
+    </div>
+    <div class="perfiles">
+      <div class="perfil-card">
+        <span class="eyebrow">Productor</span>
+        <h3>Publicá tu cosecha</h3>
+        <p>Nuez, durazno, manzana, pera, uva o pistacho: publicá cantidad, precio y fotos, y llegá directo a compradores de la región sin intermediarios de más.</p>
+        <span class="comision-tag">Comisión solo si se cierra la venta</span>
+        <a class="btn-primary" href="panel.html#cuenta">Publicar mi producción</a>
+      </div>
+      <div class="perfil-card alt2">
+        <span class="eyebrow">Empresa compradora</span>
+        <h3>Encontrá volumen confiable</h3>
+        <p>Buscá por cultivo, cantidad y zona del Valle de Uco. Contactá productores verificados y cerrá acuerdos de compra sin recorrer fincas a ciegas.</p>
+        <span class="comision-tag">Comisión solo si se cierra la compra</span>
+        <a class="btn-primary" href="panel.html#cuenta">Buscar productores</a>
+      </div>
+      <div class="perfil-card alt3">
+        <span class="eyebrow">Prestador de servicios</span>
+        <h3>Publicá sin comisión</h3>
+        <p>Flete, maquinaria, asesoría técnica: mostrá tu servicio a productores y empresas de la zona. AgroValle Conecta no cobra comisión sobre servicios.</p>
+        <span class="comision-tag">Sin comisión — contratación directa</span>
+        <a class="btn-primary" href="panel.html#cuenta">Ofrecer mis servicios</a>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="section-alt">
+  <div class="wrap">
+    <div class="section-head">
+      <span class="eyebrow">Por qué el Valle de Uco</span>
+      <h2>Una región, seis cultivos clave</h2>
+    </div>
+    <div class="cifras">
+      <div class="cifra">
+        <div class="valor">6</div>
+        <div class="etiqueta">Cultivos priorizados: nuez, durazno, manzana, pera, uva, pistacho</div>
+      </div>
+      <div class="cifra">
+        <div class="valor">3</div>
+        <div class="etiqueta">Perfiles conectados en un mismo lugar</div>
+      </div>
+      <div class="cifra">
+        <div class="valor">0</div>
+        <div class="etiqueta">Comisión sobre servicios de terceros</div>
+      </div>
+      <div class="cifra">
+        <div class="valor">%</div>
+        <div class="etiqueta">Comisión solo sobre transacciones cerradas</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<footer>
+  <div class="wrap footer-inner">
+    <span>AgroValle Conecta — Tupungato, Valle de Uco, Mendoza</span>
+    <span><a href="panel.html#cuenta">Ingresar</a> · <a href="panel.html#contacto">Contacto</a></span>
+  </div>
+</footer>
+
+</body>
+</html>
