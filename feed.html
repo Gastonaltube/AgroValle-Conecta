@@ -1,0 +1,428 @@
+<!DOCTYPE html>
+<html lang="es-AR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>AgroValle Conecta — Tu feed</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700&family=Work+Sans:wght@400;500;600&family=Space+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --green-deep: #1E3A2B;
+    --green-deep-2: #16301F;
+    --green-sage: #6C8F53;
+    --green-sage-light: #9BB984;
+    --white: #FFFFFF;
+    --paper: #F5F7F1;
+    --ink: #1B2119;
+    --ink-soft: #4B564A;
+    --line: rgba(30,58,43,0.14);
+    --shadow: 0 12px 32px rgba(20,40,28,0.10);
+    --radius: 4px;
+  }
+  *{box-sizing:border-box;}
+  body{
+    margin:0;
+    background:var(--paper);
+    color:var(--ink);
+    font-family:'Work Sans',sans-serif;
+    font-size:16px;
+    line-height:1.6;
+    -webkit-font-smoothing:antialiased;
+  }
+  h1,h2,h3,h4{
+    font-family:'Space Grotesk',sans-serif;
+    font-weight:600;
+    margin:0;
+    color:var(--green-deep-2);
+    letter-spacing:-0.02em;
+  }
+  .eyebrow{
+    font-family:'Space Mono',monospace;
+    font-size:11px;
+    letter-spacing:0.12em;
+    text-transform:uppercase;
+    color:var(--green-sage);
+    font-weight:500;
+  }
+  p{color:var(--ink-soft); margin:0;}
+  a{color:inherit;}
+  button{font-family:'Work Sans',sans-serif;}
+
+  header.appbar{
+    position:sticky; top:0; z-index:100;
+    background:var(--white);
+    border-bottom:1px solid var(--line);
+    height:64px;
+  }
+  .appbar-inner{
+    max-width:1200px; margin:0 auto; height:100%;
+    padding:0 24px;
+    display:flex; align-items:center; gap:20px;
+  }
+  .logo{
+    display:flex; align-items:center; gap:9px;
+    font-family:'Space Grotesk',sans-serif; font-weight:600; font-size:17px;
+    color:var(--green-deep-2); text-decoration:none; flex-shrink:0;
+  }
+  .logo-mark{width:24px; height:24px; flex-shrink:0;}
+
+  .search-box{
+    flex-grow:1; max-width:480px;
+    display:flex; align-items:center; gap:8px;
+    background:var(--paper); border:1px solid var(--line); border-radius:20px;
+    padding:9px 16px;
+  }
+  .search-box input{
+    border:none; background:transparent; outline:none; width:100%;
+    font-family:'Work Sans',sans-serif; font-size:14px; color:var(--ink);
+  }
+  .search-box svg{flex-shrink:0; opacity:0.55;}
+
+  .appbar-actions{
+    display:flex; align-items:center; gap:6px; margin-left:auto;
+  }
+  .icon-btn{
+    position:relative;
+    width:42px; height:42px; border-radius:50%; border:none; background:transparent;
+    display:flex; align-items:center; justify-content:center; cursor:pointer;
+    color:var(--green-deep-2); transition:background .15s;
+  }
+  .icon-btn:hover{background:var(--paper);}
+  .icon-btn .badge{
+    position:absolute; top:5px; right:5px; width:8px; height:8px; border-radius:50%;
+    background:#C25B3B; border:2px solid var(--white);
+  }
+  .profile-btn{
+    display:flex; align-items:center; gap:9px; border:none; background:transparent;
+    cursor:pointer; padding:6px 10px 6px 6px; border-radius:22px; transition:background .15s;
+  }
+  .profile-btn:hover{background:var(--paper);}
+  .avatar{
+    width:32px; height:32px; border-radius:50%; background:var(--green-sage);
+    color:var(--white); display:flex; align-items:center; justify-content:center;
+    font-family:'Space Grotesk',sans-serif; font-weight:600; font-size:13px; flex-shrink:0;
+  }
+  .profile-btn .nombre{font-size:13.5px; font-weight:600; color:var(--green-deep-2); white-space:nowrap;}
+  @media(max-width:760px){ .profile-btn .nombre{display:none;} .search-box{max-width:none;} }
+
+  .dropdown-wrap{position:relative;}
+  .dropdown-menu{
+    position:absolute; top:52px; right:0; width:220px;
+    background:var(--white); border:1px solid var(--line); border-radius:var(--radius);
+    box-shadow:var(--shadow); padding:8px; display:none; z-index:110;
+  }
+  .dropdown-menu.open{display:block;}
+  .dropdown-menu button{
+    width:100%; text-align:left; background:none; border:none; padding:11px 12px;
+    font-size:14px; color:var(--ink); border-radius:3px; cursor:pointer; display:flex; align-items:center; gap:10px;
+  }
+  .dropdown-menu button:hover{background:var(--paper);}
+  .dropdown-menu .salir{color:#B03A2E;}
+  .dropdown-menu hr{border:none; border-top:1px solid var(--line); margin:6px 0;}
+
+  .app-layout{
+    max-width:1200px; margin:0 auto; padding:28px 24px 80px;
+    display:grid; grid-template-columns:1fr 300px; gap:28px; align-items:start;
+  }
+  @media(max-width:900px){ .app-layout{grid-template-columns:1fr; padding:20px 16px 60px;} .ads-aside{display:none;} }
+
+  .feed-col{min-width:0;}
+  .feed-placeholder{
+    background:var(--white); border:1px dashed var(--line); border-radius:var(--radius);
+    padding:56px 32px; text-align:center;
+  }
+  .feed-placeholder .icon-wrap{
+    width:52px; height:52px; border-radius:50%; background:var(--paper); margin:0 auto 18px;
+    display:flex; align-items:center; justify-content:center;
+  }
+  .feed-placeholder h2{font-size:20px; margin-bottom:8px;}
+  .feed-placeholder p{max-width:380px; margin:0 auto; font-size:14.5px;}
+
+  .ads-aside{position:sticky; top:88px;}
+  .ads-slot{
+    background:var(--white); border:1px solid var(--line); border-radius:var(--radius);
+    padding:20px; text-align:center; min-height:250px;
+    display:flex; flex-direction:column; align-items:center; justify-content:center; gap:10px;
+  }
+  .ads-slot .eyebrow{color:var(--ink-soft); opacity:0.7;}
+  .ads-slot p{font-size:12.5px; max-width:200px;}
+
+  .modal-overlay{
+    display:none; position:fixed; inset:0; background:rgba(20,30,20,0.45);
+    z-index:200; align-items:flex-start; justify-content:center; padding:60px 20px; overflow-y:auto;
+  }
+  .modal-overlay.open{display:flex;}
+  .modal-card{
+    background:var(--white); border-radius:var(--radius); max-width:560px; width:100%;
+    padding:32px; box-shadow:var(--shadow); position:relative;
+  }
+  .modal-close{
+    position:absolute; top:18px; right:18px; background:none; border:none; cursor:pointer;
+    color:var(--ink-soft); width:32px; height:32px; border-radius:50%;
+  }
+  .modal-close:hover{background:var(--paper);}
+  .form-card{margin-bottom:20px;}
+  .field-group{margin-bottom:16px;}
+  .field-group label{
+    display:block; font-family:'Space Mono',monospace; font-size:11px; text-transform:uppercase;
+    letter-spacing:0.06em; color:var(--green-sage); margin-bottom:6px; font-weight:500;
+  }
+  .field-group input{
+    width:100%; padding:11px 12px; border:1px solid var(--line); border-radius:3px;
+    font-family:'Work Sans',sans-serif; font-size:14.5px; color:var(--ink); background:var(--paper);
+  }
+  .field-group input:focus{outline:2px solid var(--green-sage); outline-offset:1px;}
+  .form-submit{
+    width:100%; background:var(--green-deep); color:var(--white); border:none; padding:13px;
+    border-radius:var(--radius); font-weight:600; font-size:14.5px; cursor:pointer;
+  }
+  .form-msg{margin-top:12px; font-size:13px; color:var(--green-sage); display:none;}
+  .form-msg.show{display:block;}
+</style>
+</head>
+<body>
+
+<header class="appbar">
+  <div class="appbar-inner">
+    <a href="feed.html" class="logo">
+      <svg class="logo-mark" viewBox="0 0 32 32" fill="none">
+        <circle cx="16" cy="16" r="15" stroke="#1E3A2B" stroke-width="1.4"/>
+        <path d="M16 6C16 6 10 12 10 18C10 21.3 12.7 24 16 24C19.3 24 22 21.3 22 18C22 12 16 6 16 6Z" fill="#6C8F53"/>
+        <path d="M16 24V9" stroke="#F5F7F1" stroke-width="1" stroke-linecap="round"/>
+      </svg>
+      AgroValle
+    </a>
+
+    <div class="search-box">
+      <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="7"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>
+      <input id="buscador" type="text" placeholder="Buscar productores, cultivos, servicios...">
+    </div>
+
+    <div class="appbar-actions">
+      <button class="icon-btn" title="Notificaciones" type="button">
+        <svg width="21" height="21" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M18 8a6 6 0 10-12 0c0 7-3 9-3 9h18s-3-2-3-9"/><path d="M13.73 21a2 2 0 01-3.46 0"/></svg>
+      </button>
+      <button class="icon-btn" title="Chat" type="button">
+        <svg width="21" height="21" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M21 11.5a8.38 8.38 0 01-.9 3.8 8.5 8.5 0 01-7.6 4.7 8.38 8.38 0 01-3.8-.9L3 21l1.9-5.7a8.38 8.38 0 01-.9-3.8 8.5 8.5 0 014.7-7.6 8.38 8.38 0 013.8-.9h.5a8.48 8.48 0 018 8v.5z"/></svg>
+      </button>
+      <div class="dropdown-wrap">
+        <button class="profile-btn" id="btn-perfil" type="button">
+          <span class="avatar" id="avatar-inicial">?</span>
+          <span class="nombre" id="nombre-usuario">Cuenta</span>
+        </button>
+        <div class="dropdown-menu" id="menu-perfil">
+          <button type="button" onclick="abrirModalPerfil()">
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M20 21v-2a4 4 0 00-4-4H8a4 4 0 00-4 4v2"/><circle cx="12" cy="7" r="4"/></svg>
+            Editar mi perfil
+          </button>
+          <hr>
+          <button type="button" class="salir" onclick="cerrarSesion()">
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M9 21H5a2 2 0 01-2-2V5a2 2 0 012-2h4"/><polyline points="16 17 21 12 16 7"/><line x1="21" y1="12" x2="9" y2="12"/></svg>
+            Cerrar sesión
+          </button>
+        </div>
+      </div>
+    </div>
+  </div>
+</header>
+
+<div class="app-layout">
+  <div class="feed-col">
+    <div class="feed-placeholder">
+      <div class="icon-wrap">
+        <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#6C8F53" stroke-width="1.8"><rect x="3" y="3" width="18" height="18" rx="2"/><line x1="3" y1="9" x2="21" y2="9"/><line x1="9" y1="21" x2="9" y2="9"/></svg>
+      </div>
+      <h2>Tu feed está en construcción</h2>
+      <p>Acá vas a ver las publicaciones de productores y prestadores de servicios del Valle de Uco. Es el próximo paso que vamos a construir juntos.</p>
+    </div>
+  </div>
+
+  <aside class="ads-aside">
+    <div class="ads-slot">
+      <span class="eyebrow">Espacio publicitario</span>
+      <p>Próximamente vas a poder destacar publicaciones acá.</p>
+    </div>
+  </aside>
+</div>
+
+<div class="modal-overlay" id="modal-perfil">
+  <div class="modal-card">
+    <button class="modal-close" onclick="cerrarModalPerfil()" type="button">✕</button>
+    <span class="eyebrow">Tu perfil</span>
+    <h2 id="perfil-saludo" style="font-size:22px; margin-top:8px; margin-bottom:22px;">Hola</h2>
+    <div id="perfil-roles"></div>
+  </div>
+</div>
+
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+<script>
+  const SUPABASE_URL = 'https://yolccrvajsaltnfzvglr.supabase.co';
+  const SUPABASE_ANON_KEY = 'sb_publishable_lt6djx886Pwd8aqreZ7TSg_97WUM0Wf';
+  const supabaseClient = window.supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
+
+  let usuarioActualId = null;
+
+  async function protegerPagina(){
+    const { data: { session } } = await supabaseClient.auth.getSession();
+    if (!session?.user){
+      window.location.href = 'panel.html#cuenta';
+      return;
+    }
+    usuarioActualId = session.user.id;
+    await cargarDatosNav(session.user.id);
+  }
+
+  async function cargarDatosNav(userId){
+    const { data: usuario } = await supabaseClient
+      .from('usuarios')
+      .select('nombre')
+      .eq('id', userId)
+      .single();
+
+    const nombre = usuario?.nombre || '';
+    document.getElementById('nombre-usuario').textContent = nombre || 'Cuenta';
+    document.getElementById('avatar-inicial').textContent = nombre ? nombre.trim().charAt(0).toUpperCase() : '?';
+    document.getElementById('perfil-saludo').textContent = nombre ? `Hola, ${nombre}` : 'Hola';
+  }
+
+  const btnPerfil = document.getElementById('btn-perfil');
+  const menuPerfil = document.getElementById('menu-perfil');
+  btnPerfil.addEventListener('click', (e) => {
+    e.stopPropagation();
+    menuPerfil.classList.toggle('open');
+  });
+  document.addEventListener('click', () => menuPerfil.classList.remove('open'));
+
+  const CONFIG_ROLES = {
+    productor: {
+      tabla: 'productores',
+      titulo: 'Productor',
+      campos: [
+        { id: 'nombre_finca', label: 'Nombre de la finca', tipo: 'text' },
+        { id: 'hectareas', label: 'Hectáreas', tipo: 'number' },
+        { id: 'ubicacion_finca', label: 'Ubicación de la finca', tipo: 'text' }
+      ]
+    },
+    comprador: {
+      tabla: 'compradores',
+      titulo: 'Empresario / Comprador',
+      campos: [
+        { id: 'nombre_empresa', label: 'Nombre de la empresa', tipo: 'text' },
+        { id: 'rubro', label: 'Rubro', tipo: 'text' },
+        { id: 'volumen_mensual_estimado', label: 'Volumen mensual estimado', tipo: 'text' }
+      ]
+    },
+    proveedor_servicio: {
+      tabla: 'proveedores_servicios',
+      titulo: 'Prestador de servicios',
+      campos: [
+        { id: 'nombre_empresa', label: 'Nombre de la empresa', tipo: 'text' },
+        { id: 'tipo_servicio', label: 'Tipo de servicio', tipo: 'text' },
+        { id: 'zona_cobertura', label: 'Zona de cobertura', tipo: 'text' }
+      ]
+    }
+  };
+
+  function renderTarjetaRol(rol, config, fila, userId){
+    const form = document.createElement('form');
+    form.className = 'form-card';
+
+    const eyebrow = document.createElement('span');
+    eyebrow.className = 'eyebrow';
+    eyebrow.textContent = config.titulo;
+    form.appendChild(eyebrow);
+
+    const h3 = document.createElement('h3');
+    h3.style.marginTop = '6px';
+    h3.style.marginBottom = '16px';
+    h3.style.fontSize = '16px';
+    h3.textContent = 'Datos de tu perfil';
+    form.appendChild(h3);
+
+    const inputs = {};
+    config.campos.forEach(campo => {
+      const group = document.createElement('div');
+      group.className = 'field-group';
+      const label = document.createElement('label');
+      label.textContent = campo.label;
+      const input = document.createElement('input');
+      input.type = campo.tipo;
+      input.value = (fila && fila[campo.id] != null) ? fila[campo.id] : '';
+      group.appendChild(label);
+      group.appendChild(input);
+      form.appendChild(group);
+      inputs[campo.id] = input;
+    });
+
+    const btn = document.createElement('button');
+    btn.className = 'form-submit';
+    btn.type = 'submit';
+    btn.textContent = 'Guardar cambios';
+    form.appendChild(btn);
+
+    const msg = document.createElement('p');
+    msg.className = 'form-msg';
+    form.appendChild(msg);
+
+    form.addEventListener('submit', async (e) => {
+      e.preventDefault();
+      const cambios = {};
+      config.campos.forEach(campo => {
+        const val = inputs[campo.id].value;
+        cambios[campo.id] = (campo.tipo === 'number') ? (val ? Number(val) : null) : val;
+      });
+      msg.textContent = 'Guardando...';
+      msg.classList.add('show');
+      const { error } = await supabaseClient.from(config.tabla).update(cambios).eq('usuario_id', userId);
+      msg.textContent = error ? ('Error: ' + error.message) : 'Cambios guardados.';
+    });
+
+    return form;
+  }
+
+  async function abrirModalPerfil(){
+    menuPerfil.classList.remove('open');
+    const contenedor = document.getElementById('perfil-roles');
+    contenedor.innerHTML = '<p>Cargando...</p>';
+
+    const { data: rolesData } = await supabaseClient
+      .from('usuario_roles')
+      .select('roles(nombre)')
+      .eq('usuario_id', usuarioActualId);
+
+    const nombresRoles = (rolesData || []).map(r => r.roles?.nombre).filter(Boolean);
+    contenedor.innerHTML = '';
+
+    for (const rol of nombresRoles){
+      const config = CONFIG_ROLES[rol];
+      if (!config) continue;
+      const { data: fila } = await supabaseClient
+        .from(config.tabla)
+        .select('*')
+        .eq('usuario_id', usuarioActualId)
+        .single();
+      contenedor.appendChild(renderTarjetaRol(rol, config, fila, usuarioActualId));
+    }
+
+    if (nombresRoles.length === 0){
+      contenedor.innerHTML = '<p>Todavía no tenés un rol asignado.</p>';
+    }
+
+    document.getElementById('modal-perfil').classList.add('open');
+  }
+
+  function cerrarModalPerfil(){
+    document.getElementById('modal-perfil').classList.remove('open');
+  }
+
+  async function cerrarSesion(){
+    await supabaseClient.auth.signOut();
+    window.location.href = 'panel.html#cuenta';
+  }
+
+  protegerPagina();
+</script>
+</body>
+</html>
