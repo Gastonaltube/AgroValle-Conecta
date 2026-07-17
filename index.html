@@ -1,10 +1,9 @@
-<!DOCTYPE html>
+!DOCTYPE html>
 <html lang="es-AR">
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>AgroValle Conecta — Vinculamos al Valle de Uco</title>
-<meta name="description" content="La plataforma B2B que conecta productores, empresas compradoras y prestadores de servicios del Valle de Uco: nuez, durazno, manzana, pera, uva y pistacho.">
+<title>AgroValle Conecta — Panel principal</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700&family=Work+Sans:wght@400;500;600&family=Space+Mono:wght@400;500&display=swap" rel="stylesheet">
@@ -81,19 +80,24 @@
   }
   @media(max-width:860px){.nav-links{display:none;}}
 
-  /* HERO */
-  .hero{
+  /* INTRO */
+  .intro{
     position:relative; overflow:hidden;
-    padding:88px 0 64px;
+    padding:72px 0 56px;
     background:var(--white);
     border-bottom:1px solid var(--line);
   }
-  .hero-contours{position:absolute; inset:0; z-index:0; opacity:0.5;}
-  .hero-inner{position:relative; z-index:1; max-width:720px;}
-  .hero h1{font-size:44px; line-height:1.12; letter-spacing:-0.02em;}
-  .hero h1 em{font-style:normal; color:var(--green-sage);}
-  .hero p.lead{font-size:17.5px; max-width:540px; margin-top:18px;}
-  .hero-actions{display:flex; gap:14px; margin-top:32px; flex-wrap:wrap;}
+  .intro-contours{position:absolute; inset:0; z-index:0; opacity:0.5;}
+  .intro-inner{position:relative; z-index:1;}
+  .intro h1{font-size:38px; line-height:1.1; max-width:640px;}
+  .intro p{font-size:16.5px; max-width:560px; margin-top:16px;}
+
+  /* SECTION GENERIC */
+  section{padding:80px 0;}
+  .section-head{max-width:640px; margin-bottom:44px;}
+  .section-head h2{font-size:32px; margin-top:12px; letter-spacing:-0.01em;}
+  .section-alt{background:var(--white); border-top:1px solid var(--line); border-bottom:1px solid var(--line);}
+
   .btn-primary{
     background:var(--green-deep); color:var(--white); text-decoration:none;
     padding:14px 26px; border-radius:var(--radius); font-weight:600; font-size:15px;
@@ -104,73 +108,73 @@
     padding:13px 25px; border-radius:var(--radius); font-weight:600; font-size:15px;
     display:inline-block;
   }
-  .hero-crops{
-    display:flex; gap:10px; margin-top:40px; flex-wrap:wrap;
-  }
-  .crop-chip{
-    font-family:'Space Mono',monospace; font-size:12px; text-transform:uppercase;
-    letter-spacing:0.06em; padding:7px 13px; border-radius:20px; border:1px solid var(--line);
-    color:var(--ink-soft); background:var(--paper);
-  }
 
-  /* SECTION GENERIC */
-  section{padding:80px 0;}
-  .section-head{max-width:620px; margin-bottom:48px;}
-  .section-head h2{font-size:32px; margin-top:12px; letter-spacing:-0.01em;}
-  .section-alt{background:var(--white); border-top:1px solid var(--line); border-bottom:1px solid var(--line);}
-
-  /* COMO FUNCIONA - proceso real, por eso lleva numeración */
-  .pasos{display:grid; grid-template-columns:repeat(3,1fr); gap:32px; counter-reset:paso;}
-  @media(max-width:860px){.pasos{grid-template-columns:1fr;}}
-  .paso{position:relative; padding-top:8px;}
-  .paso .num{
-    font-family:'Space Grotesk',sans-serif; font-size:38px; font-weight:700;
-    color:var(--green-sage-light); line-height:1; margin-bottom:14px;
+  /* SECCIONES POR TIPO DE USUARIO */
+  .type-grid{display:grid; grid-template-columns:1.15fr 0.85fr; gap:56px; align-items:start;}
+  @media(max-width:900px){.type-grid{grid-template-columns:1fr;}}
+  ul.type-features{list-style:none; margin:24px 0 0; padding:0;}
+  ul.type-features li{
+    padding:14px 0; border-top:1px solid var(--line); font-size:14.5px; color:var(--ink-soft);
+    display:flex; gap:10px;
   }
-  .paso h3{font-size:18px; margin-bottom:8px;}
-  .paso p{font-size:14.5px;}
+  ul.type-features li .dot{width:6px; height:6px; border-radius:50%; background:var(--green-sage); margin-top:8px; flex-shrink:0;}
+  .type-panel{border-radius:var(--radius); padding:32px 28px; background:var(--green-deep); color:var(--white);}
+  .type-panel.alt2{background:var(--green-deep-2);}
+  .type-panel.alt3{background:var(--green-sage);}
+  .type-panel .eyebrow{color:rgba(255,255,255,0.65);}
+  .type-panel h3{color:var(--white); font-size:19px; margin-top:10px;}
+  .type-panel p{color:rgba(255,255,255,0.8); font-size:14px; margin-top:10px;}
+  .type-panel .btn-primary{margin-top:20px; background:var(--white); color:var(--green-deep-2);}
 
-  /* PERFILES */
-  .perfiles{display:grid; grid-template-columns:repeat(3,1fr); gap:24px;}
-  @media(max-width:900px){.perfiles{grid-template-columns:1fr;}}
-  .perfil-card{
-    border-radius:var(--radius); padding:32px 28px; background:var(--green-deep); color:var(--white);
-    display:flex; flex-direction:column;
+  /* FORMULARIOS (cuenta / contacto) */
+  .form-card{
+    background:var(--white); border:1px solid var(--line); border-radius:var(--radius);
+    padding:36px; box-shadow:var(--shadow); max-width:480px;
   }
-  .perfil-card.alt2{background:var(--green-deep-2);}
-  .perfil-card.alt3{background:var(--green-sage);}
-  .perfil-card .eyebrow{color:rgba(255,255,255,0.65);}
-  .perfil-card h3{color:var(--white); font-size:20px; margin-top:10px;}
-  .perfil-card p{color:rgba(255,255,255,0.82); font-size:14.5px; margin-top:10px; flex-grow:1;}
-  .perfil-card .comision-tag{
-    font-family:'Space Mono',monospace; font-size:11px; text-transform:uppercase;
-    letter-spacing:0.05em; color:rgba(255,255,255,0.7); margin-top:16px;
+  .form-card.wide{max-width:560px;}
+  .form-tabs{display:flex; gap:8px; margin-bottom:26px;}
+  .tab-btn{
+    font-family:'Space Mono',monospace; font-size:12.5px; text-transform:uppercase;
+    letter-spacing:0.06em; padding:10px 18px; border-radius:20px; border:1px solid var(--line);
+    background:var(--white); cursor:pointer; color:var(--ink-soft); font-weight:500;
   }
-  .perfil-card .btn-primary{margin-top:20px; background:var(--white); color:var(--green-deep-2); align-self:flex-start;}
-
-  /* CIFRAS / CONTEXTO REGIONAL */
-  .cifras{display:grid; grid-template-columns:repeat(4,1fr); gap:28px;}
-  @media(max-width:860px){.cifras{grid-template-columns:repeat(2,1fr);}}
-  .cifra{border-top:2px solid var(--green-sage); padding-top:14px;}
-  .cifra .valor{font-family:'Space Grotesk',sans-serif; font-size:30px; font-weight:700; color:var(--green-deep-2);}
-  .cifra .etiqueta{font-size:13px; color:var(--ink-soft); margin-top:4px;}
+  .tab-btn.active{background:var(--green-deep); border-color:var(--green-deep); color:var(--white);}
+  .field-group{margin-bottom:18px;}
+  .field-group label{
+    display:block; font-family:'Space Mono',monospace; font-size:11px; text-transform:uppercase;
+    letter-spacing:0.06em; color:var(--green-sage); margin-bottom:6px; font-weight:500;
+  }
+  .field-group input, .field-group select, .field-group textarea{
+    width:100%; padding:11px 12px; border:1px solid var(--line); border-radius:3px;
+    font-family:'Work Sans',sans-serif; font-size:14.5px; color:var(--ink); background:var(--paper);
+  }
+  .field-group textarea{resize:vertical; min-height:110px;}
+  .field-group input:focus, .field-group select:focus, .field-group textarea:focus{
+    outline:2px solid var(--green-sage); outline-offset:1px;
+  }
+  .form-submit{
+    width:100%; background:var(--green-deep); color:var(--white); border:none; padding:14px;
+    border-radius:var(--radius); font-weight:600; font-size:15px; cursor:pointer; font-family:'Work Sans',sans-serif;
+  }
+  .form-msg{margin-top:14px; font-size:13.5px; color:var(--green-sage); display:none;}
+  .form-msg.show{display:block;}
+  .account-panel{display:none;}
+  .account-panel.active{display:block;}
+  .form-foot-note{font-size:13px; color:var(--ink-soft); margin-top:16px;}
 
   footer{
     background:var(--green-deep-2); color:rgba(255,255,255,0.6); padding:40px 0; font-size:13.5px;
   }
   .footer-inner{display:flex; justify-content:space-between; flex-wrap:wrap; gap:16px;}
   footer a{color:rgba(255,255,255,0.85); text-decoration:none;}
-
-  @media (prefers-reduced-motion: reduce){
-    html{scroll-behavior:auto;}
-  }
 </style>
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 </head>
 <body>
 
 <header class="nav" id="top">
   <div class="wrap nav-inner">
-    <a href="#top" class="logo" aria-label="Ir al inicio">
+    <a href="#top" class="logo" aria-label="Ir al inicio del panel">
       <svg class="logo-mark" viewBox="0 0 32 32" fill="none">
         <circle cx="16" cy="16" r="15" stroke="#1E3A2B" stroke-width="1.4"/>
         <path d="M16 6C16 6 10 12 10 18C10 21.3 12.7 24 16 24C19.3 24 22 21.3 22 18C22 12 16 6 16 6Z" fill="#6C8F53"/>
@@ -179,129 +183,459 @@
       AgroValle Conecta
     </a>
     <nav class="nav-links">
-      <a href="#como-funciona">Cómo funciona</a>
-      <a href="#perfiles">Perfiles</a>
-      <a href="panel.html#contacto">Contacto</a>
+      <a href="#productores">Productores</a>
+      <a href="#empresarios">Empresarios</a>
+      <a href="#prestadores">Prestadores de servicios</a>
+      <a href="#contacto">Contacto</a>
     </nav>
-    <a class="nav-cta" href="panel.html#cuenta">Ingresar / Crear cuenta</a>
+    <a class="nav-cta" href="#cuenta">Mi perfil</a>
   </div>
 </header>
 
-<section class="hero">
-  <svg class="hero-contours" viewBox="0 0 1120 340" preserveAspectRatio="none" xmlns="http://www.w3.org/2000/svg">
-    <path d="M-20 300 C 180 270, 260 320, 420 290 S 700 250, 900 290 S 1100 270, 1160 290" stroke="#6C8F53" stroke-width="1" fill="none" opacity="0.3"/>
-    <path d="M-20 250 C 200 210, 300 260, 460 230 S 720 190, 920 230 S 1080 210, 1160 230" stroke="#1E3A2B" stroke-width="1" fill="none" opacity="0.15"/>
+<section class="intro">
+  <svg class="intro-contours" viewBox="0 0 1120 300" preserveAspectRatio="none" xmlns="http://www.w3.org/2000/svg">
+    <path d="M-20 260 C 180 230, 260 280, 420 250 S 700 210, 900 250 S 1100 230, 1160 250" stroke="#6C8F53" stroke-width="1" fill="none" opacity="0.3"/>
+    <path d="M-20 30 C 150 70, 240 20, 400 50 S 640 100, 820 40 S 1000 10, 1160 40" stroke="#1E3A2B" stroke-width="1" fill="none" opacity="0.1"/>
   </svg>
-  <div class="wrap hero-inner">
-    <span class="eyebrow">Valle de Uco · Mendoza</span>
-    <h1>El puente comercial entre <em>quien produce</em> y quien compra en el Valle de Uco</h1>
-    <p class="lead">AgroValle Conecta une a productores, empresas compradoras y prestadores de servicios de la cadena agrícola regional en un solo lugar, para que cerrar un trato sea cuestión de días, no de semanas de llamados.</p>
-    <div class="hero-actions">
-      <a class="btn-primary" href="panel.html#cuenta">Crear mi cuenta</a>
-      <a class="btn-ghost" href="#como-funciona">Ver cómo funciona</a>
+  <div class="wrap intro-inner">
+    <span class="eyebrow">Panel principal</span>
+    <h1>Elegí tu perfil y empezá a operar en el Valle de Uco.</h1>
+    <p>Productor, empresario comprador o prestador de servicios técnicos: cada uno tiene su espacio dentro de AgroValle Conecta. Entrá a tu perfil o escribinos si tenés dudas.</p>
+  </div>
+</section>
+
+<section id="productores">
+  <div class="wrap type-grid">
+    <div>
+      <span class="eyebrow">Para productores</span>
+      <h2 style="font-size:30px; margin-top:12px;">Tu cosecha, con vidriera propia</h2>
+      <p style="margin-top:16px; font-size:15px;">Si sos productor del Valle de Uco, armá tu tienda dentro de la plataforma y llegá directo al comprador mayorista, sin escalones de por medio.</p>
+      <ul class="type-features">
+        <li><span class="dot"></span>Tienda propia con catálogo de fotos y videos.</li>
+        <li><span class="dot"></span>Fichas técnicas: variedad, calibre y certificaciones.</li>
+        <li><span class="dot"></span>Contacto directo con compradores dentro de la plataforma.</li>
+        <li><span class="dot"></span>Acceso a servicios técnicos sin salir del sitio.</li>
+        <li><span class="dot"></span>Gestión de reputación con casos reales de venta.</li>
+      </ul>
     </div>
-    <div class="hero-crops">
-      <span class="crop-chip">Nuez</span>
-      <span class="crop-chip">Durazno</span>
-      <span class="crop-chip">Manzana</span>
-      <span class="crop-chip">Pera</span>
-      <span class="crop-chip">Uva</span>
-      <span class="crop-chip">Pistacho</span>
+    <div class="type-panel">
+      <span class="eyebrow">Productor</span>
+      <h3>Vendé sin intermediarios</h3>
+      <p>Publicar tu catálogo y vender es gratuito. Por el momento no cobramos comisión por tus ventas.</p>
+      <a class="btn-primary" href="#cuenta">Quiero vender acá</a>
     </div>
   </div>
 </section>
 
-<section id="como-funciona" class="section-alt">
-  <div class="wrap">
-    <div class="section-head">
-      <span class="eyebrow">El proceso</span>
-      <h2>De la finca al comprador, en tres pasos</h2>
+<section id="empresarios" class="section-alt">
+  <div class="wrap type-grid">
+    <div>
+      <span class="eyebrow">Para empresarios y compradores</span>
+      <h2 style="font-size:30px; margin-top:12px;">Comprá directo a la fuente</h2>
+      <p style="margin-top:16px; font-size:15px;">Fabricantes, mayoristas, exportadores e importadores encuentran en un mismo lugar la oferta de los principales cultivos del Valle de Uco, con información técnica verificable antes de negociar.</p>
+      <ul class="type-features">
+        <li><span class="dot"></span>Búsqueda avanzada por cultivo, variedad, calibre y ubicación.</li>
+        <li><span class="dot"></span>Fichas técnicas y certificaciones verificadas por productor.</li>
+        <li><span class="dot"></span>Cotización de logística integrada a la operación.</li>
+        <li><span class="dot"></span>Contacto directo con el productor, sin intermediarios.</li>
+      </ul>
     </div>
-    <div class="pasos">
-      <div class="paso">
-        <div class="num">01</div>
-        <h3>Creás tu perfil</h3>
-        <p>Te registrás como productor, empresa compradora o prestador de servicios. Cada perfil ve la plataforma a su medida.</p>
-      </div>
-      <div class="paso">
-        <div class="num">02</div>
-        <h3>Publicás o buscás</h3>
-        <p>Los productores publican su cosecha disponible. Las empresas buscan por cultivo, volumen y zona. Los prestadores ofrecen sus servicios.</p>
-      </div>
-      <div class="paso">
-        <div class="num">03</div>
-        <h3>Cerrás el trato</h3>
-        <p>Coordinás directo con la otra parte. AgroValle Conecta cobra una comisión solo cuando la transacción se concreta.</p>
-      </div>
+    <div class="type-panel alt2">
+      <span class="eyebrow">Empresario</span>
+      <h3>Encontrá tu proveedor</h3>
+      <p>Filtrá por producto y zona, revisá la ficha técnica y cerrá la operación con el productor dentro de la plataforma.</p>
+      <a class="btn-primary" href="#cuenta">Quiero comprar acá</a>
     </div>
   </div>
 </section>
 
-<section id="perfiles">
-  <div class="wrap">
-    <div class="section-head">
-      <span class="eyebrow">Tres perfiles, un mismo mercado</span>
-      <h2>Elegí cómo participás</h2>
+<section id="prestadores">
+  <div class="wrap type-grid">
+    <div>
+      <span class="eyebrow">Para prestadores de servicios</span>
+      <h2 style="font-size:30px; margin-top:12px;">Ofrecé tu servicio donde se decide la venta</h2>
+      <p style="margin-top:16px; font-size:15px;">Ofrecé servicios técnicos al productor: publicá tu perfil de servicios y quedá al alcance justo cuando está tomando decisiones sobre su próxima cosecha.</p>
+      <ul class="type-features">
+        <li><span class="dot"></span>Perfil de servicios con portafolio de trabajos realizados.</li>
+        <li><span class="dot"></span>Agenda de contratación directa con el productor.</li>
+        <li><span class="dot"></span>Casos de éxito verificables dentro de tu perfil.</li>
+        <li><span class="dot"></span>Publicación gratuita: vos ponés tus precios y condiciones.</li>
+      </ul>
     </div>
-    <div class="perfiles">
-      <div class="perfil-card">
-        <span class="eyebrow">Productor</span>
-        <h3>Publicá tu cosecha</h3>
-        <p>Nuez, durazno, manzana, pera, uva o pistacho: publicá cantidad, precio y fotos, y llegá directo a compradores de la región sin intermediarios de más.</p>
-        <span class="comision-tag">Comisión solo si se cierra la venta</span>
-        <a class="btn-primary" href="panel.html#cuenta">Publicar mi producción</a>
-      </div>
-      <div class="perfil-card alt2">
-        <span class="eyebrow">Empresa compradora</span>
-        <h3>Encontrá volumen confiable</h3>
-        <p>Buscá por cultivo, cantidad y zona del Valle de Uco. Contactá productores verificados y cerrá acuerdos de compra sin recorrer fincas a ciegas.</p>
-        <span class="comision-tag">Comisión solo si se cierra la compra</span>
-        <a class="btn-primary" href="panel.html#cuenta">Buscar productores</a>
-      </div>
-      <div class="perfil-card alt3">
-        <span class="eyebrow">Prestador de servicios</span>
-        <h3>Publicá sin comisión</h3>
-        <p>Flete, maquinaria, asesoría técnica: mostrá tu servicio a productores y empresas de la zona. AgroValle Conecta no cobra comisión sobre servicios.</p>
-        <span class="comision-tag">Sin comisión — contratación directa</span>
-        <a class="btn-primary" href="panel.html#cuenta">Ofrecer mis servicios</a>
-      </div>
+    <div class="type-panel alt3">
+      <span class="eyebrow">Prestador</span>
+      <h3>Publicá sin comisión</h3>
+      <p>AgroValle Conecta no cobra comisión sobre tus servicios. Publicás tu perfil y manejás la contratación de forma directa con el productor.</p>
+      <a class="btn-primary" href="#cuenta">Quiero ofrecer mis servicios</a>
     </div>
   </div>
 </section>
 
-<section class="section-alt">
+<section id="cuenta" class="section-alt">
   <div class="wrap">
     <div class="section-head">
-      <span class="eyebrow">Por qué el Valle de Uco</span>
-      <h2>Una región, seis cultivos clave</h2>
+      <span class="eyebrow">Tu cuenta</span>
+      <h2>Ingresá a tu perfil</h2>
     </div>
-    <div class="cifras">
-      <div class="cifra">
-        <div class="valor">6</div>
-        <div class="etiqueta">Cultivos priorizados: nuez, durazno, manzana, pera, uva, pistacho</div>
+    <div class="form-card">
+      <div class="form-tabs">
+        <button class="tab-btn active" onclick="showAccountTab('login')" type="button">Iniciar sesión</button>
+        <button class="tab-btn" onclick="showAccountTab('registro')" type="button">Crear cuenta</button>
       </div>
-      <div class="cifra">
-        <div class="valor">3</div>
-        <div class="etiqueta">Perfiles conectados en un mismo lugar</div>
-      </div>
-      <div class="cifra">
-        <div class="valor">0</div>
-        <div class="etiqueta">Comisión sobre servicios de terceros</div>
-      </div>
-      <div class="cifra">
-        <div class="valor">%</div>
-        <div class="etiqueta">Comisión solo sobre transacciones cerradas</div>
-      </div>
+
+      <form id="login" class="account-panel active" onsubmit="return handleLogin(event)">
+        <div class="field-group">
+          <label for="login-email">Email</label>
+          <input id="login-email" type="email" placeholder="tu@email.com" required>
+        </div>
+        <div class="field-group">
+          <label for="login-pass">Contraseña</label>
+          <input id="login-pass" type="password" placeholder="••••••••" required>
+        </div>
+        <button class="form-submit" type="submit">Ingresar</button>
+        <p class="form-msg"></p>
+      </form>
+
+      <form id="registro" class="account-panel" onsubmit="return handleRegistro(event)">
+        <div class="field-group">
+          <label for="reg-nombre">Nombre y apellido</label>
+          <input id="reg-nombre" type="text" placeholder="Nombre completo" required>
+        </div>
+        <div class="field-group">
+          <label for="reg-tipo">Tipo de perfil</label>
+          <select id="reg-tipo" required>
+            <option value="">Elegí una opción</option>
+            <option value="productor">Productor</option>
+            <option value="empresario">Empresario / comprador</option>
+            <option value="prestador">Prestador de servicios</option>
+          </select>
+        </div>
+        <div class="field-group">
+          <label for="reg-email">Email</label>
+          <input id="reg-email" type="email" placeholder="tu@email.com" required>
+        </div>
+        <div class="field-group">
+          <label for="reg-pass">Contraseña</label>
+          <input id="reg-pass" type="password" placeholder="Mínimo 6 caracteres" required minlength="6">
+        </div>
+        <button class="form-submit" type="submit">Crear cuenta</button>
+        <p class="form-msg"></p>
+      </form>
+
+      <p class="form-foot-note">Al crear tu cuenta te llega un email de confirmación de Supabase. Cualquier consulta la podés hacer directo por <a href="#contacto" style="color:var(--green-sage); font-weight:600;">contacto</a>.</p>
     </div>
+  </div>
+</section>
+
+<section id="mi-perfil" class="section-alt" style="display:none;">
+  <div class="wrap">
+    <div class="section-head">
+      <span class="eyebrow">Tu perfil</span>
+      <h2 id="perfil-saludo">Hola</h2>
+      <p style="margin-top:10px;">Estos son los datos que ven productores, compradores y prestadores cuando interactúan con vos. Los podés editar cuando quieras.</p>
+    </div>
+    <div id="perfil-roles"></div>
+    <button class="btn-ghost" onclick="cerrarSesion()" type="button">Cerrar sesión</button>
+  </div>
+</section>
+
+<section id="contacto">
+  <div class="wrap">
+    <div class="section-head">
+      <span class="eyebrow">Contacto</span>
+      <h2>¿Dudas o querés sumarte? Escribinos</h2>
+    </div>
+    <form class="form-card wide" onsubmit="return sendToWhatsapp(event)">
+      <div class="field-group">
+        <label for="c-nombre">Nombre</label>
+        <input id="c-nombre" type="text" placeholder="Tu nombre" required>
+      </div>
+      <div class="field-group">
+        <label for="c-tipo">Sos...</label>
+        <select id="c-tipo" required>
+          <option value="">Elegí una opción</option>
+          <option value="Productor">Productor</option>
+          <option value="Empresario / comprador">Empresario / comprador</option>
+          <option value="Prestador de servicios">Prestador de servicios</option>
+          <option value="Consulta general">Consulta general</option>
+        </select>
+      </div>
+      <div class="field-group">
+        <label for="c-mensaje">Mensaje</label>
+        <textarea id="c-mensaje" placeholder="Contanos en qué podemos ayudarte" required></textarea>
+      </div>
+      <button class="form-submit" type="submit">Enviar por WhatsApp</button>
+      <p class="form-foot-note">También podés escribirnos directo al <a href="https://wa.me/5492622314168" target="_blank" rel="noopener" style="color:var(--green-sage); font-weight:600;">+54 9 2622 31-4168</a>.</p>
+    </form>
   </div>
 </section>
 
 <footer>
   <div class="wrap footer-inner">
     <span>AgroValle Conecta — Tupungato, Valle de Uco, Mendoza</span>
-    <span><a href="panel.html#cuenta">Ingresar</a> · <a href="panel.html#contacto">Contacto</a></span>
+    <span>Nombre de trabajo provisorio · Junio 2026</span>
   </div>
 </footer>
+
+<script>
+  // ======================================================
+  // CONFIGURACIÓN DE SUPABASE
+  // Reemplazá estos dos valores por los de tu proyecto:
+  // Project Settings → API → Project URL / anon public key
+  // ======================================================
+  const SUPABASE_URL = 'https://yolccrvajsaltnfzvglr.supabase.co';
+  const SUPABASE_ANON_KEY = 'sb_publishable_lt6djx886Pwd8aqreZ7TSg_97WUM0Wf';
+
+  const supabaseClient = window.supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
+
+  function showAccountTab(id){
+    const card = document.getElementById(id).closest('.form-card');
+    card.querySelectorAll('.account-panel').forEach(p => p.classList.remove('active'));
+    card.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
+    document.getElementById(id).classList.add('active');
+    event.target.classList.add('active');
+  }
+
+  function showMsg(form, text, isError){
+    const msg = form.querySelector('.form-msg');
+    msg.textContent = text;
+    msg.style.color = isError ? '#B3413E' : 'var(--green-sage)';
+    msg.classList.add('show');
+  }
+
+  // Traduce la opción elegida en el formulario al nombre de rol
+  // que usamos adentro de la tabla "roles" en la base de datos.
+  const MAPA_ROLES = {
+    'productor': 'productor',
+    'empresario': 'comprador',
+    'prestador': 'proveedor_servicio'
+  };
+
+  async function handleRegistro(event){
+    event.preventDefault();
+    const form = event.target;
+    const nombre = document.getElementById('reg-nombre').value;
+    const tipo = document.getElementById('reg-tipo').value;
+    const email = document.getElementById('reg-email').value;
+    const password = document.getElementById('reg-pass').value;
+    const rol = MAPA_ROLES[tipo];
+
+    showMsg(form, 'Creando tu cuenta...', false);
+
+    // Creamos el usuario en el sistema de autenticación de Supabase.
+    // Le pasamos nombre y rol como "metadata": esos datos los va a
+    // leer el trigger de la base de datos para armar automáticamente
+    // la fila en "usuarios", el rol, y la ficha correspondiente
+    // (productor / comprador / proveedor de servicios).
+    const { data, error } = await supabaseClient.auth.signUp({
+      email,
+      password,
+      options: {
+        data: { nombre: nombre, rol: rol }
+      }
+    });
+
+    if (error){
+      showMsg(form, 'Error: ' + error.message, true);
+      return false;
+    }
+
+    showMsg(form, 'Cuenta creada. Revisá tu email para confirmarla antes de ingresar.', false);
+    form.reset();
+    return false;
+  }
+
+  async function handleLogin(event){
+    event.preventDefault();
+    const form = event.target;
+    const email = document.getElementById('login-email').value;
+    const password = document.getElementById('login-pass').value;
+
+    showMsg(form, 'Ingresando...', false);
+
+    const { data, error } = await supabaseClient.auth.signInWithPassword({ email, password });
+
+    if (error){
+      showMsg(form, 'Error: ' + error.message, true);
+      return false;
+    }
+
+    await cargarPerfil(data.user.id);
+    document.getElementById('mi-perfil').scrollIntoView({ behavior: 'smooth' });
+    return false;
+  }
+
+  // ======================================================
+  // VISTA DE PERFIL POR ROL
+  // Cada rol tiene su propia tabla y sus propios campos.
+  // Un mismo usuario puede tener más de un rol, por eso
+  // armamos una tarjeta por cada rol que tenga asignado.
+  // ======================================================
+  const CONFIG_ROLES = {
+    productor: {
+      tabla: 'productores',
+      titulo: 'Productor',
+      campos: [
+        { id: 'nombre_finca', label: 'Nombre de la finca', tipo: 'text' },
+        { id: 'hectareas', label: 'Hectáreas', tipo: 'number' },
+        { id: 'ubicacion_finca', label: 'Ubicación de la finca', tipo: 'text' }
+      ]
+    },
+    comprador: {
+      tabla: 'compradores',
+      titulo: 'Empresario / Comprador',
+      campos: [
+        { id: 'nombre_empresa', label: 'Nombre de la empresa', tipo: 'text' },
+        { id: 'rubro', label: 'Rubro', tipo: 'text' },
+        { id: 'volumen_mensual_estimado', label: 'Volumen mensual estimado', tipo: 'text' }
+      ]
+    },
+    proveedor_servicio: {
+      tabla: 'proveedores_servicios',
+      titulo: 'Prestador de servicios',
+      campos: [
+        { id: 'nombre_empresa', label: 'Nombre de la empresa', tipo: 'text' },
+        { id: 'tipo_servicio', label: 'Tipo de servicio', tipo: 'text' },
+        { id: 'zona_cobertura', label: 'Zona de cobertura', tipo: 'text' }
+      ]
+    }
+  };
+
+  // Arma la tarjeta (formulario) para un rol puntual, ya con
+  // los datos actuales cargados, y con su propio botón de guardar.
+  function renderTarjetaRol(rol, config, fila, userId){
+    const form = document.createElement('form');
+    form.className = 'form-card';
+    form.style.marginBottom = '24px';
+    form.style.maxWidth = '560px';
+
+    const eyebrow = document.createElement('span');
+    eyebrow.className = 'eyebrow';
+    eyebrow.textContent = config.titulo;
+    form.appendChild(eyebrow);
+
+    const h3 = document.createElement('h3');
+    h3.style.marginTop = '8px';
+    h3.style.marginBottom = '18px';
+    h3.textContent = 'Datos de tu perfil';
+    form.appendChild(h3);
+
+    const inputs = {};
+    config.campos.forEach(campo => {
+      const group = document.createElement('div');
+      group.className = 'field-group';
+      const label = document.createElement('label');
+      label.textContent = campo.label;
+      const input = document.createElement('input');
+      input.type = campo.tipo;
+      input.value = (fila && fila[campo.id] != null) ? fila[campo.id] : '';
+      group.appendChild(label);
+      group.appendChild(input);
+      form.appendChild(group);
+      inputs[campo.id] = input;
+    });
+
+    const btn = document.createElement('button');
+    btn.className = 'form-submit';
+    btn.type = 'submit';
+    btn.textContent = 'Guardar cambios';
+    form.appendChild(btn);
+
+    const msg = document.createElement('p');
+    msg.className = 'form-msg';
+    form.appendChild(msg);
+
+    form.addEventListener('submit', async (e) => {
+      e.preventDefault();
+      const cambios = {};
+      config.campos.forEach(campo => {
+        const val = inputs[campo.id].value;
+        cambios[campo.id] = (campo.tipo === 'number') ? (val ? Number(val) : null) : val;
+      });
+      showMsg(form, 'Guardando...', false);
+      const { error } = await supabaseClient.from(config.tabla).update(cambios).eq('usuario_id', userId);
+      if (error){
+        showMsg(form, 'Error: ' + error.message, true);
+      } else {
+        showMsg(form, 'Cambios guardados.', false);
+      }
+    });
+
+    return form;
+  }
+
+  // Trae el nombre, los roles y los datos de cada tabla de rol,
+  // y arma la vista completa del perfil en pantalla.
+  async function cargarPerfil(userId){
+    const { data: usuario } = await supabaseClient
+      .from('usuarios')
+      .select('nombre')
+      .eq('id', userId)
+      .single();
+
+    document.getElementById('perfil-saludo').textContent =
+      usuario?.nombre ? `Hola, ${usuario.nombre}` : 'Hola';
+
+    const { data: rolesData } = await supabaseClient
+      .from('usuario_roles')
+      .select('roles(nombre)')
+      .eq('usuario_id', userId);
+
+    const nombresRoles = (rolesData || [])
+      .map(r => r.roles?.nombre)
+      .filter(Boolean);
+
+    const contenedor = document.getElementById('perfil-roles');
+    contenedor.innerHTML = '';
+
+    for (const rol of nombresRoles){
+      const config = CONFIG_ROLES[rol];
+      if (!config) continue;
+      const { data: fila } = await supabaseClient
+        .from(config.tabla)
+        .select('*')
+        .eq('usuario_id', userId)
+        .single();
+      contenedor.appendChild(renderTarjetaRol(rol, config, fila, userId));
+    }
+
+    if (nombresRoles.length === 0){
+      const p = document.createElement('p');
+      p.textContent = 'Todavía no tenés un rol asignado. Escribinos por contacto si esto no es lo esperado.';
+      contenedor.appendChild(p);
+    }
+
+    // Mostramos el perfil y ocultamos el formulario de login/registro
+    document.getElementById('cuenta').querySelector('.form-card').style.display = 'none';
+    document.getElementById('mi-perfil').style.display = 'block';
+  }
+
+  async function cerrarSesion(){
+    await supabaseClient.auth.signOut();
+    document.getElementById('mi-perfil').style.display = 'none';
+    document.getElementById('cuenta').querySelector('.form-card').style.display = 'block';
+    window.location.hash = 'cuenta';
+  }
+
+  // Si la persona ya tenía una sesión abierta (por ejemplo, si
+  // refresca la página), le mostramos su perfil directamente.
+  (async function chequearSesionActiva(){
+    const { data: { session } } = await supabaseClient.auth.getSession();
+    if (session?.user){
+      await cargarPerfil(session.user.id);
+    }
+  })();
+
+  function sendToWhatsapp(event){
+    event.preventDefault();
+    const nombre = document.getElementById('c-nombre').value;
+    const tipo = document.getElementById('c-tipo').value;
+    const mensaje = document.getElementById('c-mensaje').value;
+    const texto = `Hola, soy ${nombre} (${tipo}). ${mensaje}`;
+    window.open(`https://wa.me/5492622314168?text=${encodeURIComponent(texto)}`, '_blank');
+    return false;
+  }
+</script>
 
 </body>
 </html>
