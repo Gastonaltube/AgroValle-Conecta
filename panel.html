@@ -441,25 +441,26 @@
 
     showMsg(form, 'Ingresando...', false);
 
-    const { data, error } = await supabaseClient.auth.signInWithPassword({ email, password });
+    const { error } = await supabaseClient.auth.signInWithPassword({ email, password });
 
     if (error){
       showMsg(form, 'Error: ' + error.message, true);
       return false;
     }
 
-    // Buscamos el nombre real en la tabla "usuarios" para
-    // confirmar que la conexión funciona de punta a punta.
-    const { data: perfil } = await supabaseClient
-      .from('usuarios')
-      .select('nombre')
-      .eq('id', data.user.id)
-      .single();
-
-    const nombre = perfil?.nombre || '';
-    showMsg(form, `¡Bienvenido de nuevo${nombre ? ', ' + nombre : ''}!`, false);
+    // Login correcto: mandamos a la persona directo a la app (feed).
+    window.location.href = 'feed.html';
     return false;
   }
+
+  // Si ya tenía una sesión abierta (por ejemplo, refrescó esta
+  // página estando logueada), la mandamos directo al feed.
+  (async function chequearSesionActiva(){
+    const { data: { session } } = await supabaseClient.auth.getSession();
+    if (session?.user){
+      window.location.href = 'feed.html';
+    }
+  })();
 
   function sendToWhatsapp(event){
     event.preventDefault();
