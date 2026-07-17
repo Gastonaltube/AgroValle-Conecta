@@ -129,6 +129,7 @@
   @media(max-width:900px){ .app-layout{grid-template-columns:1fr; padding:20px 16px 60px;} .ads-aside{display:none;} }
 
   .feed-col{min-width:0;}
+  .feed-toolbar{display:flex; justify-content:flex-end; margin-bottom:18px;}
   .feed-placeholder{
     background:var(--white); border:1px dashed var(--line); border-radius:var(--radius);
     padding:56px 32px; text-align:center;
@@ -139,6 +140,24 @@
   }
   .feed-placeholder h2{font-size:20px; margin-bottom:8px;}
   .feed-placeholder p{max-width:380px; margin:0 auto; font-size:14.5px;}
+
+  .post-card{
+    background:var(--white); border:1px solid var(--line); border-radius:var(--radius);
+    margin-bottom:20px; overflow:hidden;
+  }
+  .post-img{width:100%; height:280px; object-fit:cover; display:block; background:var(--paper);}
+  .post-body{padding:22px 24px;}
+  .post-top{display:flex; align-items:center; justify-content:space-between; gap:12px; margin-bottom:10px;}
+  .post-cultivo{
+    font-family:'Space Mono',monospace; font-size:11px; text-transform:uppercase; letter-spacing:0.06em;
+    background:var(--paper); color:var(--green-deep-2); padding:5px 11px; border-radius:20px; font-weight:600;
+  }
+  .post-fecha{font-size:12.5px; color:var(--ink-soft); opacity:0.75;}
+  .post-body h3{font-size:18px; margin-bottom:6px;}
+  .post-detalle{font-size:14px; color:var(--ink-soft); margin-bottom:10px;}
+  .post-detalle strong{color:var(--green-deep-2);}
+  .post-desc{font-size:14px; margin-bottom:12px;}
+  .post-finca{font-size:12.5px; color:var(--green-sage); font-weight:600;}
 
   .ads-aside{position:sticky; top:88px;}
   .ads-slot{
@@ -230,12 +249,17 @@
 
 <div class="app-layout">
   <div class="feed-col">
-    <div class="feed-placeholder">
-      <div class="icon-wrap">
-        <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#6C8F53" stroke-width="1.8"><rect x="3" y="3" width="18" height="18" rx="2"/><line x1="3" y1="9" x2="21" y2="9"/><line x1="9" y1="21" x2="9" y2="9"/></svg>
+    <div class="feed-toolbar" id="feed-toolbar" style="display:none;">
+      <button class="btn-primary" onclick="abrirModalPublicacion()" type="button">+ Publicar mi cosecha</button>
+    </div>
+    <div id="feed-lista">
+      <div class="feed-placeholder">
+        <div class="icon-wrap">
+          <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#6C8F53" stroke-width="1.8"><rect x="3" y="3" width="18" height="18" rx="2"/><line x1="3" y1="9" x2="21" y2="9"/><line x1="9" y1="21" x2="9" y2="9"/></svg>
+        </div>
+        <h2>Cargando publicaciones...</h2>
+        <p>Ya volvemos con lo último del Valle de Uco.</p>
       </div>
-      <h2>Tu feed está en construcción</h2>
-      <p>Acá vas a ver las publicaciones de productores y prestadores de servicios del Valle de Uco. Es el próximo paso que vamos a construir juntos.</p>
     </div>
   </div>
 
@@ -245,6 +269,48 @@
       <p>Próximamente vas a poder destacar publicaciones acá.</p>
     </div>
   </aside>
+</div>
+
+<div class="modal-overlay" id="modal-publicacion">
+  <div class="modal-card">
+    <button class="modal-close" onclick="cerrarModalPublicacion()" type="button">✕</button>
+    <span class="eyebrow">Nueva publicación</span>
+    <h2 style="font-size:22px; margin-top:8px; margin-bottom:22px;">Publicá tu cosecha</h2>
+    <form id="form-publicacion">
+      <div class="field-group">
+        <label for="pub-cultivo">Cultivo</label>
+        <select id="pub-cultivo" required></select>
+      </div>
+      <div class="field-group" style="display:flex; gap:12px;">
+        <div style="flex:1;">
+          <label for="pub-cantidad">Cantidad</label>
+          <input id="pub-cantidad" type="number" min="0" step="0.01" required>
+        </div>
+        <div style="flex:1;">
+          <label for="pub-unidad">Unidad</label>
+          <select id="pub-unidad">
+            <option value="kg">kg</option>
+            <option value="toneladas">toneladas</option>
+            <option value="cajones">cajones</option>
+          </select>
+        </div>
+      </div>
+      <div class="field-group">
+        <label for="pub-precio">Precio (ARS, opcional)</label>
+        <input id="pub-precio" type="number" min="0" step="0.01">
+      </div>
+      <div class="field-group">
+        <label for="pub-descripcion">Descripción</label>
+        <textarea id="pub-descripcion" rows="3" style="width:100%; padding:11px 12px; border:1px solid var(--line); border-radius:3px; font-family:'Work Sans',sans-serif; font-size:14.5px; color:var(--ink); background:var(--paper); resize:vertical;"></textarea>
+      </div>
+      <div class="field-group">
+        <label for="pub-fotos">Fotos (podés elegir varias)</label>
+        <input id="pub-fotos" type="file" accept="image/*" multiple>
+      </div>
+      <button class="form-submit" type="submit">Publicar</button>
+      <p class="form-msg" id="pub-msg"></p>
+    </form>
+  </div>
 </div>
 
 <div class="modal-overlay" id="modal-perfil">
@@ -272,7 +338,229 @@
     }
     usuarioActualId = session.user.id;
     await cargarDatosNav(session.user.id);
+    await revisarSiEsProductor(session.user.id);
+    await cargarFeed();
+    await cargarOpcionesCultivo();
   }
+
+  let esProductor = false;
+
+  async function revisarSiEsProductor(userId){
+    const { data: rolesData } = await supabaseClient
+      .from('usuario_roles')
+      .select('roles(nombre)')
+      .eq('usuario_id', userId);
+    const nombresRoles = (rolesData || []).map(r => r.roles?.nombre).filter(Boolean);
+    esProductor = nombresRoles.includes('productor');
+    document.getElementById('feed-toolbar').style.display = esProductor ? 'flex' : 'none';
+  }
+
+  // ======================================================
+  // FEED: traer publicaciones activas con su cultivo, su
+  // productor y sus fotos, y mostrarlas como tarjetas.
+  // ======================================================
+  function tiempoRelativo(fechaIso){
+    const fecha = new Date(fechaIso);
+    const diffMs = Date.now() - fecha.getTime();
+    const diffDias = Math.floor(diffMs / (1000 * 60 * 60 * 24));
+    if (diffDias <= 0) return 'hoy';
+    if (diffDias === 1) return 'ayer';
+    if (diffDias < 30) return `hace ${diffDias} días`;
+    return fecha.toLocaleDateString('es-AR');
+  }
+
+  function formatearPrecio(precio, moneda){
+    if (precio == null) return 'Precio a consultar';
+    const num = Number(precio).toLocaleString('es-AR');
+    return `${moneda || 'ARS'} ${num}`;
+  }
+
+  async function cargarFeed(){
+    const contenedor = document.getElementById('feed-lista');
+    const { data: publicaciones, error } = await supabaseClient
+      .from('publicaciones')
+      .select(`
+        id, cantidad, unidad, precio, moneda, descripcion, creado_en,
+        cultivos ( nombre ),
+        productores ( nombre_finca, ubicacion_finca, usuarios ( nombre ) ),
+        publicacion_imagenes ( url, orden )
+      `)
+      .eq('estado', 'activa')
+      .order('creado_en', { ascending: false });
+
+    if (error){
+      contenedor.innerHTML = `<div class="feed-placeholder"><h2>No se pudo cargar el feed</h2><p>${error.message}</p></div>`;
+      return;
+    }
+
+    if (!publicaciones || publicaciones.length === 0){
+      contenedor.innerHTML = `
+        <div class="feed-placeholder">
+          <div class="icon-wrap">
+            <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#6C8F53" stroke-width="1.8"><rect x="3" y="3" width="18" height="18" rx="2"/><line x1="3" y1="9" x2="21" y2="9"/><line x1="9" y1="21" x2="9" y2="9"/></svg>
+          </div>
+          <h2>Todavía no hay publicaciones</h2>
+          <p>Cuando los productores empiecen a publicar su cosecha, la vas a ver acá.</p>
+        </div>`;
+      return;
+    }
+
+    contenedor.innerHTML = '';
+    publicaciones.forEach(pub => {
+      contenedor.appendChild(renderTarjetaPublicacion(pub));
+    });
+  }
+
+  function renderTarjetaPublicacion(pub){
+    const card = document.createElement('article');
+    card.className = 'post-card';
+
+    const imagenes = (pub.publicacion_imagenes || []).slice().sort((a, b) => (a.orden || 0) - (b.orden || 0));
+    if (imagenes.length > 0){
+      const img = document.createElement('img');
+      img.className = 'post-img';
+      img.src = imagenes[0].url;
+      img.alt = pub.cultivos?.nombre || 'Publicación';
+      card.appendChild(img);
+    }
+
+    const body = document.createElement('div');
+    body.className = 'post-body';
+
+    const top = document.createElement('div');
+    top.className = 'post-top';
+    const cultivoTag = document.createElement('span');
+    cultivoTag.className = 'post-cultivo';
+    cultivoTag.textContent = pub.cultivos?.nombre || 'Producto';
+    const fecha = document.createElement('span');
+    fecha.className = 'post-fecha';
+    fecha.textContent = tiempoRelativo(pub.creado_en);
+    top.appendChild(cultivoTag);
+    top.appendChild(fecha);
+    body.appendChild(top);
+
+    const detalle = document.createElement('p');
+    detalle.className = 'post-detalle';
+    detalle.innerHTML = `<strong>${pub.cantidad} ${pub.unidad}</strong> · ${formatearPrecio(pub.precio, pub.moneda)}`;
+    body.appendChild(detalle);
+
+    if (pub.descripcion){
+      const desc = document.createElement('p');
+      desc.className = 'post-desc';
+      desc.textContent = pub.descripcion;
+      body.appendChild(desc);
+    }
+
+    const finca = document.createElement('p');
+    finca.className = 'post-finca';
+    const nombreFinca = pub.productores?.nombre_finca || pub.productores?.usuarios?.nombre || 'Productor';
+    const ubicacion = pub.productores?.ubicacion_finca;
+    finca.textContent = ubicacion ? `${nombreFinca} · ${ubicacion}` : nombreFinca;
+    body.appendChild(finca);
+
+    card.appendChild(body);
+    return card;
+  }
+
+  // ======================================================
+  // BUSCADOR: filtra las tarjetas ya cargadas en pantalla
+  // por cultivo, descripción, finca o ubicación.
+  // ======================================================
+  document.getElementById('buscador').addEventListener('input', (e) => {
+    const texto = e.target.value.trim().toLowerCase();
+    const tarjetas = document.querySelectorAll('#feed-lista .post-card');
+    tarjetas.forEach(tarjeta => {
+      const coincide = tarjeta.textContent.toLowerCase().includes(texto);
+      tarjeta.style.display = coincide ? '' : 'none';
+    });
+  });
+
+  // ======================================================
+  // NUEVA PUBLICACIÓN (solo productores)
+  // ======================================================
+  async function cargarOpcionesCultivo(){
+    const { data: cultivos } = await supabaseClient.from('cultivos').select('id, nombre').order('nombre');
+    const select = document.getElementById('pub-cultivo');
+    select.innerHTML = '';
+    (cultivos || []).forEach(c => {
+      const opt = document.createElement('option');
+      opt.value = c.id;
+      opt.textContent = c.nombre.charAt(0).toUpperCase() + c.nombre.slice(1);
+      select.appendChild(opt);
+    });
+  }
+
+  function abrirModalPublicacion(){
+    document.getElementById('modal-publicacion').classList.add('open');
+  }
+  function cerrarModalPublicacion(){
+    document.getElementById('modal-publicacion').classList.remove('open');
+  }
+
+  document.getElementById('form-publicacion').addEventListener('submit', async (e) => {
+    e.preventDefault();
+    const msg = document.getElementById('pub-msg');
+    msg.classList.add('show');
+    msg.textContent = 'Publicando...';
+
+    const cultivoId = document.getElementById('pub-cultivo').value;
+    const cantidad = document.getElementById('pub-cantidad').value;
+    const unidad = document.getElementById('pub-unidad').value;
+    const precioValor = document.getElementById('pub-precio').value;
+    const descripcion = document.getElementById('pub-descripcion').value;
+    const archivos = document.getElementById('pub-fotos').files;
+
+    // 1. Crear la publicación
+    const { data: nuevaPub, error: errorPub } = await supabaseClient
+      .from('publicaciones')
+      .insert({
+        productor_id: usuarioActualId,
+        cultivo_id: cultivoId,
+        cantidad: Number(cantidad),
+        unidad,
+        precio: precioValor ? Number(precioValor) : null,
+        descripcion
+      })
+      .select()
+      .single();
+
+    if (errorPub){
+      msg.textContent = 'Error: ' + errorPub.message;
+      return;
+    }
+
+    // 2. Subir cada foto al bucket y guardar su URL
+    for (let i = 0; i < archivos.length; i++){
+      const archivo = archivos[i];
+      const ruta = `${usuarioActualId}/${nuevaPub.id}/${i}-${archivo.name}`;
+
+      const { error: errorSubida } = await supabaseClient
+        .storage
+        .from('publicaciones-imagenes')
+        .upload(ruta, archivo);
+
+      if (errorSubida){
+        msg.textContent = 'La publicación se creó, pero hubo un problema subiendo una foto: ' + errorSubida.message;
+        continue;
+      }
+
+      const { data: urlData } = supabaseClient
+        .storage
+        .from('publicaciones-imagenes')
+        .getPublicUrl(ruta);
+
+      await supabaseClient.from('publicacion_imagenes').insert({
+        publicacion_id: nuevaPub.id,
+        url: urlData.publicUrl,
+        orden: i
+      });
+    }
+
+    msg.textContent = '¡Publicado!';
+    document.getElementById('form-publicacion').reset();
+    await cargarFeed();
+    setTimeout(() => cerrarModalPublicacion(), 900);
+  });
 
   async function cargarDatosNav(userId){
     const { data: usuario } = await supabaseClient
