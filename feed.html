@@ -567,7 +567,7 @@
       .from('usuarios')
       .select('nombre')
       .eq('id', userId)
-      .single();
+      .maybeSingle();
 
     const nombre = usuario?.nombre || '';
     document.getElementById('nombre-usuario').textContent = nombre || 'Cuenta';
@@ -690,7 +690,7 @@
         .from(config.tabla)
         .select('*')
         .eq('usuario_id', usuarioActualId)
-        .single();
+        .maybeSingle();
       contenedor.appendChild(renderTarjetaRol(rol, config, fila, usuarioActualId));
     }
 
