@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>AgroValle Conecta — Tu feed</title>
+<title>AgroValle Conecta — Tu perfil</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700&family=Work+Sans:wght@400;500;600&family=Space+Mono:wght@400;500&display=swap" rel="stylesheet">
@@ -28,7 +28,7 @@
     color:var(--ink);
     font-family:'Work Sans',sans-serif;
     font-size:16px;
-    line-height:1.6;
+    line-height:1.5;
     -webkit-font-smoothing:antialiased;
   }
   h1,h2,h3,h4{
@@ -40,677 +40,338 @@
   }
   .eyebrow{
     font-family:'Space Mono',monospace;
-    font-size:11px;
+    font-size:11.5px;
     letter-spacing:0.12em;
     text-transform:uppercase;
     color:var(--green-sage);
     font-weight:500;
   }
-  p{color:var(--ink-soft); margin:0;}
+  p{color:var(--ink-soft);}
   a{color:inherit;}
-  button{font-family:'Work Sans',sans-serif;}
 
-  header.appbar{
-    position:sticky; top:0; z-index:100;
+  /* ===== HEADER (perfil / buscador / iconos) ===== */
+  header.panel-nav{
+    position:sticky; top:0; z-index:50;
     background:var(--white);
     border-bottom:1px solid var(--line);
-    height:64px;
   }
-  .appbar-inner{
-    max-width:1200px; margin:0 auto; height:100%;
-    padding:0 24px;
-    display:flex; align-items:center; gap:20px;
+  .panel-nav-inner{
+    display:flex; align-items:center; gap:24px;
+    padding:14px 24px;
+    max-width:1280px; margin:0 auto;
   }
-  .logo{
-    display:flex; align-items:center; gap:9px;
-    font-family:'Space Grotesk',sans-serif; font-weight:600; font-size:17px;
-    color:var(--green-deep-2); text-decoration:none; flex-shrink:0;
+  .perfil-btn{
+    display:flex; align-items:center; gap:10px;
+    background:none; border:none; cursor:pointer;
+    font-family:'Work Sans',sans-serif; text-align:left; padding:0;
+    flex-shrink:0;
   }
-  .logo-mark{width:24px; height:24px; flex-shrink:0;}
+  .perfil-avatar{
+    width:38px; height:38px; border-radius:50%;
+    background:var(--green-deep); color:var(--white);
+    display:flex; align-items:center; justify-content:center;
+    font-family:'Space Grotesk',sans-serif; font-weight:600; font-size:15px;
+    flex-shrink:0;
+  }
+  .perfil-info{display:flex; flex-direction:column; line-height:1.2;}
+  .perfil-info .eyebrow{font-size:10px;}
+  .perfil-info span.nombre{font-size:14px; font-weight:600; color:var(--green-deep-2); max-width:140px; overflow:hidden; text-overflow:ellipsis; white-space:nowrap;}
 
-  .search-box{
-    flex-grow:1; max-width:480px;
-    display:flex; align-items:center; gap:8px;
+  .buscador{
+    flex:1; display:flex; align-items:center; gap:10px;
     background:var(--paper); border:1px solid var(--line); border-radius:20px;
-    padding:9px 16px;
+    padding:9px 16px; max-width:480px;
   }
-  .search-box input{
-    border:none; background:transparent; outline:none; width:100%;
+  .buscador input{
+    border:none; background:none; outline:none; flex:1;
     font-family:'Work Sans',sans-serif; font-size:14px; color:var(--ink);
   }
-  .search-box svg{flex-shrink:0; opacity:0.55;}
+  .buscador svg{flex-shrink:0; opacity:0.55;}
 
-  .appbar-actions{
-    display:flex; align-items:center; gap:6px; margin-left:auto;
-  }
+  .nav-icons{display:flex; align-items:center; gap:6px; margin-left:auto; flex-shrink:0;}
   .icon-btn{
-    position:relative;
-    width:42px; height:42px; border-radius:50%; border:none; background:transparent;
-    display:flex; align-items:center; justify-content:center; cursor:pointer;
-    color:var(--green-deep-2); transition:background .15s;
+    display:flex; flex-direction:column; align-items:center; gap:3px;
+    background:none; border:none; cursor:pointer; color:var(--ink-soft);
+    padding:6px 10px; border-radius:var(--radius); position:relative;
   }
   .icon-btn:hover{background:var(--paper);}
-  .icon-btn .badge{
-    position:absolute; top:5px; right:5px; width:8px; height:8px; border-radius:50%;
-    background:#C25B3B; border:2px solid var(--white);
+  .icon-btn span{font-family:'Space Mono',monospace; font-size:10px; text-transform:uppercase; letter-spacing:0.04em;}
+  .icon-badge{
+    position:absolute; top:2px; right:6px; width:8px; height:8px; border-radius:50%;
+    background:#B3413E; border:1.5px solid var(--white); display:none;
   }
-  .profile-btn{
-    display:flex; align-items:center; gap:9px; border:none; background:transparent;
-    cursor:pointer; padding:6px 10px 6px 6px; border-radius:22px; transition:background .15s;
-  }
-  .profile-btn:hover{background:var(--paper);}
-  .avatar{
-    width:32px; height:32px; border-radius:50%; background:var(--green-sage);
-    color:var(--white); display:flex; align-items:center; justify-content:center;
-    font-family:'Space Grotesk',sans-serif; font-weight:600; font-size:13px; flex-shrink:0;
-  }
-  .profile-btn .nombre{font-size:13.5px; font-weight:600; color:var(--green-deep-2); white-space:nowrap;}
-  @media(max-width:760px){ .profile-btn .nombre{display:none;} .search-box{max-width:none;} }
+  .icon-badge.show{display:block;}
 
-  .dropdown-wrap{position:relative;}
-  .dropdown-menu{
-    position:absolute; top:52px; right:0; width:220px;
-    background:var(--white); border:1px solid var(--line); border-radius:var(--radius);
-    box-shadow:var(--shadow); padding:8px; display:none; z-index:110;
+  @media(max-width:760px){
+    .perfil-info{display:none;}
+    .icon-btn span{display:none;}
+    .buscador{max-width:none;}
   }
-  .dropdown-menu.open{display:block;}
-  .dropdown-menu button{
-    width:100%; text-align:left; background:none; border:none; padding:11px 12px;
-    font-size:14px; color:var(--ink); border-radius:3px; cursor:pointer; display:flex; align-items:center; gap:10px;
-  }
-  .dropdown-menu button:hover{background:var(--paper);}
-  .dropdown-menu .salir{color:#B03A2E;}
-  .dropdown-menu hr{border:none; border-top:1px solid var(--line); margin:6px 0;}
 
-  .app-layout{
-    max-width:1200px; margin:0 auto; padding:28px 24px 80px;
+  /* ===== PESTAÑAS ===== */
+  .tabs-bar{
+    display:flex; border-bottom:1px solid var(--line); background:var(--white);
+    max-width:1280px; margin:0 auto; padding:0 24px;
+  }
+  .tab-item{
+    font-family:'Space Grotesk',sans-serif; font-weight:600; font-size:14.5px;
+    color:var(--ink-soft); background:none; border:none; cursor:pointer;
+    padding:16px 22px; border-bottom:2.5px solid transparent; letter-spacing:0.01em;
+  }
+  .tab-item.active{color:var(--green-deep-2); border-bottom-color:var(--green-deep);}
+  .tab-item:hover:not(.active){color:var(--green-deep-2);}
+
+  /* ===== CUERPO: feed + sidebar publicitaria ===== */
+  .panel-body{
+    max-width:1280px; margin:0 auto; padding:28px 24px 60px;
     display:grid; grid-template-columns:1fr 300px; gap:28px; align-items:start;
   }
-  @media(max-width:900px){ .app-layout{grid-template-columns:1fr; padding:20px 16px 60px;} .ads-aside{display:none;} }
-
-  .feed-col{min-width:0;}
-  .feed-toolbar{display:flex; justify-content:flex-end; margin-bottom:18px;}
-  .feed-placeholder{
-    background:var(--white); border:1px dashed var(--line); border-radius:var(--radius);
-    padding:56px 32px; text-align:center;
+  @media(max-width:900px){
+    .panel-body{grid-template-columns:1fr; padding:20px 16px 48px;}
   }
-  .feed-placeholder .icon-wrap{
-    width:52px; height:52px; border-radius:50%; background:var(--paper); margin:0 auto 18px;
-    display:flex; align-items:center; justify-content:center;
-  }
-  .feed-placeholder h2{font-size:20px; margin-bottom:8px;}
-  .feed-placeholder p{max-width:380px; margin:0 auto; font-size:14.5px;}
 
-  .post-card{
+  .feed{
     background:var(--white); border:1px solid var(--line); border-radius:var(--radius);
-    margin-bottom:20px; overflow:hidden;
+    min-height:520px; padding:20px;
   }
-  .post-img{width:100%; height:280px; object-fit:cover; display:block; background:var(--paper);}
-  .post-body{padding:22px 24px;}
-  .post-top{display:flex; align-items:center; justify-content:space-between; gap:12px; margin-bottom:10px;}
-  .post-cultivo{
-    font-family:'Space Mono',monospace; font-size:11px; text-transform:uppercase; letter-spacing:0.06em;
-    background:var(--paper); color:var(--green-deep-2); padding:5px 11px; border-radius:20px; font-weight:600;
+  .feed-empty{
+    min-height:460px; display:flex; flex-direction:column; align-items:center; justify-content:center;
+    gap:12px; text-align:center; color:var(--ink-soft);
   }
-  .post-fecha{font-size:12.5px; color:var(--ink-soft); opacity:0.75;}
-  .post-body h3{font-size:18px; margin-bottom:6px;}
-  .post-detalle{font-size:14px; color:var(--ink-soft); margin-bottom:10px;}
-  .post-detalle strong{color:var(--green-deep-2);}
-  .post-desc{font-size:14px; margin-bottom:12px;}
-  .post-finca{font-size:12.5px; color:var(--green-sage); font-weight:600;}
+  .feed-empty svg{opacity:0.4;}
+  .feed-empty h3{font-size:16px; color:var(--ink-soft); font-weight:600;}
+  .feed-empty p{font-size:13.5px; max-width:280px;}
+  .feed-loading{padding:60px 0; text-align:center; color:var(--ink-soft); font-size:14px;}
 
-  .ads-aside{position:sticky; top:88px;}
-  .ads-slot{
+  .publicacion-card{
+    display:flex; gap:14px; padding:16px 4px; border-bottom:1px solid var(--line);
+  }
+  .publicacion-card:last-child{border-bottom:none;}
+  .publicacion-img{
+    width:88px; height:88px; border-radius:var(--radius); background:var(--paper);
+    flex-shrink:0; object-fit:cover; border:1px solid var(--line);
+  }
+  .publicacion-info h4{font-size:15px;}
+  .publicacion-info p{font-size:13px; margin-top:4px;}
+  .publicacion-info .eyebrow{font-size:10px; margin-bottom:4px; display:block;}
+
+  /* Columna "Sector publicitario" */
+  .ads-col{
     background:var(--white); border:1px solid var(--line); border-radius:var(--radius);
-    padding:20px; text-align:center; min-height:250px;
-    display:flex; flex-direction:column; align-items:center; justify-content:center; gap:10px;
+    padding:18px; position:sticky; top:88px;
   }
-  .ads-slot .eyebrow{color:var(--ink-soft); opacity:0.7;}
-  .ads-slot p{font-size:12.5px; max-width:200px;}
-
-  .modal-overlay{
-    display:none; position:fixed; inset:0; background:rgba(20,30,20,0.45);
-    z-index:200; align-items:flex-start; justify-content:center; padding:60px 20px; overflow-y:auto;
+  .ads-col .eyebrow{display:block; margin-bottom:14px;}
+  .ad-card{margin-bottom:18px;}
+  .ad-card:last-child{margin-bottom:0;}
+  .ad-card .ad-empresa{font-size:12.5px; font-weight:600; color:var(--green-deep-2); margin-bottom:6px; display:block;}
+  .ad-card .ad-img{
+    width:100%; aspect-ratio:1/1; border-radius:var(--radius); background:var(--paper);
+    border:1px solid var(--line); object-fit:cover; display:block;
   }
-  .modal-overlay.open{display:flex;}
-  .modal-card{
-    background:var(--white); border-radius:var(--radius); max-width:560px; width:100%;
-    padding:32px; box-shadow:var(--shadow); position:relative;
-  }
-  .modal-close{
-    position:absolute; top:18px; right:18px; background:none; border:none; cursor:pointer;
-    color:var(--ink-soft); width:32px; height:32px; border-radius:50%;
-  }
-  .modal-close:hover{background:var(--paper);}
-  .form-card{margin-bottom:20px;}
-  .field-group{margin-bottom:16px;}
-  .field-group label{
-    display:block; font-family:'Space Mono',monospace; font-size:11px; text-transform:uppercase;
-    letter-spacing:0.06em; color:var(--green-sage); margin-bottom:6px; font-weight:500;
-  }
-  .field-group input{
-    width:100%; padding:11px 12px; border:1px solid var(--line); border-radius:3px;
-    font-family:'Work Sans',sans-serif; font-size:14.5px; color:var(--ink); background:var(--paper);
-  }
-  .field-group input:focus{outline:2px solid var(--green-sage); outline-offset:1px;}
-  .form-submit{
-    width:100%; background:var(--green-deep); color:var(--white); border:none; padding:13px;
-    border-radius:var(--radius); font-weight:600; font-size:14.5px; cursor:pointer;
-  }
-  .form-msg{margin-top:12px; font-size:13px; color:var(--green-sage); display:none;}
-  .form-msg.show{display:block;}
+  .ad-card .ad-desc{font-size:12px; margin-top:6px; color:var(--ink-soft);}
+  .ads-empty{font-size:12.5px; color:var(--ink-soft); text-align:center; padding:20px 0;}
 </style>
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 </head>
 <body>
 
-<header class="appbar">
-  <div class="appbar-inner">
-    <a href="feed.html" class="logo">
-      <svg class="logo-mark" viewBox="0 0 32 32" fill="none">
-        <circle cx="16" cy="16" r="15" stroke="#1E3A2B" stroke-width="1.4"/>
-        <path d="M16 6C16 6 10 12 10 18C10 21.3 12.7 24 16 24C19.3 24 22 21.3 22 18C22 12 16 6 16 6Z" fill="#6C8F53"/>
-        <path d="M16 24V9" stroke="#F5F7F1" stroke-width="1" stroke-linecap="round"/>
-      </svg>
-      AgroValle
-    </a>
+<header class="panel-nav">
+  <div class="panel-nav-inner">
+    <!-- PERFIL -->
+    <button class="perfil-btn" onclick="window.location.href='mi-perfil.html'" title="Ir a mi perfil">
+      <span class="perfil-avatar" id="avatarIniciales">--</span>
+      <span class="perfil-info">
+        <span class="eyebrow">Perfil</span>
+        <span class="nombre" id="nombreUsuario">Cargando...</span>
+      </span>
+    </button>
 
-    <div class="search-box">
-      <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="7"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>
-      <input id="buscador" type="text" placeholder="Buscar productores, cultivos, servicios...">
+    <!-- BUSCADOR -->
+    <div class="buscador">
+      <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="7"/><path d="M21 21l-4.3-4.3"/></svg>
+      <input id="inputBuscador" type="text" placeholder="Buscar productores, empresas o servicios..." onkeydown="if(event.key==='Enter')buscar()">
     </div>
 
-    <div class="appbar-actions">
-      <button class="icon-btn" title="Notificaciones" type="button">
-        <svg width="21" height="21" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M18 8a6 6 0 10-12 0c0 7-3 9-3 9h18s-3-2-3-9"/><path d="M13.73 21a2 2 0 01-3.46 0"/></svg>
+    <!-- ICONOS -->
+    <div class="nav-icons">
+      <button class="icon-btn" title="Menú" onclick="alert('Menú: próximamente vamos a sumar acá el resto de las secciones.')">
+        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="7" height="7" rx="1"/><rect x="14" y="3" width="7" height="7" rx="1"/><rect x="3" y="14" width="7" height="7" rx="1"/><rect x="14" y="14" width="7" height="7" rx="1"/></svg>
+        <span>Menú</span>
       </button>
-      <button class="icon-btn" title="Chat" type="button">
-        <svg width="21" height="21" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M21 11.5a8.38 8.38 0 01-.9 3.8 8.5 8.5 0 01-7.6 4.7 8.38 8.38 0 01-3.8-.9L3 21l1.9-5.7a8.38 8.38 0 01-.9-3.8 8.5 8.5 0 014.7-7.6 8.38 8.38 0 013.8-.9h.5a8.48 8.48 0 018 8v.5z"/></svg>
+      <button class="icon-btn" title="Mensajes" onclick="window.location.href='mensajes.html'">
+        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/></svg>
+        <span class="icon-badge" id="badgeMensajes"></span>
+        <span>Mensajes</span>
       </button>
-      <div class="dropdown-wrap">
-        <button class="profile-btn" id="btn-perfil" type="button">
-          <span class="avatar" id="avatar-inicial">?</span>
-          <span class="nombre" id="nombre-usuario">Cuenta</span>
-        </button>
-        <div class="dropdown-menu" id="menu-perfil">
-          <button type="button" onclick="abrirModalPerfil()">
-            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M20 21v-2a4 4 0 00-4-4H8a4 4 0 00-4 4v2"/><circle cx="12" cy="7" r="4"/></svg>
-            Editar mi perfil
-          </button>
-          <hr>
-          <button type="button" class="salir" onclick="cerrarSesion()">
-            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M9 21H5a2 2 0 01-2-2V5a2 2 0 012-2h4"/><polyline points="16 17 21 12 16 7"/><line x1="21" y1="12" x2="9" y2="12"/></svg>
-            Cerrar sesión
-          </button>
-        </div>
-      </div>
+      <button class="icon-btn" title="Notificaciones" onclick="alert('Notificaciones: próximamente.')">
+        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M18 8a6 6 0 0 0-12 0c0 7-3 9-3 9h18s-3-2-3-9"/><path d="M13.73 21a2 2 0 0 1-3.46 0"/></svg>
+        <span class="icon-badge" id="badgeNotif"></span>
+        <span>Avisos</span>
+      </button>
+      <button class="icon-btn" title="Cerrar sesión" onclick="cerrarSesion()">
+        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4"/><path d="M16 17l5-5-5-5"/><path d="M21 12H9"/></svg>
+        <span>Salir</span>
+      </button>
     </div>
   </div>
+
+  <!-- PESTAÑAS -->
+  <nav class="tabs-bar">
+    <button class="tab-item active" data-tab="productores" onclick="cambiarTab('productores')">Productores</button>
+    <button class="tab-item" data-tab="empresas" onclick="cambiarTab('empresas')">Empresas</button>
+    <button class="tab-item" data-tab="servicios" onclick="cambiarTab('servicios')">Servicios</button>
+  </nav>
 </header>
 
-<div class="app-layout">
-  <div class="feed-col">
-    <div class="feed-toolbar" id="feed-toolbar" style="display:none;">
-      <button class="btn-primary" onclick="abrirModalPublicacion()" type="button">+ Publicar mi cosecha</button>
-    </div>
-    <div id="feed-lista">
-      <div class="feed-placeholder">
-        <div class="icon-wrap">
-          <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#6C8F53" stroke-width="1.8"><rect x="3" y="3" width="18" height="18" rx="2"/><line x1="3" y1="9" x2="21" y2="9"/><line x1="9" y1="21" x2="9" y2="9"/></svg>
-        </div>
-        <h2>Cargando publicaciones...</h2>
-        <p>Ya volvemos con lo último del Valle de Uco.</p>
-      </div>
-    </div>
-  </div>
+<div class="panel-body">
+  <!-- FEED DE PUBLICACIONES -->
+  <section class="feed" id="feedContainer">
+    <div class="feed-loading">Cargando publicaciones...</div>
+  </section>
 
-  <aside class="ads-aside">
-    <div class="ads-slot">
-      <span class="eyebrow">Espacio publicitario</span>
-      <p>Próximamente vas a poder destacar publicaciones acá.</p>
+  <!-- SECTOR PUBLICITARIO -->
+  <aside class="ads-col">
+    <span class="eyebrow">Sector publicitario</span>
+    <div id="adsContainer">
+      <div class="ads-empty">Cargando...</div>
     </div>
   </aside>
 </div>
 
-<div class="modal-overlay" id="modal-publicacion">
-  <div class="modal-card">
-    <button class="modal-close" onclick="cerrarModalPublicacion()" type="button">✕</button>
-    <span class="eyebrow">Nueva publicación</span>
-    <h2 style="font-size:22px; margin-top:8px; margin-bottom:22px;">Publicá tu cosecha</h2>
-    <form id="form-publicacion">
-      <div class="field-group">
-        <label for="pub-cultivo">Cultivo</label>
-        <select id="pub-cultivo" required></select>
-      </div>
-      <div class="field-group" style="display:flex; gap:12px;">
-        <div style="flex:1;">
-          <label for="pub-cantidad">Cantidad</label>
-          <input id="pub-cantidad" type="number" min="0" step="0.01" required>
-        </div>
-        <div style="flex:1;">
-          <label for="pub-unidad">Unidad</label>
-          <select id="pub-unidad">
-            <option value="kg">kg</option>
-            <option value="toneladas">toneladas</option>
-            <option value="cajones">cajones</option>
-          </select>
-        </div>
-      </div>
-      <div class="field-group">
-        <label for="pub-precio">Precio (ARS, opcional)</label>
-        <input id="pub-precio" type="number" min="0" step="0.01">
-      </div>
-      <div class="field-group">
-        <label for="pub-descripcion">Descripción</label>
-        <textarea id="pub-descripcion" rows="3" style="width:100%; padding:11px 12px; border:1px solid var(--line); border-radius:3px; font-family:'Work Sans',sans-serif; font-size:14.5px; color:var(--ink); background:var(--paper); resize:vertical;"></textarea>
-      </div>
-      <div class="field-group">
-        <label for="pub-fotos">Fotos (podés elegir varias)</label>
-        <input id="pub-fotos" type="file" accept="image/*" multiple>
-      </div>
-      <button class="form-submit" type="submit">Publicar</button>
-      <p class="form-msg" id="pub-msg"></p>
-    </form>
-  </div>
-</div>
-
-<div class="modal-overlay" id="modal-perfil">
-  <div class="modal-card">
-    <button class="modal-close" onclick="cerrarModalPerfil()" type="button">✕</button>
-    <span class="eyebrow">Tu perfil</span>
-    <h2 id="perfil-saludo" style="font-size:22px; margin-top:8px; margin-bottom:22px;">Hola</h2>
-    <div id="perfil-roles"></div>
-  </div>
-</div>
-
-<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 <script>
+  // ======================================================
+  // CONFIGURACIÓN DE SUPABASE (mismo proyecto que panel.html)
+  // ======================================================
   const SUPABASE_URL = 'https://yolccrvajsaltnfzvglr.supabase.co';
-  const SUPABASE_ANON_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InlvbGNjcnZhanNhbHRuZnp2Z2xyIiwicm9sZSI6ImFub24iLCJpYXQiOjE3ODQwOTc1NzMsImV4cCI6MjA5OTY3MzU3M30.QydmDBnu-cc7B1hI1MjZ_eAyq_PcO2RHtFwEFKCQcbY';
+  const SUPABASE_ANON_KEY = 'sb_publishable_lt6djx886Pwd8aqreZ7TSg_97WUM0Wf';
   const supabaseClient = window.supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
 
-  let usuarioActualId = null;
+  let tabActual = 'productores';
 
-  async function protegerPagina(){
+  // ------------------------------------------------------
+  // 1) Chequear que haya sesión activa. Si no hay, de vuelta
+  //    al panel de login (esta pantalla es solo para logueados).
+  // ------------------------------------------------------
+  let usuarioActual = null;
+
+  (async function init(){
     const { data: { session } } = await supabaseClient.auth.getSession();
     if (!session?.user){
-      window.location.href = 'panel.html#cuenta';
+      window.location.href = 'panel.html';
       return;
     }
-    usuarioActualId = session.user.id;
-    await cargarDatosNav(session.user.id);
-    await revisarSiEsProductor(session.user.id);
+    usuarioActual = session.user;
+    await cargarPerfil();
     await cargarFeed();
-    await cargarOpcionesCultivo();
+    await cargarPublicidad();
+  })();
+
+  // ------------------------------------------------------
+  // 2) Traer nombre del usuario logueado desde la tabla "usuarios"
+  //    para mostrarlo arriba a la izquierda (como en el boceto).
+  // ------------------------------------------------------
+  async function cargarPerfil(){
+    const { data, error } = await supabaseClient
+      .from('usuarios')
+      .select('nombre')
+      .eq('id', usuarioActual.id)
+      .maybeSingle();
+
+    const nombre = (!error && data?.nombre) ? data.nombre : (usuarioActual.email || 'Mi perfil');
+    document.getElementById('nombreUsuario').textContent = nombre;
+    document.getElementById('avatarIniciales').textContent = nombre.trim().charAt(0).toUpperCase();
   }
 
-  let esProductor = false;
-
-  async function revisarSiEsProductor(userId){
-    const { data: rolesData } = await supabaseClient
-      .from('usuario_roles')
-      .select('roles(nombre)')
-      .eq('usuario_id', userId);
-    const nombresRoles = (rolesData || []).map(r => r.roles?.nombre).filter(Boolean);
-    esProductor = nombresRoles.includes('productor');
-    document.getElementById('feed-toolbar').style.display = esProductor ? 'flex' : 'none';
-  }
-
-  // ======================================================
-  // FEED: traer publicaciones activas con su cultivo, su
-  // productor y sus fotos, y mostrarlas como tarjetas.
-  // ======================================================
-  function tiempoRelativo(fechaIso){
-    const fecha = new Date(fechaIso);
-    const diffMs = Date.now() - fecha.getTime();
-    const diffDias = Math.floor(diffMs / (1000 * 60 * 60 * 24));
-    if (diffDias <= 0) return 'hoy';
-    if (diffDias === 1) return 'ayer';
-    if (diffDias < 30) return `hace ${diffDias} días`;
-    return fecha.toLocaleDateString('es-AR');
-  }
-
-  function formatearPrecio(precio, moneda){
-    if (precio == null) return 'Precio a consultar';
-    const num = Number(precio).toLocaleString('es-AR');
-    return `${moneda || 'ARS'} ${num}`;
-  }
-
+  // ------------------------------------------------------
+  // 3) Cargar el feed de publicaciones según la pestaña activa.
+  //    OJO Gastón: esto asume que la tabla "publicaciones" tiene
+  //    una columna que indica el tipo de perfil que publicó
+  //    (productor / comprador / proveedor_servicio). Si el nombre
+  //    real de esa columna es distinto, avisame y lo ajusto.
+  // ------------------------------------------------------
   async function cargarFeed(){
-    const contenedor = document.getElementById('feed-lista');
-    const { data: publicaciones, error } = await supabaseClient
+    const feedEl = document.getElementById('feedContainer');
+    feedEl.innerHTML = '<div class="feed-loading">Cargando publicaciones...</div>';
+
+    const mapaTipo = { productores: 'productor', empresas: 'comprador', servicios: 'proveedor_servicio' };
+
+    const { data, error } = await supabaseClient
       .from('publicaciones')
-      .select(`
-        id, cantidad, unidad, precio, moneda, descripcion, creado_en,
-        cultivos ( nombre ),
-        productores ( nombre_finca, ubicacion_finca, usuarios ( nombre ) ),
-        publicacion_imagenes ( url, orden )
-      `)
-      .eq('estado', 'activa')
-      .order('creado_en', { ascending: false });
+      .select('id, titulo, descripcion, tipo_publicador, publicacion_imagenes(url_imagen)')
+      .eq('tipo_publicador', mapaTipo[tabActual])
+      .order('created_at', { ascending: false })
+      .limit(20);
 
-    if (error){
-      contenedor.innerHTML = `<div class="feed-placeholder"><h2>No se pudo cargar el feed</h2><p>${error.message}</p></div>`;
-      return;
-    }
-
-    if (!publicaciones || publicaciones.length === 0){
-      contenedor.innerHTML = `
-        <div class="feed-placeholder">
-          <div class="icon-wrap">
-            <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#6C8F53" stroke-width="1.8"><rect x="3" y="3" width="18" height="18" rx="2"/><line x1="3" y1="9" x2="21" y2="9"/><line x1="9" y1="21" x2="9" y2="9"/></svg>
-          </div>
-          <h2>Todavía no hay publicaciones</h2>
-          <p>Cuando los productores empiecen a publicar su cosecha, la vas a ver acá.</p>
+    if (error || !data || data.length === 0){
+      feedEl.innerHTML = `
+        <div class="feed-empty">
+          <svg width="46" height="46" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><rect x="3" y="3" width="18" height="18" rx="2"/><path d="M3 9h18"/><path d="M9 21V9"/></svg>
+          <h3>Todavía no hay publicaciones acá</h3>
+          <p>Cuando haya publicaciones de ${tabActual === 'productores' ? 'productores' : tabActual === 'empresas' ? 'empresas compradoras' : 'prestadores de servicios'}, van a aparecer en este feed.</p>
         </div>`;
       return;
     }
 
-    contenedor.innerHTML = '';
-    publicaciones.forEach(pub => {
-      contenedor.appendChild(renderTarjetaPublicacion(pub));
-    });
+    feedEl.innerHTML = data.map(pub => `
+      <div class="publicacion-card">
+        <img class="publicacion-img" src="${pub.publicacion_imagenes?.[0]?.url_imagen || ''}" alt="${pub.titulo || ''}" onerror="this.style.display='none'">
+        <div class="publicacion-info">
+          <span class="eyebrow">${tabActual}</span>
+          <h4>${pub.titulo || 'Sin título'}</h4>
+          <p>${pub.descripcion || ''}</p>
+        </div>
+      </div>
+    `).join('');
   }
 
-  function renderTarjetaPublicacion(pub){
-    const card = document.createElement('article');
-    card.className = 'post-card';
+  // ------------------------------------------------------
+  // 4) Columna "Sector publicitario": por ahora trae hasta 4
+  //    prestadores de servicios como espacio destacado. Es un
+  //    primer armado simple — si querés que sea un espacio pago
+  //    de verdad (con su propia tabla), lo armamos aparte.
+  // ------------------------------------------------------
+  async function cargarPublicidad(){
+    const adsEl = document.getElementById('adsContainer');
 
-    const imagenes = (pub.publicacion_imagenes || []).slice().sort((a, b) => (a.orden || 0) - (b.orden || 0));
-    if (imagenes.length > 0){
-      const img = document.createElement('img');
-      img.className = 'post-img';
-      img.src = imagenes[0].url;
-      img.alt = pub.cultivos?.nombre || 'Publicación';
-      card.appendChild(img);
-    }
+    const { data, error } = await supabaseClient
+      .from('proveedores_servicios')
+      .select('nombre_empresa, descripcion, logo_url')
+      .limit(4);
 
-    const body = document.createElement('div');
-    body.className = 'post-body';
-
-    const top = document.createElement('div');
-    top.className = 'post-top';
-    const cultivoTag = document.createElement('span');
-    cultivoTag.className = 'post-cultivo';
-    cultivoTag.textContent = pub.cultivos?.nombre || 'Producto';
-    const fecha = document.createElement('span');
-    fecha.className = 'post-fecha';
-    fecha.textContent = tiempoRelativo(pub.creado_en);
-    top.appendChild(cultivoTag);
-    top.appendChild(fecha);
-    body.appendChild(top);
-
-    const detalle = document.createElement('p');
-    detalle.className = 'post-detalle';
-    detalle.innerHTML = `<strong>${pub.cantidad} ${pub.unidad}</strong> · ${formatearPrecio(pub.precio, pub.moneda)}`;
-    body.appendChild(detalle);
-
-    if (pub.descripcion){
-      const desc = document.createElement('p');
-      desc.className = 'post-desc';
-      desc.textContent = pub.descripcion;
-      body.appendChild(desc);
-    }
-
-    const finca = document.createElement('p');
-    finca.className = 'post-finca';
-    const nombreFinca = pub.productores?.nombre_finca || pub.productores?.usuarios?.nombre || 'Productor';
-    const ubicacion = pub.productores?.ubicacion_finca;
-    finca.textContent = ubicacion ? `${nombreFinca} · ${ubicacion}` : nombreFinca;
-    body.appendChild(finca);
-
-    card.appendChild(body);
-    return card;
-  }
-
-  // ======================================================
-  // BUSCADOR: filtra las tarjetas ya cargadas en pantalla
-  // por cultivo, descripción, finca o ubicación.
-  // ======================================================
-  document.getElementById('buscador').addEventListener('input', (e) => {
-    const texto = e.target.value.trim().toLowerCase();
-    const tarjetas = document.querySelectorAll('#feed-lista .post-card');
-    tarjetas.forEach(tarjeta => {
-      const coincide = tarjeta.textContent.toLowerCase().includes(texto);
-      tarjeta.style.display = coincide ? '' : 'none';
-    });
-  });
-
-  // ======================================================
-  // NUEVA PUBLICACIÓN (solo productores)
-  // ======================================================
-  async function cargarOpcionesCultivo(){
-    const { data: cultivos } = await supabaseClient.from('cultivos').select('id, nombre').order('nombre');
-    const select = document.getElementById('pub-cultivo');
-    select.innerHTML = '';
-    (cultivos || []).forEach(c => {
-      const opt = document.createElement('option');
-      opt.value = c.id;
-      opt.textContent = c.nombre.charAt(0).toUpperCase() + c.nombre.slice(1);
-      select.appendChild(opt);
-    });
-  }
-
-  function abrirModalPublicacion(){
-    document.getElementById('modal-publicacion').classList.add('open');
-  }
-  function cerrarModalPublicacion(){
-    document.getElementById('modal-publicacion').classList.remove('open');
-  }
-
-  document.getElementById('form-publicacion').addEventListener('submit', async (e) => {
-    e.preventDefault();
-    const msg = document.getElementById('pub-msg');
-    msg.classList.add('show');
-    msg.textContent = 'Publicando...';
-
-    const cultivoId = document.getElementById('pub-cultivo').value;
-    const cantidad = document.getElementById('pub-cantidad').value;
-    const unidad = document.getElementById('pub-unidad').value;
-    const precioValor = document.getElementById('pub-precio').value;
-    const descripcion = document.getElementById('pub-descripcion').value;
-    const archivos = document.getElementById('pub-fotos').files;
-
-    // 1. Crear la publicación
-    const { data: nuevaPub, error: errorPub } = await supabaseClient
-      .from('publicaciones')
-      .insert({
-        productor_id: usuarioActualId,
-        cultivo_id: cultivoId,
-        cantidad: Number(cantidad),
-        unidad,
-        precio: precioValor ? Number(precioValor) : null,
-        descripcion
-      })
-      .select()
-      .single();
-
-    if (errorPub){
-      msg.textContent = 'Error: ' + errorPub.message;
+    if (error || !data || data.length === 0){
+      adsEl.innerHTML = '<div class="ads-empty">Por ahora no hay anunciantes cargados.</div>';
       return;
     }
 
-    // 2. Subir cada foto al bucket y guardar su URL
-    for (let i = 0; i < archivos.length; i++){
-      const archivo = archivos[i];
-      const ruta = `${usuarioActualId}/${nuevaPub.id}/${i}-${archivo.name}`;
-
-      const { error: errorSubida } = await supabaseClient
-        .storage
-        .from('publicaciones-imagenes')
-        .upload(ruta, archivo);
-
-      if (errorSubida){
-        msg.textContent = 'La publicación se creó, pero hubo un problema subiendo una foto: ' + errorSubida.message;
-        continue;
-      }
-
-      const { data: urlData } = supabaseClient
-        .storage
-        .from('publicaciones-imagenes')
-        .getPublicUrl(ruta);
-
-      await supabaseClient.from('publicacion_imagenes').insert({
-        publicacion_id: nuevaPub.id,
-        url: urlData.publicUrl,
-        orden: i
-      });
-    }
-
-    msg.textContent = '¡Publicado!';
-    document.getElementById('form-publicacion').reset();
-    await cargarFeed();
-    setTimeout(() => cerrarModalPublicacion(), 900);
-  });
-
-  async function cargarDatosNav(userId){
-    const { data: usuario } = await supabaseClient
-      .from('usuarios')
-      .select('nombre')
-      .eq('id', userId)
-      .maybeSingle();
-
-    const nombre = usuario?.nombre || '';
-    document.getElementById('nombre-usuario').textContent = nombre || 'Cuenta';
-    document.getElementById('avatar-inicial').textContent = nombre ? nombre.trim().charAt(0).toUpperCase() : '?';
-    document.getElementById('perfil-saludo').textContent = nombre ? `Hola, ${nombre}` : 'Hola';
+    adsEl.innerHTML = data.map(a => `
+      <div class="ad-card">
+        <span class="ad-empresa">${a.nombre_empresa || 'Empresa'}</span>
+        <img class="ad-img" src="${a.logo_url || ''}" alt="${a.nombre_empresa || ''}" onerror="this.style.background='var(--paper)'">
+        <p class="ad-desc">${a.descripcion || ''}</p>
+      </div>
+    `).join('');
   }
 
-  const btnPerfil = document.getElementById('btn-perfil');
-  const menuPerfil = document.getElementById('menu-perfil');
-  btnPerfil.addEventListener('click', (e) => {
-    e.stopPropagation();
-    menuPerfil.classList.toggle('open');
-  });
-  document.addEventListener('click', () => menuPerfil.classList.remove('open'));
-
-  const CONFIG_ROLES = {
-    productor: {
-      tabla: 'productores',
-      titulo: 'Productor',
-      campos: [
-        { id: 'nombre_finca', label: 'Nombre de la finca', tipo: 'text' },
-        { id: 'hectareas', label: 'Hectáreas', tipo: 'number' },
-        { id: 'ubicacion_finca', label: 'Ubicación de la finca', tipo: 'text' }
-      ]
-    },
-    comprador: {
-      tabla: 'compradores',
-      titulo: 'Empresario / Comprador',
-      campos: [
-        { id: 'nombre_empresa', label: 'Nombre de la empresa', tipo: 'text' },
-        { id: 'rubro', label: 'Rubro', tipo: 'text' },
-        { id: 'volumen_mensual_estimado', label: 'Volumen mensual estimado', tipo: 'text' }
-      ]
-    },
-    proveedor_servicio: {
-      tabla: 'proveedores_servicios',
-      titulo: 'Prestador de servicios',
-      campos: [
-        { id: 'nombre_empresa', label: 'Nombre de la empresa', tipo: 'text' },
-        { id: 'tipo_servicio', label: 'Tipo de servicio', tipo: 'text' },
-        { id: 'zona_cobertura', label: 'Zona de cobertura', tipo: 'text' }
-      ]
-    }
-  };
-
-  function renderTarjetaRol(rol, config, fila, userId){
-    const form = document.createElement('form');
-    form.className = 'form-card';
-
-    const eyebrow = document.createElement('span');
-    eyebrow.className = 'eyebrow';
-    eyebrow.textContent = config.titulo;
-    form.appendChild(eyebrow);
-
-    const h3 = document.createElement('h3');
-    h3.style.marginTop = '6px';
-    h3.style.marginBottom = '16px';
-    h3.style.fontSize = '16px';
-    h3.textContent = 'Datos de tu perfil';
-    form.appendChild(h3);
-
-    const inputs = {};
-    config.campos.forEach(campo => {
-      const group = document.createElement('div');
-      group.className = 'field-group';
-      const label = document.createElement('label');
-      label.textContent = campo.label;
-      const input = document.createElement('input');
-      input.type = campo.tipo;
-      input.value = (fila && fila[campo.id] != null) ? fila[campo.id] : '';
-      group.appendChild(label);
-      group.appendChild(input);
-      form.appendChild(group);
-      inputs[campo.id] = input;
-    });
-
-    const btn = document.createElement('button');
-    btn.className = 'form-submit';
-    btn.type = 'submit';
-    btn.textContent = 'Guardar cambios';
-    form.appendChild(btn);
-
-    const msg = document.createElement('p');
-    msg.className = 'form-msg';
-    form.appendChild(msg);
-
-    form.addEventListener('submit', async (e) => {
-      e.preventDefault();
-      const cambios = {};
-      config.campos.forEach(campo => {
-        const val = inputs[campo.id].value;
-        cambios[campo.id] = (campo.tipo === 'number') ? (val ? Number(val) : null) : val;
-      });
-      msg.textContent = 'Guardando...';
-      msg.classList.add('show');
-      const { error } = await supabaseClient.from(config.tabla).update(cambios).eq('usuario_id', userId);
-      msg.textContent = error ? ('Error: ' + error.message) : 'Cambios guardados.';
-    });
-
-    return form;
+  // ------------------------------------------------------
+  // Cambiar de pestaña (Productores / Empresas / Servicios)
+  // ------------------------------------------------------
+  function cambiarTab(tab){
+    tabActual = tab;
+    document.querySelectorAll('.tab-item').forEach(t => t.classList.toggle('active', t.dataset.tab === tab));
+    cargarFeed();
   }
 
-  async function abrirModalPerfil(){
-    menuPerfil.classList.remove('open');
-    const contenedor = document.getElementById('perfil-roles');
-    contenedor.innerHTML = '<p>Cargando...</p>';
-
-    const { data: rolesData } = await supabaseClient
-      .from('usuario_roles')
-      .select('roles(nombre)')
-      .eq('usuario_id', usuarioActualId);
-
-    const nombresRoles = (rolesData || []).map(r => r.roles?.nombre).filter(Boolean);
-    contenedor.innerHTML = '';
-
-    for (const rol of nombresRoles){
-      const config = CONFIG_ROLES[rol];
-      if (!config) continue;
-      const { data: fila } = await supabaseClient
-        .from(config.tabla)
-        .select('*')
-        .eq('usuario_id', usuarioActualId)
-        .maybeSingle();
-      contenedor.appendChild(renderTarjetaRol(rol, config, fila, usuarioActualId));
-    }
-
-    if (nombresRoles.length === 0){
-      contenedor.innerHTML = '<p>Todavía no tenés un rol asignado.</p>';
-    }
-
-    document.getElementById('modal-perfil').classList.add('open');
-  }
-
-  function cerrarModalPerfil(){
-    document.getElementById('modal-perfil').classList.remove('open');
+  function buscar(){
+    const q = document.getElementById('inputBuscador').value.trim();
+    if (!q) return;
+    alert('Buscador: próximamente lo conectamos a resultados reales. Buscaste: "' + q + '"');
   }
 
   async function cerrarSesion(){
     await supabaseClient.auth.signOut();
-    window.location.href = 'panel.html#cuenta';
+    window.location.href = 'panel.html';
   }
-
-  protegerPagina();
 </script>
+
 </body>
 </html>
