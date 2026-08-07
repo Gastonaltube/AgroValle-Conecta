@@ -170,6 +170,58 @@
   }
   .ad-card .ad-desc{font-size:12px; margin-top:6px; color:var(--ink-soft);}
   .ads-empty{font-size:12.5px; color:var(--ink-soft); text-align:center; padding:20px 0;}
+  .ad-card .ad-icon{
+    width:100%; aspect-ratio:1/1; border-radius:var(--radius); background:var(--green-deep);
+    color:var(--white); display:flex; align-items:center; justify-content:center;
+    font-family:'Space Grotesk',sans-serif; font-weight:700; font-size:28px;
+  }
+  .ad-card .ad-meta{font-size:11.5px; color:var(--green-sage); font-family:'Space Mono',monospace; margin-top:2px;}
+
+  /* Botón Publicar destacado */
+  .publicar-btn{color:var(--green-deep);}
+  .publicar-btn:hover{background:var(--paper);}
+
+  /* ===== MODAL PUBLICAR ===== */
+  .modal-overlay{
+    display:none; position:fixed; inset:0; background:rgba(20,32,22,0.45); z-index:100;
+    align-items:flex-start; justify-content:center; padding:60px 16px; overflow-y:auto;
+  }
+  .modal-overlay.show{display:flex;}
+  .modal-box{
+    background:var(--white); border-radius:6px; max-width:480px; width:100%;
+    padding:26px; box-shadow:var(--shadow);
+  }
+  .modal-box h3{font-size:18px; margin-bottom:4px;}
+  .modal-box .modal-sub{font-size:13px; color:var(--ink-soft); margin-bottom:20px;}
+  .campo{margin-bottom:14px;}
+  .campo label{
+    display:block; font-family:'Space Mono',monospace; font-size:11px; text-transform:uppercase;
+    letter-spacing:0.06em; color:var(--green-sage); margin-bottom:5px;
+  }
+  .campo input, .campo select, .campo textarea{
+    width:100%; padding:9px 12px; border:1px solid var(--line); border-radius:var(--radius);
+    font-family:'Work Sans',sans-serif; font-size:14px; color:var(--ink); background:var(--paper);
+    outline:none;
+  }
+  .campo textarea{resize:vertical; min-height:70px;}
+  .campo-fila{display:grid; grid-template-columns:1fr 1fr; gap:10px;}
+  .tipo-toggle{display:flex; gap:8px; margin-bottom:16px;}
+  .tipo-toggle button{
+    flex:1; padding:9px; border:1px solid var(--line); background:var(--paper); border-radius:var(--radius);
+    font-family:'Work Sans',sans-serif; font-size:13.5px; cursor:pointer; color:var(--ink-soft);
+  }
+  .tipo-toggle button.active{background:var(--green-deep); color:var(--white); border-color:var(--green-deep);}
+  .modal-actions{display:flex; gap:10px; margin-top:6px;}
+  .btn-cancelar, .btn-publicar{
+    flex:1; padding:11px; border-radius:var(--radius); border:none; cursor:pointer;
+    font-family:'Space Grotesk',sans-serif; font-weight:600; font-size:14px;
+  }
+  .btn-cancelar{background:var(--paper); color:var(--ink-soft); border:1px solid var(--line);}
+  .btn-publicar{background:var(--green-deep); color:var(--white);}
+  .btn-publicar:disabled{opacity:0.6; cursor:default;}
+  .modal-msg{font-size:12.5px; margin-top:10px; text-align:center;}
+  .modal-msg.error{color:#B3413E;}
+  .modal-msg.ok{color:var(--green-sage);}
 </style>
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 </head>
@@ -194,6 +246,10 @@
 
     <!-- ICONOS -->
     <div class="nav-icons">
+      <button class="icon-btn publicar-btn" title="Publicar" onclick="abrirModalPublicar()">
+        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 5v14M5 12h14"/></svg>
+        <span>Publicar</span>
+      </button>
       <button class="icon-btn" title="Menú" onclick="alert('Menú: próximamente vamos a sumar acá el resto de las secciones.')">
         <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="7" height="7" rx="1"/><rect x="14" y="3" width="7" height="7" rx="1"/><rect x="3" y="14" width="7" height="7" rx="1"/><rect x="14" y="14" width="7" height="7" rx="1"/></svg>
         <span>Menú</span>
@@ -238,6 +294,20 @@
   </aside>
 </div>
 
+<!-- MODAL: Publicar -->
+<div class="modal-overlay" id="modalOverlay">
+  <div class="modal-box">
+    <h3 id="modalTitulo">Publicar</h3>
+    <p class="modal-sub" id="modalSub">Cargando tu perfil...</p>
+    <div id="modalFormContainer"></div>
+    <div class="modal-actions">
+      <button class="btn-cancelar" onclick="cerrarModalPublicar()">Cancelar</button>
+      <button class="btn-publicar" id="btnPublicarSubmit" onclick="enviarPublicacion()">Publicar</button>
+    </div>
+    <div class="modal-msg" id="modalMsg"></div>
+  </div>
+</div>
+
 <script>
   // ======================================================
   // CONFIGURACIÓN DE SUPABASE (mismo proyecto que panel.html)
@@ -247,13 +317,35 @@
   const supabaseClient = window.supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
 
   let tabActual = 'productores';
+  let usuarioActual = null;
+  let miRol = null; // 'productor' | 'comprador' | 'proveedor_servicio' | null
+  let cultivosCache = null;
+  let tipoNecesidadModal = 'producto'; // toggle dentro del modal para compradores
+
+  // ------------------------------------------------------
+  // 0) Algunas tablas de tu base tienen mayúscula inicial
+  //    (Usuarios, Publicaciones, Productores) y otras no.
+  //    En vez de asumir a ojo, probamos las dos formas la
+  //    primera vez y guardamos cuál existe realmente.
+  // ------------------------------------------------------
+  const cacheNombresTabla = {};
+  async function resolverTabla(candidatos){
+    const key = candidatos.join('|');
+    if (cacheNombresTabla[key]) return cacheNombresTabla[key];
+    for (const nombre of candidatos){
+      const { error } = await supabaseClient.from(nombre).select('*', { head: true, count: 'exact' });
+      if (!error){ cacheNombresTabla[key] = nombre; return nombre; }
+    }
+    cacheNombresTabla[key] = candidatos[0];
+    return candidatos[0];
+  }
+
+  let TABLA_USUARIOS, TABLA_PUBLICACIONES, TABLA_PRODUCTORES;
 
   // ------------------------------------------------------
   // 1) Chequear que haya sesión activa. Si no hay, de vuelta
   //    al panel de login (esta pantalla es solo para logueados).
   // ------------------------------------------------------
-  let usuarioActual = null;
-
   (async function init(){
     const { data: { session } } = await supabaseClient.auth.getSession();
     if (!session?.user){
@@ -261,10 +353,36 @@
       return;
     }
     usuarioActual = session.user;
+
+    [TABLA_USUARIOS, TABLA_PUBLICACIONES, TABLA_PRODUCTORES] = await Promise.all([
+      resolverTabla(['Usuarios', 'usuarios']),
+      resolverTabla(['Publicaciones', 'publicaciones']),
+      resolverTabla(['Productores', 'productores'])
+    ]);
+
     await cargarPerfil();
+    await detectarRol();
     await cargarFeed();
     await cargarPublicidad();
   })();
+
+  // ------------------------------------------------------
+  // 1.b) Detectar qué tipo de perfil tiene el usuario logueado
+  //    (productor / comprador / proveedor de servicios), buscando
+  //    en qué tabla existe una fila con su usuario_id.
+  //    Esto define qué formulario de "Publicar" le mostramos.
+  // ------------------------------------------------------
+  async function detectarRol(){
+    const [prod, comp, prov] = await Promise.all([
+      supabaseClient.from(TABLA_PRODUCTORES).select('usuario_id').eq('usuario_id', usuarioActual.id).maybeSingle(),
+      supabaseClient.from('compradores').select('usuario_id').eq('usuario_id', usuarioActual.id).maybeSingle(),
+      supabaseClient.from('proveedores_servicios').select('usuario_id').eq('usuario_id', usuarioActual.id).maybeSingle()
+    ]);
+    if (prod.data) miRol = 'productor';
+    else if (comp.data) miRol = 'comprador';
+    else if (prov.data) miRol = 'proveedor_servicio';
+    else miRol = null;
+  }
 
   // ------------------------------------------------------
   // 2) Traer nombre del usuario logueado desde la tabla "usuarios"
@@ -272,7 +390,7 @@
   // ------------------------------------------------------
   async function cargarPerfil(){
     const { data, error } = await supabaseClient
-      .from('usuarios')
+      .from(TABLA_USUARIOS)
       .select('nombre')
       .eq('id', usuarioActual.id)
       .maybeSingle();
@@ -283,45 +401,113 @@
   }
 
   // ------------------------------------------------------
-  // 3) Cargar el feed de publicaciones según la pestaña activa.
-  //    OJO Gastón: esto asume que la tabla "publicaciones" tiene
-  //    una columna que indica el tipo de perfil que publicó
-  //    (productor / comprador / proveedor_servicio). Si el nombre
-  //    real de esa columna es distinto, avisame y lo ajusto.
+  // 3) Cargar el feed según la pestaña activa. Cada pestaña sale
+  //    de una tabla distinta, porque cada tipo de perfil publica
+  //    algo distinto:
+  //    - Productores  -> tabla "Publicaciones" (vende cultivos)
+  //    - Servicios    -> tabla "servicios_ofrecidos"
+  //    - Empresas     -> tabla "solicitudes_compradores"
   // ------------------------------------------------------
   async function cargarFeed(){
     const feedEl = document.getElementById('feedContainer');
     feedEl.innerHTML = '<div class="feed-loading">Cargando publicaciones...</div>';
 
-    const mapaTipo = { productores: 'productor', empresas: 'comprador', servicios: 'proveedor_servicio' };
+    if (tabActual === 'productores') return cargarFeedProductores(feedEl);
+    if (tabActual === 'servicios') return cargarFeedServicios(feedEl);
+    if (tabActual === 'empresas') return cargarFeedEmpresas(feedEl);
+  }
 
+  function mostrarFeedVacio(feedEl, mensaje){
+    feedEl.innerHTML = `
+      <div class="feed-empty">
+        <svg width="46" height="46" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><rect x="3" y="3" width="18" height="18" rx="2"/><path d="M3 9h18"/><path d="M9 21V9"/></svg>
+        <h3>Todavía no hay publicaciones acá</h3>
+        <p>${mensaje}</p>
+      </div>`;
+  }
+
+  function formatearPrecio(precio, moneda){
+    if (precio === null || precio === undefined) return '';
+    return `${moneda || 'ARS'} ${Number(precio).toLocaleString('es-AR')}`;
+  }
+
+  async function cargarFeedProductores(feedEl){
     const { data, error } = await supabaseClient
-      .from('publicaciones')
-      .select('id, titulo, descripcion, tipo_publicador, publicacion_imagenes(url_imagen)')
-      .eq('tipo_publicador', mapaTipo[tabActual])
-      .order('created_at', { ascending: false })
+      .from(TABLA_PUBLICACIONES)
+      .select('id, cantidad, unidad, precio, moneda, descripcion, estado, creado_en, cultivos(nombre), publicacion_imagenes(URL)')
+      .eq('estado', 'activa')
+      .order('creado_en', { ascending: false })
       .limit(20);
 
     if (error || !data || data.length === 0){
-      feedEl.innerHTML = `
-        <div class="feed-empty">
-          <svg width="46" height="46" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><rect x="3" y="3" width="18" height="18" rx="2"/><path d="M3 9h18"/><path d="M9 21V9"/></svg>
-          <h3>Todavía no hay publicaciones acá</h3>
-          <p>Cuando haya publicaciones de ${tabActual === 'productores' ? 'productores' : tabActual === 'empresas' ? 'empresas compradoras' : 'prestadores de servicios'}, van a aparecer en este feed.</p>
-        </div>`;
+      mostrarFeedVacio(feedEl, 'Cuando los productores publiquen su cosecha (cultivo, cantidad y precio), va a aparecer acá.');
       return;
     }
 
     feedEl.innerHTML = data.map(pub => `
       <div class="publicacion-card">
-        <img class="publicacion-img" src="${pub.publicacion_imagenes?.[0]?.url_imagen || ''}" alt="${pub.titulo || ''}" onerror="this.style.display='none'">
+        <img class="publicacion-img" src="${pub.publicacion_imagenes?.[0]?.URL || ''}" alt="${pub.cultivos?.nombre || ''}" onerror="this.style.display='none'">
         <div class="publicacion-info">
-          <span class="eyebrow">${tabActual}</span>
-          <h4>${pub.titulo || 'Sin título'}</h4>
+          <span class="eyebrow">${pub.cultivos?.nombre || 'Cultivo'} · ${pub.cantidad ?? ''} ${pub.unidad || ''}</span>
+          <h4>${formatearPrecio(pub.precio, pub.moneda) || 'Precio a consultar'}</h4>
           <p>${pub.descripcion || ''}</p>
         </div>
       </div>
     `).join('');
+  }
+
+  async function cargarFeedServicios(feedEl){
+    const { data, error } = await supabaseClient
+      .from('servicios_ofrecidos')
+      .select('id, tipo_servicio, descripcion, precio, unidad_precio, disponible, creado_en, proveedores_servicios(nombre_empresa, zona_cobertura)')
+      .eq('disponible', true)
+      .order('creado_en', { ascending: false })
+      .limit(20);
+
+    if (error || !data || data.length === 0){
+      mostrarFeedVacio(feedEl, 'Cuando los prestadores publiquen sus servicios, van a aparecer acá.');
+      return;
+    }
+
+    feedEl.innerHTML = data.map(s => `
+      <div class="publicacion-card">
+        <div class="publicacion-info" style="flex:1">
+          <span class="eyebrow">${s.proveedores_servicios?.nombre_empresa || 'Prestador de servicios'}${s.proveedores_servicios?.zona_cobertura ? ' · ' + s.proveedores_servicios.zona_cobertura : ''}</span>
+          <h4>${s.tipo_servicio || 'Servicio'}</h4>
+          <p>${s.descripcion || ''}</p>
+          ${s.precio ? `<p style="margin-top:4px;font-weight:600;color:var(--green-deep-2)">${formatearPrecio(s.precio, null)}${s.unidad_precio ? ' / ' + s.unidad_precio : ''}</p>` : ''}
+        </div>
+      </div>
+    `).join('');
+  }
+
+  async function cargarFeedEmpresas(feedEl){
+    const { data, error } = await supabaseClient
+      .from('solicitudes_compradores')
+      .select('id, tipo_necesidad, tipo_servicio, cantidad, unidad, descripcion, precio_ofrecido, moneda, estado, creado_en, cultivos(nombre), compradores(nombre_empresa)')
+      .eq('estado', 'activa')
+      .order('creado_en', { ascending: false })
+      .limit(20);
+
+    if (error || !data || data.length === 0){
+      mostrarFeedVacio(feedEl, 'Cuando las empresas publiquen qué necesitan comprar o contratar, va a aparecer acá.');
+      return;
+    }
+
+    feedEl.innerHTML = data.map(s => {
+      const queNecesita = s.tipo_necesidad === 'producto'
+        ? `${s.cultivos?.nombre || 'Producto'} · ${s.cantidad ?? ''} ${s.unidad || ''}`
+        : (s.tipo_servicio || 'Servicio');
+      return `
+      <div class="publicacion-card">
+        <div class="publicacion-info" style="flex:1">
+          <span class="eyebrow">${s.compradores?.nombre_empresa || 'Empresa'} · busca ${s.tipo_necesidad === 'producto' ? 'comprar' : 'contratar'}</span>
+          <h4>${queNecesita}</h4>
+          <p>${s.descripcion || ''}</p>
+          ${s.precio_ofrecido ? `<p style="margin-top:4px;font-weight:600;color:var(--green-deep-2)">Ofrece: ${formatearPrecio(s.precio_ofrecido, s.moneda)}</p>` : ''}
+        </div>
+      </div>`;
+    }).join('');
   }
 
   // ------------------------------------------------------
@@ -335,7 +521,7 @@
 
     const { data, error } = await supabaseClient
       .from('proveedores_servicios')
-      .select('nombre_empresa, descripcion, logo_url')
+      .select('nombre_empresa, tipo_servicio, zona_cobertura')
       .limit(4);
 
     if (error || !data || data.length === 0){
@@ -346,8 +532,9 @@
     adsEl.innerHTML = data.map(a => `
       <div class="ad-card">
         <span class="ad-empresa">${a.nombre_empresa || 'Empresa'}</span>
-        <img class="ad-img" src="${a.logo_url || ''}" alt="${a.nombre_empresa || ''}" onerror="this.style.background='var(--paper)'">
-        <p class="ad-desc">${a.descripcion || ''}</p>
+        <div class="ad-icon">${(a.nombre_empresa || 'E').trim().charAt(0).toUpperCase()}</div>
+        <span class="ad-meta">${a.tipo_servicio || ''}</span>
+        <p class="ad-desc">${a.zona_cobertura ? 'Cobertura: ' + a.zona_cobertura : ''}</p>
       </div>
     `).join('');
   }
@@ -370,6 +557,246 @@
   async function cerrarSesion(){
     await supabaseClient.auth.signOut();
     window.location.href = 'panel.html';
+  }
+
+  // ======================================================
+  // MODAL "PUBLICAR" — el formulario cambia según tu rol
+  // ======================================================
+  async function abrirModalPublicar(){
+    document.getElementById('modalOverlay').classList.add('show');
+    document.getElementById('modalMsg').textContent = '';
+    tipoNecesidadModal = 'producto';
+
+    if (!miRol){
+      document.getElementById('modalTitulo').textContent = 'Publicar';
+      document.getElementById('modalSub').textContent = 'No encontramos un perfil (productor, empresa o prestador de servicios) asociado a tu cuenta todavía.';
+      document.getElementById('modalFormContainer').innerHTML = '';
+      document.getElementById('btnPublicarSubmit').style.display = 'none';
+      return;
+    }
+    document.getElementById('btnPublicarSubmit').style.display = 'block';
+
+    if (!cultivosCache){
+      const { data } = await supabaseClient.from('cultivos').select('id, nombre').order('nombre');
+      cultivosCache = data || [];
+    }
+    const opcionesCultivos = cultivosCache.map(c => `<option value="${c.id}">${c.nombre}</option>`).join('');
+
+    if (miRol === 'productor'){
+      document.getElementById('modalTitulo').textContent = 'Publicar producto';
+      document.getElementById('modalSub').textContent = 'Contá qué cultivo tenés para vender.';
+      document.getElementById('modalFormContainer').innerHTML = `
+        <div class="campo">
+          <label>Cultivo</label>
+          <select id="f_cultivo">${opcionesCultivos}</select>
+        </div>
+        <div class="campo campo-fila">
+          <div>
+            <label>Cantidad</label>
+            <input type="number" id="f_cantidad" placeholder="Ej: 500" min="0" step="0.01">
+          </div>
+          <div>
+            <label>Unidad</label>
+            <select id="f_unidad">
+              <option value="kg">kg</option>
+              <option value="ton">toneladas</option>
+              <option value="cajones">cajones</option>
+              <option value="unidades">unidades</option>
+            </select>
+          </div>
+        </div>
+        <div class="campo campo-fila">
+          <div>
+            <label>Precio</label>
+            <input type="number" id="f_precio" placeholder="Ej: 1200" min="0" step="0.01">
+          </div>
+          <div>
+            <label>Moneda</label>
+            <select id="f_moneda"><option value="ARS">ARS</option><option value="USD">USD</option></select>
+          </div>
+        </div>
+        <div class="campo">
+          <label>Descripción</label>
+          <textarea id="f_descripcion" placeholder="Detalles de la cosecha, calidad, disponibilidad..."></textarea>
+        </div>
+      `;
+    }
+
+    if (miRol === 'proveedor_servicio'){
+      document.getElementById('modalTitulo').textContent = 'Publicar servicio';
+      document.getElementById('modalSub').textContent = 'Contá qué servicio ofrecés.';
+      document.getElementById('modalFormContainer').innerHTML = `
+        <div class="campo">
+          <label>Tipo de servicio</label>
+          <input type="text" id="f_tipo_servicio" placeholder="Ej: Flete refrigerado, asesoría técnica...">
+        </div>
+        <div class="campo campo-fila">
+          <div>
+            <label>Precio (opcional)</label>
+            <input type="number" id="f_precio" placeholder="Ej: 15000" min="0" step="0.01">
+          </div>
+          <div>
+            <label>Unidad de precio</label>
+            <input type="text" id="f_unidad_precio" placeholder="Ej: por viaje, por hora">
+          </div>
+        </div>
+        <div class="campo">
+          <label>Descripción</label>
+          <textarea id="f_descripcion" placeholder="Detalles del servicio..."></textarea>
+        </div>
+      `;
+    }
+
+    if (miRol === 'comprador'){
+      document.getElementById('modalTitulo').textContent = 'Publicar necesidad';
+      document.getElementById('modalSub').textContent = '¿Qué necesita tu empresa: comprar un producto o contratar un servicio?';
+      document.getElementById('modalFormContainer').innerHTML = `
+        <div class="tipo-toggle">
+          <button type="button" id="btnTipoProducto" class="active" onclick="cambiarTipoNecesidad('producto')">Comprar producto</button>
+          <button type="button" id="btnTipoServicio" onclick="cambiarTipoNecesidad('servicio')">Contratar servicio</button>
+        </div>
+        <div id="camposNecesidad"></div>
+        <div class="campo campo-fila">
+          <div>
+            <label>Precio que ofrecés (opcional)</label>
+            <input type="number" id="f_precio_ofrecido" placeholder="Ej: 900" min="0" step="0.01">
+          </div>
+          <div>
+            <label>Moneda</label>
+            <select id="f_moneda"><option value="ARS">ARS</option><option value="USD">USD</option></select>
+          </div>
+        </div>
+        <div class="campo">
+          <label>Descripción</label>
+          <textarea id="f_descripcion" placeholder="Detalles de lo que necesitás..."></textarea>
+        </div>
+      `;
+      renderCamposNecesidad(opcionesCultivos);
+    }
+  }
+
+  function cambiarTipoNecesidad(tipo){
+    tipoNecesidadModal = tipo;
+    document.getElementById('btnTipoProducto').classList.toggle('active', tipo === 'producto');
+    document.getElementById('btnTipoServicio').classList.toggle('active', tipo === 'servicio');
+    const opcionesCultivos = cultivosCache.map(c => `<option value="${c.id}">${c.nombre}</option>`).join('');
+    renderCamposNecesidad(opcionesCultivos);
+  }
+
+  function renderCamposNecesidad(opcionesCultivos){
+    const cont = document.getElementById('camposNecesidad');
+    if (tipoNecesidadModal === 'producto'){
+      cont.innerHTML = `
+        <div class="campo">
+          <label>Cultivo</label>
+          <select id="f_cultivo">${opcionesCultivos}</select>
+        </div>
+        <div class="campo campo-fila">
+          <div>
+            <label>Cantidad</label>
+            <input type="number" id="f_cantidad" placeholder="Ej: 2000" min="0" step="0.01">
+          </div>
+          <div>
+            <label>Unidad</label>
+            <select id="f_unidad">
+              <option value="kg">kg</option>
+              <option value="ton">toneladas</option>
+              <option value="cajones">cajones</option>
+              <option value="unidades">unidades</option>
+            </select>
+          </div>
+        </div>
+      `;
+    } else {
+      cont.innerHTML = `
+        <div class="campo">
+          <label>Tipo de servicio que buscás</label>
+          <input type="text" id="f_tipo_servicio" placeholder="Ej: Flete, asesoría, cosecha...">
+        </div>
+      `;
+    }
+  }
+
+  function cerrarModalPublicar(){
+    document.getElementById('modalOverlay').classList.remove('show');
+  }
+
+  async function enviarPublicacion(){
+    const msgEl = document.getElementById('modalMsg');
+    const btn = document.getElementById('btnPublicarSubmit');
+    msgEl.textContent = ''; msgEl.className = 'modal-msg';
+    btn.disabled = true; btn.textContent = 'Publicando...';
+
+    try{
+      let error;
+
+      if (miRol === 'productor'){
+        const cantidad = parseFloat(document.getElementById('f_cantidad').value);
+        if (!cantidad){ throw new Error('Ingresá una cantidad válida.'); }
+        ({ error } = await supabaseClient.from(TABLA_PUBLICACIONES).insert({
+          productor_id: usuarioActual.id,
+          cultivo_id: document.getElementById('f_cultivo').value,
+          cantidad,
+          unidad: document.getElementById('f_unidad').value,
+          precio: parseFloat(document.getElementById('f_precio').value) || null,
+          moneda: document.getElementById('f_moneda').value,
+          descripcion: document.getElementById('f_descripcion').value || null,
+          estado: 'activa'
+        }));
+      }
+
+      if (miRol === 'proveedor_servicio'){
+        const tipoServicio = document.getElementById('f_tipo_servicio').value.trim();
+        if (!tipoServicio){ throw new Error('Contanos qué tipo de servicio ofrecés.'); }
+        ({ error } = await supabaseClient.from('servicios_ofrecidos').insert({
+          proveedor_id: usuarioActual.id,
+          tipo_servicio: tipoServicio,
+          descripcion: document.getElementById('f_descripcion').value || null,
+          precio: parseFloat(document.getElementById('f_precio').value) || null,
+          unidad_precio: document.getElementById('f_unidad_precio').value || null,
+          disponible: true
+        }));
+      }
+
+      if (miRol === 'comprador'){
+        const payload = {
+          comprador_id: usuarioActual.id,
+          tipo_necesidad: tipoNecesidadModal,
+          descripcion: document.getElementById('f_descripcion').value || null,
+          precio_ofrecido: parseFloat(document.getElementById('f_precio_ofrecido').value) || null,
+          moneda: document.getElementById('f_moneda').value,
+          estado: 'activa'
+        };
+        if (tipoNecesidadModal === 'producto'){
+          const cantidad = parseFloat(document.getElementById('f_cantidad').value);
+          if (!cantidad){ throw new Error('Ingresá una cantidad válida.'); }
+          payload.cultivo_id = document.getElementById('f_cultivo').value;
+          payload.cantidad = cantidad;
+          payload.unidad = document.getElementById('f_unidad').value;
+        } else {
+          const tipoServicio = document.getElementById('f_tipo_servicio').value.trim();
+          if (!tipoServicio){ throw new Error('Contanos qué servicio buscás contratar.'); }
+          payload.tipo_servicio = tipoServicio;
+        }
+        ({ error } = await supabaseClient.from('solicitudes_compradores').insert(payload));
+      }
+
+      if (error) throw error;
+
+      msgEl.textContent = '¡Publicado con éxito!';
+      msgEl.className = 'modal-msg ok';
+
+      const mapaTab = { productor: 'productores', proveedor_servicio: 'servicios', comprador: 'empresas' };
+      cambiarTab(mapaTab[miRol]);
+
+      setTimeout(cerrarModalPublicar, 900);
+
+    } catch(err){
+      msgEl.textContent = err.message || 'Hubo un error al publicar. Probá de nuevo.';
+      msgEl.className = 'modal-msg error';
+    } finally {
+      btn.disabled = false; btn.textContent = 'Publicar';
+    }
   }
 </script>
 
