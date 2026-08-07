@@ -449,7 +449,9 @@
     }
 
     // Login correcto: mandamos a la persona directo a la app (feed).
-    window.location.href = 'feed.html';
+    // El "?_=" con la hora actual evita que el navegador muestre una
+    // copia vieja guardada en caché.
+    window.location.href = 'feed.html?_=' + Date.now();
     return false;
   }
 
@@ -458,7 +460,7 @@
   (async function chequearSesionActiva(){
     const { data: { session } } = await supabaseClient.auth.getSession();
     if (session?.user){
-      window.location.href = 'feed.html';
+      window.location.href = 'feed.html?_=' + Date.now();
     }
   })();
 
