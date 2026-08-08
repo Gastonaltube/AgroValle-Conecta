@@ -321,7 +321,8 @@
 
   let tabActual = 'productores';
   let usuarioActual = null;
-  let miRol = null; // 'productor' | 'comprador' | 'proveedor_servicio' | null
+  let misRoles = []; // todos los roles detectados: ['productor','proveedor_servicio',...]
+  let rolActivo = null; // el rol que está seleccionado ahora mismo para publicar
   let cultivosCache = null;
   let tipoNecesidadModal = 'producto'; // toggle dentro del modal para compradores
 
@@ -381,10 +382,11 @@
       supabaseClient.from('compradores').select('usuario_id').eq('usuario_id', usuarioActual.id).maybeSingle(),
       supabaseClient.from('proveedores_servicios').select('usuario_id').eq('usuario_id', usuarioActual.id).maybeSingle()
     ]);
-    if (prod.data) miRol = 'productor';
-    else if (comp.data) miRol = 'comprador';
-    else if (prov.data) miRol = 'proveedor_servicio';
-    else miRol = null;
+    misRoles = [];
+    if (prod.data) misRoles.push('productor');
+    if (comp.data) misRoles.push('comprador');
+    if (prov.data) misRoles.push('proveedor_servicio');
+    rolActivo = misRoles[0] || null;
   }
 
   // ------------------------------------------------------
@@ -565,12 +567,18 @@
   // ======================================================
   // MODAL "PUBLICAR" — el formulario cambia según tu rol
   // ======================================================
+  const NOMBRE_ROL = {
+    productor: 'Productor',
+    comprador: 'Empresa',
+    proveedor_servicio: 'Prestador de servicios'
+  };
+
   async function abrirModalPublicar(){
     document.getElementById('modalOverlay').classList.add('show');
     document.getElementById('modalMsg').textContent = '';
     tipoNecesidadModal = 'producto';
 
-    if (!miRol){
+    if (!rolActivo){
       document.getElementById('modalTitulo').textContent = 'Publicar';
       document.getElementById('modalSub').textContent = 'No encontramos un perfil (productor, empresa o prestador de servicios) asociado a tu cuenta todavía.';
       document.getElementById('modalFormContainer').innerHTML = '';
@@ -583,12 +591,37 @@
       const { data } = await supabaseClient.from('cultivos').select('id, nombre').order('nombre');
       cultivosCache = data || [];
     }
-    const opcionesCultivos = cultivosCache.map(c => `<option value="${c.id}">${c.nombre}</option>`).join('');
 
-    if (miRol === 'productor'){
+    renderFormularioPublicar();
+  }
+
+  // Cuando la cuenta tiene más de un rol (ej: productor Y prestador de
+  // servicios), mostramos un selector arriba del formulario para elegir
+  // con cuál sombrero publicar.
+  function selectorDeRolHTML(){
+    if (misRoles.length <= 1) return '';
+    return `
+      <div class="tipo-toggle" style="margin-bottom:16px;">
+        ${misRoles.map(r => `
+          <button type="button" class="${r === rolActivo ? 'active' : ''}" onclick="cambiarRolActivo('${r}')">${NOMBRE_ROL[r]}</button>
+        `).join('')}
+      </div>
+    `;
+  }
+
+  function cambiarRolActivo(rol){
+    rolActivo = rol;
+    renderFormularioPublicar();
+  }
+
+  function renderFormularioPublicar(){
+    const opcionesCultivos = cultivosCache.map(c => `<option value="${c.id}">${c.nombre}</option>`).join('');
+    const selector = selectorDeRolHTML();
+
+    if (rolActivo === 'productor'){
       document.getElementById('modalTitulo').textContent = 'Publicar producto';
       document.getElementById('modalSub').textContent = 'Contá qué cultivo tenés para vender.';
-      document.getElementById('modalFormContainer').innerHTML = `
+      document.getElementById('modalFormContainer').innerHTML = selector + `
         <div class="campo">
           <label>Cultivo</label>
           <select id="f_cultivo">${opcionesCultivos}</select>
@@ -625,10 +658,10 @@
       `;
     }
 
-    if (miRol === 'proveedor_servicio'){
+    if (rolActivo === 'proveedor_servicio'){
       document.getElementById('modalTitulo').textContent = 'Publicar servicio';
       document.getElementById('modalSub').textContent = 'Contá qué servicio ofrecés.';
-      document.getElementById('modalFormContainer').innerHTML = `
+      document.getElementById('modalFormContainer').innerHTML = selector + `
         <div class="campo">
           <label>Tipo de servicio</label>
           <input type="text" id="f_tipo_servicio" placeholder="Ej: Flete refrigerado, asesoría técnica...">
@@ -650,10 +683,10 @@
       `;
     }
 
-    if (miRol === 'comprador'){
+    if (rolActivo === 'comprador'){
       document.getElementById('modalTitulo').textContent = 'Publicar necesidad';
       document.getElementById('modalSub').textContent = '¿Qué necesita tu empresa: comprar un producto o contratar un servicio?';
-      document.getElementById('modalFormContainer').innerHTML = `
+      document.getElementById('modalFormContainer').innerHTML = selector + `
         <div class="tipo-toggle">
           <button type="button" id="btnTipoProducto" class="active" onclick="cambiarTipoNecesidad('producto')">Comprar producto</button>
           <button type="button" id="btnTipoServicio" onclick="cambiarTipoNecesidad('servicio')">Contratar servicio</button>
@@ -733,7 +766,7 @@
     try{
       let error;
 
-      if (miRol === 'productor'){
+      if (rolActivo === 'productor'){
         const cantidad = parseFloat(document.getElementById('f_cantidad').value);
         if (!cantidad){ throw new Error('Ingresá una cantidad válida.'); }
         ({ error } = await supabaseClient.from(TABLA_PUBLICACIONES).insert({
@@ -748,7 +781,7 @@
         }));
       }
 
-      if (miRol === 'proveedor_servicio'){
+      if (rolActivo === 'proveedor_servicio'){
         const tipoServicio = document.getElementById('f_tipo_servicio').value.trim();
         if (!tipoServicio){ throw new Error('Contanos qué tipo de servicio ofrecés.'); }
         ({ error } = await supabaseClient.from('servicios_ofrecidos').insert({
@@ -761,7 +794,7 @@
         }));
       }
 
-      if (miRol === 'comprador'){
+      if (rolActivo === 'comprador'){
         const payload = {
           comprador_id: usuarioActual.id,
           tipo_necesidad: tipoNecesidadModal,
@@ -790,7 +823,7 @@
       msgEl.className = 'modal-msg ok';
 
       const mapaTab = { productor: 'productores', proveedor_servicio: 'servicios', comprador: 'empresas' };
-      cambiarTab(mapaTab[miRol]);
+      cambiarTab(mapaTab[rolActivo]);
 
       setTimeout(cerrarModalPublicar, 900);
 
