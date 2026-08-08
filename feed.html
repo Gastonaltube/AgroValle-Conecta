@@ -390,8 +390,12 @@
   // 1.b) Detectar qué tipo de perfil tiene el usuario logueado
   //    (productor / comprador / proveedor de servicios), buscando
   //    en qué tabla existe una fila con su usuario_id.
-  //    Esto define qué formulario de "Publicar" le mostramos.
+  //    Esto solo nos sirve para PRESELECCIONAR el rol con el que
+  //    ya venías publicando — el selector siempre te va a dejar
+  //    elegir cualquiera de los 3, tengas o no la ficha creada.
   // ------------------------------------------------------
+  const TODOS_LOS_ROLES = ['productor', 'comprador', 'proveedor_servicio'];
+
   async function detectarRol(){
     const [prod, comp, prov] = await Promise.all([
       supabaseClient.from(TABLA_PRODUCTORES).select('usuario_id').eq('usuario_id', usuarioActual.id).maybeSingle(),
@@ -402,7 +406,21 @@
     if (prod.data) misRoles.push('productor');
     if (comp.data) misRoles.push('comprador');
     if (prov.data) misRoles.push('proveedor_servicio');
-    rolActivo = misRoles[0] || null;
+    rolActivo = misRoles[0] || 'productor';
+  }
+
+  // Si el usuario elige publicar con un rol que todavía no tiene
+  // ficha creada (ej: nunca se registró como empresa), le creamos
+  // esa ficha básica en el momento, antes de guardar la publicación.
+  async function asegurarPerfilDeRol(rol){
+    if (misRoles.includes(rol)) return; // ya la tiene
+    const tabla = rol === 'productor' ? TABLA_PRODUCTORES
+                : rol === 'comprador' ? TABLA_COMPRADORES
+                : TABLA_PROVEEDORES_SERVICIOS;
+    const { error } = await supabaseClient.from(tabla).insert({ usuario_id: usuarioActual.id });
+    // Si ya existía (carrera entre pestañas, doble clic, etc.) no es un error real.
+    if (error && error.code !== '23505') throw error;
+    misRoles.push(rol);
   }
 
   // ------------------------------------------------------
@@ -593,14 +611,6 @@
     document.getElementById('modalOverlay').classList.add('show');
     document.getElementById('modalMsg').textContent = '';
     tipoNecesidadModal = 'producto';
-
-    if (!rolActivo){
-      document.getElementById('modalTitulo').textContent = 'Publicar';
-      document.getElementById('modalSub').textContent = 'No encontramos un perfil (productor, empresa o prestador de servicios) asociado a tu cuenta todavía.';
-      document.getElementById('modalFormContainer').innerHTML = '';
-      document.getElementById('btnPublicarSubmit').style.display = 'none';
-      return;
-    }
     document.getElementById('btnPublicarSubmit').style.display = 'block';
 
     if (!cultivosCache){
@@ -611,14 +621,13 @@
     renderFormularioPublicar();
   }
 
-  // Cuando la cuenta tiene más de un rol (ej: productor Y prestador de
-  // servicios), mostramos un selector arriba del formulario para elegir
-  // con cuál sombrero publicar.
+  // Siempre mostramos las 3 opciones — cualquier cuenta puede publicar
+  // como productor, empresa o prestador de servicios, tenga o no la
+  // ficha creada todavía (se crea sola la primera vez que la usás).
   function selectorDeRolHTML(){
-    if (misRoles.length <= 1) return '';
     return `
       <div class="tipo-toggle" style="margin-bottom:16px;">
-        ${misRoles.map(r => `
+        ${TODOS_LOS_ROLES.map(r => `
           <button type="button" class="${r === rolActivo ? 'active' : ''}" onclick="cambiarRolActivo('${r}')">${NOMBRE_ROL[r]}</button>
         `).join('')}
       </div>
@@ -631,7 +640,7 @@
   }
 
   function renderFormularioPublicar(){
-    const opcionesCultivos = cultivosCache.map(c => `<option value="${c.id}">${c.nombre}</option>`).join('');
+    const datalistCultivos = `<datalist id="lista_cultivos">${cultivosCache.map(c => `<option value="${c.nombre}">`).join('')}</datalist>`;
     const selector = selectorDeRolHTML();
 
     if (rolActivo === 'productor'){
@@ -640,7 +649,8 @@
       document.getElementById('modalFormContainer').innerHTML = selector + `
         <div class="campo">
           <label>Cultivo</label>
-          <select id="f_cultivo">${opcionesCultivos}</select>
+          <input type="text" id="f_cultivo" list="lista_cultivos" placeholder="Ej: Nuez, uva, durazno... (podés escribir uno nuevo)">
+          ${datalistCultivos}
         </div>
         <div class="campo campo-fila">
           <div>
@@ -723,7 +733,7 @@
           <textarea id="f_descripcion" placeholder="Detalles de lo que necesitás..."></textarea>
         </div>
       `;
-      renderCamposNecesidad(opcionesCultivos);
+      renderCamposNecesidad(datalistCultivos);
     }
   }
 
@@ -731,17 +741,18 @@
     tipoNecesidadModal = tipo;
     document.getElementById('btnTipoProducto').classList.toggle('active', tipo === 'producto');
     document.getElementById('btnTipoServicio').classList.toggle('active', tipo === 'servicio');
-    const opcionesCultivos = cultivosCache.map(c => `<option value="${c.id}">${c.nombre}</option>`).join('');
-    renderCamposNecesidad(opcionesCultivos);
+    const datalistCultivos = `<datalist id="lista_cultivos">${cultivosCache.map(c => `<option value="${c.nombre}">`).join('')}</datalist>`;
+    renderCamposNecesidad(datalistCultivos);
   }
 
-  function renderCamposNecesidad(opcionesCultivos){
+  function renderCamposNecesidad(datalistCultivos){
     const cont = document.getElementById('camposNecesidad');
     if (tipoNecesidadModal === 'producto'){
       cont.innerHTML = `
         <div class="campo">
           <label>Cultivo</label>
-          <select id="f_cultivo">${opcionesCultivos}</select>
+          <input type="text" id="f_cultivo" list="lista_cultivos" placeholder="Ej: Nuez, uva, durazno... (podés escribir uno nuevo)">
+          ${datalistCultivos}
         </div>
         <div class="campo campo-fila">
           <div>
@@ -773,6 +784,27 @@
     document.getElementById('modalOverlay').classList.remove('show');
   }
 
+  // Busca el cultivo por nombre (sin importar mayúsculas) y si no
+  // existe todavía en el catálogo, lo crea. Así el campo "Cultivo"
+  // puede ser texto libre en vez de una lista cerrada.
+  async function obtenerOCrearCultivoId(nombreEscrito){
+    const nombre = nombreEscrito.trim();
+    if (!nombre) throw new Error('Ingresá el cultivo.');
+
+    const existente = cultivosCache.find(c => c.nombre.toLowerCase() === nombre.toLowerCase());
+    if (existente) return existente.id;
+
+    const { data, error } = await supabaseClient
+      .from(TABLA_CULTIVOS)
+      .insert({ nombre })
+      .select('id, nombre')
+      .single();
+
+    if (error) throw new Error('No pudimos guardar el cultivo "' + nombre + '".');
+    cultivosCache.push(data);
+    return data.id;
+  }
+
   async function enviarPublicacion(){
     const msgEl = document.getElementById('modalMsg');
     const btn = document.getElementById('btnPublicarSubmit');
@@ -782,12 +814,17 @@
     try{
       let error;
 
+      // Si es la primera vez que publicás con este rol, le creamos
+      // la ficha básica antes de guardar la publicación.
+      await asegurarPerfilDeRol(rolActivo);
+
       if (rolActivo === 'productor'){
         const cantidad = parseFloat(document.getElementById('f_cantidad').value);
         if (!cantidad){ throw new Error('Ingresá una cantidad válida.'); }
+        const cultivoId = await obtenerOCrearCultivoId(document.getElementById('f_cultivo').value);
         ({ error } = await supabaseClient.from(TABLA_PUBLICACIONES).insert({
           productor_id: usuarioActual.id,
-          cultivo_id: document.getElementById('f_cultivo').value,
+          cultivo_id: cultivoId,
           cantidad,
           unidad: document.getElementById('f_unidad').value,
           precio: parseFloat(document.getElementById('f_precio').value) || null,
@@ -822,7 +859,7 @@
         if (tipoNecesidadModal === 'producto'){
           const cantidad = parseFloat(document.getElementById('f_cantidad').value);
           if (!cantidad){ throw new Error('Ingresá una cantidad válida.'); }
-          payload.cultivo_id = document.getElementById('f_cultivo').value;
+          payload.cultivo_id = await obtenerOCrearCultivoId(document.getElementById('f_cultivo').value);
           payload.cantidad = cantidad;
           payload.unidad = document.getElementById('f_unidad').value;
         } else {
