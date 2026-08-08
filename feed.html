@@ -327,24 +327,32 @@
   let tipoNecesidadModal = 'producto'; // toggle dentro del modal para compradores
 
   // ------------------------------------------------------
-  // 0) Algunas tablas de tu base tienen mayúscula inicial
-  //    (Usuarios, Publicaciones, Productores) y otras no.
-  //    En vez de asumir a ojo, probamos las dos formas la
-  //    primera vez y guardamos cuál existe realmente.
+  // 0) Probamos el nombre de cada tabla en minúscula y con la
+  //    inicial en mayúscula, y nos quedamos con el que exista
+  //    de verdad. Usamos un select con límite 1 (no "head") para
+  //    que el error de "tabla no encontrada" se detecte bien —
+  //    la vez pasada usábamos head+count y ese tipo de consulta
+  //    no devolvía el error correctamente, por eso fallaba.
   // ------------------------------------------------------
   const cacheNombresTabla = {};
   async function resolverTabla(candidatos){
     const key = candidatos.join('|');
     if (cacheNombresTabla[key]) return cacheNombresTabla[key];
     for (const nombre of candidatos){
-      const { error } = await supabaseClient.from(nombre).select('*', { head: true, count: 'exact' });
+      const { error } = await supabaseClient.from(nombre).select('*').limit(1);
       if (!error){ cacheNombresTabla[key] = nombre; return nombre; }
     }
     cacheNombresTabla[key] = candidatos[0];
     return candidatos[0];
   }
 
-  let TABLA_USUARIOS, TABLA_PUBLICACIONES, TABLA_PRODUCTORES;
+  function variantesNombre(nombre){
+    const capitalizado = nombre.charAt(0).toUpperCase() + nombre.slice(1);
+    return [nombre, capitalizado];
+  }
+
+  let TABLA_USUARIOS, TABLA_PUBLICACIONES, TABLA_PRODUCTORES, TABLA_COMPRADORES,
+      TABLA_PROVEEDORES_SERVICIOS, TABLA_SERVICIOS_OFRECIDOS, TABLA_SOLICITUDES_COMPRADORES, TABLA_CULTIVOS;
 
   // ------------------------------------------------------
   // 1) Chequear que haya sesión activa. Si no hay, de vuelta
@@ -358,10 +366,18 @@
     }
     usuarioActual = session.user;
 
-    [TABLA_USUARIOS, TABLA_PUBLICACIONES, TABLA_PRODUCTORES] = await Promise.all([
-      resolverTabla(['Usuarios', 'usuarios']),
-      resolverTabla(['Publicaciones', 'publicaciones']),
-      resolverTabla(['Productores', 'productores'])
+    [
+      TABLA_USUARIOS, TABLA_PUBLICACIONES, TABLA_PRODUCTORES, TABLA_COMPRADORES,
+      TABLA_PROVEEDORES_SERVICIOS, TABLA_SERVICIOS_OFRECIDOS, TABLA_SOLICITUDES_COMPRADORES, TABLA_CULTIVOS
+    ] = await Promise.all([
+      resolverTabla(variantesNombre('usuarios')),
+      resolverTabla(variantesNombre('publicaciones')),
+      resolverTabla(variantesNombre('productores')),
+      resolverTabla(variantesNombre('compradores')),
+      resolverTabla(variantesNombre('proveedores_servicios')),
+      resolverTabla(variantesNombre('servicios_ofrecidos')),
+      resolverTabla(variantesNombre('solicitudes_compradores')),
+      resolverTabla(variantesNombre('cultivos'))
     ]);
 
     await cargarPerfil();
@@ -379,8 +395,8 @@
   async function detectarRol(){
     const [prod, comp, prov] = await Promise.all([
       supabaseClient.from(TABLA_PRODUCTORES).select('usuario_id').eq('usuario_id', usuarioActual.id).maybeSingle(),
-      supabaseClient.from('compradores').select('usuario_id').eq('usuario_id', usuarioActual.id).maybeSingle(),
-      supabaseClient.from('proveedores_servicios').select('usuario_id').eq('usuario_id', usuarioActual.id).maybeSingle()
+      supabaseClient.from(TABLA_COMPRADORES).select('usuario_id').eq('usuario_id', usuarioActual.id).maybeSingle(),
+      supabaseClient.from(TABLA_PROVEEDORES_SERVICIOS).select('usuario_id').eq('usuario_id', usuarioActual.id).maybeSingle()
     ]);
     misRoles = [];
     if (prod.data) misRoles.push('productor');
@@ -463,7 +479,7 @@
 
   async function cargarFeedServicios(feedEl){
     const { data, error } = await supabaseClient
-      .from('servicios_ofrecidos')
+      .from(TABLA_SERVICIOS_OFRECIDOS)
       .select('id, tipo_servicio, descripcion, precio, unidad_precio, disponible, creado_en, proveedores_servicios(nombre_empresa, zona_cobertura)')
       .eq('disponible', true)
       .order('creado_en', { ascending: false })
@@ -488,7 +504,7 @@
 
   async function cargarFeedEmpresas(feedEl){
     const { data, error } = await supabaseClient
-      .from('solicitudes_compradores')
+      .from(TABLA_SOLICITUDES_COMPRADORES)
       .select('id, tipo_necesidad, tipo_servicio, cantidad, unidad, descripcion, precio_ofrecido, moneda, estado, creado_en, cultivos(nombre), compradores(nombre_empresa)')
       .eq('estado', 'activa')
       .order('creado_en', { ascending: false })
@@ -525,7 +541,7 @@
     const adsEl = document.getElementById('adsContainer');
 
     const { data, error } = await supabaseClient
-      .from('proveedores_servicios')
+      .from(TABLA_PROVEEDORES_SERVICIOS)
       .select('nombre_empresa, tipo_servicio, zona_cobertura')
       .limit(4);
 
@@ -588,7 +604,7 @@
     document.getElementById('btnPublicarSubmit').style.display = 'block';
 
     if (!cultivosCache){
-      const { data } = await supabaseClient.from('cultivos').select('id, nombre').order('nombre');
+      const { data } = await supabaseClient.from(TABLA_CULTIVOS).select('id, nombre').order('nombre');
       cultivosCache = data || [];
     }
 
@@ -784,7 +800,7 @@
       if (rolActivo === 'proveedor_servicio'){
         const tipoServicio = document.getElementById('f_tipo_servicio').value.trim();
         if (!tipoServicio){ throw new Error('Contanos qué tipo de servicio ofrecés.'); }
-        ({ error } = await supabaseClient.from('servicios_ofrecidos').insert({
+        ({ error } = await supabaseClient.from(TABLA_SERVICIOS_OFRECIDOS).insert({
           proveedor_id: usuarioActual.id,
           tipo_servicio: tipoServicio,
           descripcion: document.getElementById('f_descripcion').value || null,
@@ -814,7 +830,7 @@
           if (!tipoServicio){ throw new Error('Contanos qué servicio buscás contratar.'); }
           payload.tipo_servicio = tipoServicio;
         }
-        ({ error } = await supabaseClient.from('solicitudes_compradores').insert(payload));
+        ({ error } = await supabaseClient.from(TABLA_SOLICITUDES_COMPRADORES).insert(payload));
       }
 
       if (error) throw error;
