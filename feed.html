@@ -225,6 +225,26 @@
   .modal-msg{font-size:12.5px; margin-top:10px; text-align:center;}
   .modal-msg.error{color:#B3413E;}
   .modal-msg.ok{color:var(--green-sage);}
+
+  /* Subida de imágenes en el modal Publicar */
+  .campo-imagenes label{
+    display:block; font-family:'Space Mono',monospace; font-size:11px; text-transform:uppercase;
+    letter-spacing:0.06em; color:var(--green-sage); margin-bottom:5px;
+  }
+  .dropzone-imagenes{
+    border:1.5px dashed var(--line); border-radius:var(--radius); padding:16px;
+    text-align:center; cursor:pointer; background:var(--paper); font-size:13px; color:var(--ink-soft);
+  }
+  .dropzone-imagenes:hover{border-color:var(--green-sage);}
+  .preview-imagenes{display:flex; flex-wrap:wrap; gap:8px; margin-top:10px;}
+  .preview-item{position:relative; width:64px; height:64px; border-radius:var(--radius); overflow:hidden; border:1px solid var(--line);}
+  .preview-item img{width:100%; height:100%; object-fit:cover; display:block;}
+  .preview-item button{
+    position:absolute; top:2px; right:2px; width:18px; height:18px; border-radius:50%;
+    background:rgba(20,32,22,0.75); color:var(--white); border:none; cursor:pointer;
+    font-size:12px; line-height:1; display:flex; align-items:center; justify-content:center;
+  }
+  .subiendo-imagenes{font-size:12px; color:var(--ink-soft); margin-top:6px;}
 </style>
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 </head>
@@ -352,7 +372,10 @@
   }
 
   let TABLA_USUARIOS, TABLA_PUBLICACIONES, TABLA_PRODUCTORES, TABLA_COMPRADORES,
-      TABLA_PROVEEDORES_SERVICIOS, TABLA_SERVICIOS_OFRECIDOS, TABLA_SOLICITUDES_COMPRADORES, TABLA_CULTIVOS;
+      TABLA_PROVEEDORES_SERVICIOS, TABLA_SERVICIOS_OFRECIDOS, TABLA_SOLICITUDES_COMPRADORES, TABLA_CULTIVOS,
+      TABLA_PUBLICACION_IMAGENES, TABLA_SERVICIO_IMAGENES, TABLA_SOLICITUD_IMAGENES;
+
+  const NOMBRE_BUCKET_IMAGENES = 'publicaciones-imagenes';
 
   // ------------------------------------------------------
   // 1) Chequear que haya sesión activa. Si no hay, de vuelta
@@ -368,7 +391,8 @@
 
     [
       TABLA_USUARIOS, TABLA_PUBLICACIONES, TABLA_PRODUCTORES, TABLA_COMPRADORES,
-      TABLA_PROVEEDORES_SERVICIOS, TABLA_SERVICIOS_OFRECIDOS, TABLA_SOLICITUDES_COMPRADORES, TABLA_CULTIVOS
+      TABLA_PROVEEDORES_SERVICIOS, TABLA_SERVICIOS_OFRECIDOS, TABLA_SOLICITUDES_COMPRADORES, TABLA_CULTIVOS,
+      TABLA_PUBLICACION_IMAGENES, TABLA_SERVICIO_IMAGENES, TABLA_SOLICITUD_IMAGENES
     ] = await Promise.all([
       resolverTabla(variantesNombre('usuarios')),
       resolverTabla(variantesNombre('publicaciones')),
@@ -377,7 +401,10 @@
       resolverTabla(variantesNombre('proveedores_servicios')),
       resolverTabla(variantesNombre('servicios_ofrecidos')),
       resolverTabla(variantesNombre('solicitudes_compradores')),
-      resolverTabla(variantesNombre('cultivos'))
+      resolverTabla(variantesNombre('cultivos')),
+      resolverTabla(variantesNombre('publicacion_imagenes')),
+      resolverTabla(variantesNombre('servicio_imagenes')),
+      resolverTabla(variantesNombre('solicitud_imagenes'))
     ]);
 
     await cargarPerfil();
@@ -498,7 +525,7 @@
   async function cargarFeedServicios(feedEl){
     const { data, error } = await supabaseClient
       .from(TABLA_SERVICIOS_OFRECIDOS)
-      .select('id, tipo_servicio, descripcion, precio, unidad_precio, disponible, creado_en, proveedores_servicios(nombre_empresa, zona_cobertura)')
+      .select('id, tipo_servicio, descripcion, precio, unidad_precio, disponible, creado_en, proveedores_servicios(nombre_empresa, zona_cobertura), servicio_imagenes(url)')
       .eq('disponible', true)
       .order('creado_en', { ascending: false })
       .limit(20);
@@ -510,6 +537,7 @@
 
     feedEl.innerHTML = data.map(s => `
       <div class="publicacion-card">
+        ${s.servicio_imagenes?.[0]?.url ? `<img class="publicacion-img" src="${s.servicio_imagenes[0].url}" alt="" onerror="this.style.display='none'">` : ''}
         <div class="publicacion-info" style="flex:1">
           <span class="eyebrow">${s.proveedores_servicios?.nombre_empresa || 'Prestador de servicios'}${s.proveedores_servicios?.zona_cobertura ? ' · ' + s.proveedores_servicios.zona_cobertura : ''}</span>
           <h4>${s.tipo_servicio || 'Servicio'}</h4>
@@ -523,7 +551,7 @@
   async function cargarFeedEmpresas(feedEl){
     const { data, error } = await supabaseClient
       .from(TABLA_SOLICITUDES_COMPRADORES)
-      .select('id, tipo_necesidad, tipo_servicio, cantidad, unidad, descripcion, precio_ofrecido, moneda, estado, creado_en, cultivos(nombre), compradores(nombre_empresa)')
+      .select('id, tipo_necesidad, tipo_servicio, cantidad, unidad, descripcion, precio_ofrecido, moneda, estado, creado_en, cultivos(nombre), compradores(nombre_empresa), solicitud_imagenes(url)')
       .eq('estado', 'activa')
       .order('creado_en', { ascending: false })
       .limit(20);
@@ -539,6 +567,7 @@
         : (s.tipo_servicio || 'Servicio');
       return `
       <div class="publicacion-card">
+        ${s.solicitud_imagenes?.[0]?.url ? `<img class="publicacion-img" src="${s.solicitud_imagenes[0].url}" alt="" onerror="this.style.display='none'">` : ''}
         <div class="publicacion-info" style="flex:1">
           <span class="eyebrow">${s.compradores?.nombre_empresa || 'Empresa'} · busca ${s.tipo_necesidad === 'producto' ? 'comprar' : 'contratar'}</span>
           <h4>${queNecesita}</h4>
@@ -611,6 +640,7 @@
     document.getElementById('modalOverlay').classList.add('show');
     document.getElementById('modalMsg').textContent = '';
     tipoNecesidadModal = 'producto';
+    archivosImagenesSeleccionados = [];
     document.getElementById('btnPublicarSubmit').style.display = 'block';
 
     if (!cultivosCache){
@@ -636,7 +666,78 @@
 
   function cambiarRolActivo(rol){
     rolActivo = rol;
+    archivosImagenesSeleccionados = [];
     renderFormularioPublicar();
+  }
+
+  // ------------------------------------------------------
+  // Subida de imágenes: el usuario elige hasta 5 fotos, se
+  // muestran como miniaturas, y recién se suben al Storage
+  // cuando confirma "Publicar" (junto con el resto de los datos).
+  // ------------------------------------------------------
+  let archivosImagenesSeleccionados = [];
+  const MAX_IMAGENES = 5;
+
+  function manejarSeleccionImagenes(event){
+    const nuevos = Array.from(event.target.files || []);
+    archivosImagenesSeleccionados = [...archivosImagenesSeleccionados, ...nuevos].slice(0, MAX_IMAGENES);
+    event.target.value = ''; // permite volver a elegir el mismo archivo si lo saca y lo quiere subir de nuevo
+    renderPreviewImagenes();
+  }
+
+  function quitarImagenSeleccionada(indice){
+    archivosImagenesSeleccionados.splice(indice, 1);
+    renderPreviewImagenes();
+  }
+
+  function renderPreviewImagenes(){
+    const cont = document.getElementById('previewImagenes');
+    if (!cont) return;
+    cont.innerHTML = archivosImagenesSeleccionados.map((file, i) => `
+      <div class="preview-item">
+        <img src="${URL.createObjectURL(file)}" alt="">
+        <button type="button" onclick="quitarImagenSeleccionada(${i})">✕</button>
+      </div>
+    `).join('');
+  }
+
+  // Sube todos los archivos elegidos al bucket de Storage y guarda
+  // sus URLs en la tabla de imágenes correspondiente (una por tipo
+  // de publicación). Se llama recién después de crear la publicación,
+  // ya que necesitamos su id para relacionar las fotos con ella.
+  async function subirImagenesDeLaPublicacion(idPublicacion){
+    if (archivosImagenesSeleccionados.length === 0) return;
+
+    const tablaImagenes = rolActivo === 'productor' ? TABLA_PUBLICACION_IMAGENES
+                         : rolActivo === 'proveedor_servicio' ? TABLA_SERVICIO_IMAGENES
+                         : TABLA_SOLICITUD_IMAGENES;
+    const columnaId = rolActivo === 'productor' ? 'publicacion_id'
+                     : rolActivo === 'proveedor_servicio' ? 'servicio_id'
+                     : 'solicitud_id';
+    // La tabla original "publicacion_imagenes" guarda el link en la
+    // columna "URL" (mayúscula); las tablas nuevas usan "url" en minúscula.
+    const columnaUrl = rolActivo === 'productor' ? 'URL' : 'url';
+
+    for (let i = 0; i < archivosImagenesSeleccionados.length; i++){
+      const file = archivosImagenesSeleccionados[i];
+      const rutaArchivo = `${usuarioActual.id}/${idPublicacion}/${Date.now()}_${i}_${file.name}`;
+
+      const { error: errorSubida } = await supabaseClient.storage
+        .from(NOMBRE_BUCKET_IMAGENES)
+        .upload(rutaArchivo, file);
+
+      if (errorSubida) continue; // si una foto falla, seguimos con las demás
+
+      const { data: urlPublica } = supabaseClient.storage
+        .from(NOMBRE_BUCKET_IMAGENES)
+        .getPublicUrl(rutaArchivo);
+
+      await supabaseClient.from(tablaImagenes).insert({
+        [columnaId]: idPublicacion,
+        [columnaUrl]: urlPublica.publicUrl,
+        orden: i
+      });
+    }
   }
 
   function renderFormularioPublicar(){
@@ -681,6 +782,13 @@
           <label>Descripción</label>
           <textarea id="f_descripcion" placeholder="Detalles de la cosecha, calidad, disponibilidad..."></textarea>
         </div>
+    
+        <div class="campo campo-imagenes">
+          <label>Fotos (opcional, hasta 5)</label>
+          <div class="dropzone-imagenes" onclick="document.getElementById('f_imagenes').click()">Hacé clic para elegir fotos</div>
+          <input type="file" id="f_imagenes" accept="image/*" multiple style="display:none" onchange="manejarSeleccionImagenes(event)">
+          <div class="preview-imagenes" id="previewImagenes"></div>
+        </div>
       `;
     }
 
@@ -705,6 +813,13 @@
         <div class="campo">
           <label>Descripción</label>
           <textarea id="f_descripcion" placeholder="Detalles del servicio..."></textarea>
+        </div>
+    
+        <div class="campo campo-imagenes">
+          <label>Fotos (opcional, hasta 5)</label>
+          <div class="dropzone-imagenes" onclick="document.getElementById('f_imagenes').click()">Hacé clic para elegir fotos</div>
+          <input type="file" id="f_imagenes" accept="image/*" multiple style="display:none" onchange="manejarSeleccionImagenes(event)">
+          <div class="preview-imagenes" id="previewImagenes"></div>
         </div>
       `;
     }
@@ -731,6 +846,13 @@
         <div class="campo">
           <label>Descripción</label>
           <textarea id="f_descripcion" placeholder="Detalles de lo que necesitás..."></textarea>
+        </div>
+    
+        <div class="campo campo-imagenes">
+          <label>Fotos (opcional, hasta 5)</label>
+          <div class="dropzone-imagenes" onclick="document.getElementById('f_imagenes').click()">Hacé clic para elegir fotos</div>
+          <input type="file" id="f_imagenes" accept="image/*" multiple style="display:none" onchange="manejarSeleccionImagenes(event)">
+          <div class="preview-imagenes" id="previewImagenes"></div>
         </div>
       `;
       renderCamposNecesidad(datalistCultivos);
@@ -822,7 +944,7 @@
         const cantidad = parseFloat(document.getElementById('f_cantidad').value);
         if (!cantidad){ throw new Error('Ingresá una cantidad válida.'); }
         const cultivoId = await obtenerOCrearCultivoId(document.getElementById('f_cultivo').value);
-        ({ error } = await supabaseClient.from(TABLA_PUBLICACIONES).insert({
+        const resultado = await supabaseClient.from(TABLA_PUBLICACIONES).insert({
           productor_id: usuarioActual.id,
           cultivo_id: cultivoId,
           cantidad,
@@ -831,20 +953,24 @@
           moneda: document.getElementById('f_moneda').value,
           descripcion: document.getElementById('f_descripcion').value || null,
           estado: 'activa'
-        }));
+        }).select('id').single();
+        error = resultado.error;
+        if (!error) await subirImagenesDeLaPublicacion(resultado.data.id);
       }
 
       if (rolActivo === 'proveedor_servicio'){
         const tipoServicio = document.getElementById('f_tipo_servicio').value.trim();
         if (!tipoServicio){ throw new Error('Contanos qué tipo de servicio ofrecés.'); }
-        ({ error } = await supabaseClient.from(TABLA_SERVICIOS_OFRECIDOS).insert({
+        const resultado = await supabaseClient.from(TABLA_SERVICIOS_OFRECIDOS).insert({
           proveedor_id: usuarioActual.id,
           tipo_servicio: tipoServicio,
           descripcion: document.getElementById('f_descripcion').value || null,
           precio: parseFloat(document.getElementById('f_precio').value) || null,
           unidad_precio: document.getElementById('f_unidad_precio').value || null,
           disponible: true
-        }));
+        }).select('id').single();
+        error = resultado.error;
+        if (!error) await subirImagenesDeLaPublicacion(resultado.data.id);
       }
 
       if (rolActivo === 'comprador'){
@@ -867,7 +993,9 @@
           if (!tipoServicio){ throw new Error('Contanos qué servicio buscás contratar.'); }
           payload.tipo_servicio = tipoServicio;
         }
-        ({ error } = await supabaseClient.from(TABLA_SOLICITUDES_COMPRADORES).insert(payload));
+        const resultado = await supabaseClient.from(TABLA_SOLICITUDES_COMPRADORES).insert(payload).select('id').single();
+        error = resultado.error;
+        if (!error) await subirImagenesDeLaPublicacion(resultado.data.id);
       }
 
       if (error) throw error;
