@@ -705,8 +705,10 @@
   // sus URLs en la tabla de imágenes correspondiente (una por tipo
   // de publicación). Se llama recién después de crear la publicación,
   // ya que necesitamos su id para relacionar las fotos con ella.
+  // Devuelve la cantidad de fotos que fallaron, para poder avisarle
+  // al usuario en vez de fallar en silencio (como pasó antes).
   async function subirImagenesDeLaPublicacion(idPublicacion){
-    if (archivosImagenesSeleccionados.length === 0) return;
+    if (archivosImagenesSeleccionados.length === 0) return 0;
 
     const tablaImagenes = rolActivo === 'productor' ? TABLA_PUBLICACION_IMAGENES
                          : rolActivo === 'proveedor_servicio' ? TABLA_SERVICIO_IMAGENES
@@ -714,9 +716,9 @@
     const columnaId = rolActivo === 'productor' ? 'publicacion_id'
                      : rolActivo === 'proveedor_servicio' ? 'servicio_id'
                      : 'solicitud_id';
-    // La tabla original "publicacion_imagenes" guarda el link en la
-    // columna "URL" (mayúscula); las tablas nuevas usan "url" en minúscula.
     const columnaUrl = 'url'; // las 3 tablas de imágenes usan la columna "url" en minúscula
+
+    let fallidas = 0;
 
     for (let i = 0; i < archivosImagenesSeleccionados.length; i++){
       const file = archivosImagenesSeleccionados[i];
@@ -726,18 +728,22 @@
         .from(NOMBRE_BUCKET_IMAGENES)
         .upload(rutaArchivo, file);
 
-      if (errorSubida) continue; // si una foto falla, seguimos con las demás
+      if (errorSubida){ console.error('Error subiendo imagen al storage:', errorSubida); fallidas++; continue; }
 
       const { data: urlPublica } = supabaseClient.storage
         .from(NOMBRE_BUCKET_IMAGENES)
         .getPublicUrl(rutaArchivo);
 
-      await supabaseClient.from(tablaImagenes).insert({
+      const { error: errorInsert } = await supabaseClient.from(tablaImagenes).insert({
         [columnaId]: idPublicacion,
         [columnaUrl]: urlPublica.publicUrl,
         orden: i
       });
+
+      if (errorInsert){ console.error('Error guardando la fila de imagen:', errorInsert); fallidas++; }
     }
+
+    return fallidas;
   }
 
   function renderFormularioPublicar(){
@@ -934,7 +940,7 @@
     btn.disabled = true; btn.textContent = 'Publicando...';
 
     try{
-      let error;
+      let error; let fotosFallidas = 0;
 
       // Si es la primera vez que publicás con este rol, le creamos
       // la ficha básica antes de guardar la publicación.
@@ -955,7 +961,7 @@
           estado: 'activa'
         }).select('id').single();
         error = resultado.error;
-        if (!error) await subirImagenesDeLaPublicacion(resultado.data.id);
+        if (!error) fotosFallidas = await subirImagenesDeLaPublicacion(resultado.data.id);
       }
 
       if (rolActivo === 'proveedor_servicio'){
@@ -970,7 +976,7 @@
           disponible: true
         }).select('id').single();
         error = resultado.error;
-        if (!error) await subirImagenesDeLaPublicacion(resultado.data.id);
+        if (!error) fotosFallidas = await subirImagenesDeLaPublicacion(resultado.data.id);
       }
 
       if (rolActivo === 'comprador'){
@@ -995,18 +1001,23 @@
         }
         const resultado = await supabaseClient.from(TABLA_SOLICITUDES_COMPRADORES).insert(payload).select('id').single();
         error = resultado.error;
-        if (!error) await subirImagenesDeLaPublicacion(resultado.data.id);
+        if (!error) fotosFallidas = await subirImagenesDeLaPublicacion(resultado.data.id);
       }
 
       if (error) throw error;
 
-      msgEl.textContent = '¡Publicado con éxito!';
-      msgEl.className = 'modal-msg ok';
+      if (fotosFallidas > 0){
+        msgEl.textContent = 'Se publicó, pero ' + fotosFallidas + ' foto(s) no se pudieron guardar. Podés volver a intentarlo editando la publicación más adelante.';
+        msgEl.className = 'modal-msg error';
+      } else {
+        msgEl.textContent = '¡Publicado con éxito!';
+        msgEl.className = 'modal-msg ok';
+      }
 
       const mapaTab = { productor: 'productores', proveedor_servicio: 'servicios', comprador: 'empresas' };
       cambiarTab(mapaTab[rolActivo]);
 
-      setTimeout(cerrarModalPublicar, 900);
+      setTimeout(cerrarModalPublicar, fotosFallidas > 0 ? 2500 : 900);
 
     } catch(err){
       msgEl.textContent = err.message || 'Hubo un error al publicar. Probá de nuevo.';
