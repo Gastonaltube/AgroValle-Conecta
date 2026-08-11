@@ -500,7 +500,7 @@
   async function cargarFeedProductores(feedEl){
     const { data, error } = await supabaseClient
       .from(TABLA_PUBLICACIONES)
-      .select('id, cantidad, unidad, precio, moneda, descripcion, estado, creado_en, cultivos(nombre), publicacion_imagenes(URL)')
+      .select('id, cantidad, unidad, precio, moneda, descripcion, estado, creado_en, cultivos(nombre), publicacion_imagenes(url)')
       .eq('estado', 'activa')
       .order('creado_en', { ascending: false })
       .limit(20);
@@ -512,7 +512,7 @@
 
     feedEl.innerHTML = data.map(pub => `
       <div class="publicacion-card">
-        <img class="publicacion-img" src="${pub.publicacion_imagenes?.[0]?.URL || ''}" alt="${pub.cultivos?.nombre || ''}" onerror="this.style.display='none'">
+        <img class="publicacion-img" src="${pub.publicacion_imagenes?.[0]?.url || ''}" alt="${pub.cultivos?.nombre || ''}" onerror="this.style.display='none'">
         <div class="publicacion-info">
           <span class="eyebrow">${pub.cultivos?.nombre || 'Cultivo'} · ${pub.cantidad ?? ''} ${pub.unidad || ''}</span>
           <h4>${formatearPrecio(pub.precio, pub.moneda) || 'Precio a consultar'}</h4>
@@ -716,7 +716,7 @@
                      : 'solicitud_id';
     // La tabla original "publicacion_imagenes" guarda el link en la
     // columna "URL" (mayúscula); las tablas nuevas usan "url" en minúscula.
-    const columnaUrl = rolActivo === 'productor' ? 'URL' : 'url';
+    const columnaUrl = 'url'; // las 3 tablas de imágenes usan la columna "url" en minúscula
 
     for (let i = 0; i < archivosImagenesSeleccionados.length; i++){
       const file = archivosImagenesSeleccionados[i];
