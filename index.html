@@ -1,4 +1,4 @@
-!DOCTYPE html>
+<!DOCTYPE html>
 <html lang="es-AR">
 <head>
 <meta charset="UTF-8">
@@ -168,7 +168,6 @@
   .footer-inner{display:flex; justify-content:space-between; flex-wrap:wrap; gap:16px;}
   footer a{color:rgba(255,255,255,0.85); text-decoration:none;}
 </style>
-<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 </head>
 <body>
 
@@ -188,7 +187,7 @@
       <a href="#prestadores">Prestadores de servicios</a>
       <a href="#contacto">Contacto</a>
     </nav>
-    <a class="nav-cta" href="#cuenta">Mi perfil</a>
+    <a class="nav-cta" href="panel.html">Mi perfil</a>
   </div>
 </header>
 
@@ -222,7 +221,7 @@
       <span class="eyebrow">Productor</span>
       <h3>Vendé sin intermediarios</h3>
       <p>Publicar tu catálogo y vender es gratuito. Por el momento no cobramos comisión por tus ventas.</p>
-      <a class="btn-primary" href="#cuenta">Quiero vender acá</a>
+      <a class="btn-primary" href="panel.html">Quiero vender acá</a>
     </div>
   </div>
 </section>
@@ -244,7 +243,7 @@
       <span class="eyebrow">Empresario</span>
       <h3>Encontrá tu proveedor</h3>
       <p>Filtrá por producto y zona, revisá la ficha técnica y cerrá la operación con el productor dentro de la plataforma.</p>
-      <a class="btn-primary" href="#cuenta">Quiero comprar acá</a>
+      <a class="btn-primary" href="panel.html">Quiero comprar acá</a>
     </div>
   </div>
 </section>
@@ -266,76 +265,8 @@
       <span class="eyebrow">Prestador</span>
       <h3>Publicá sin comisión</h3>
       <p>AgroValle Conecta no cobra comisión sobre tus servicios. Publicás tu perfil y manejás la contratación de forma directa con el productor.</p>
-      <a class="btn-primary" href="#cuenta">Quiero ofrecer mis servicios</a>
+      <a class="btn-primary" href="panel.html">Quiero ofrecer mis servicios</a>
     </div>
-  </div>
-</section>
-
-<section id="cuenta" class="section-alt">
-  <div class="wrap">
-    <div class="section-head">
-      <span class="eyebrow">Tu cuenta</span>
-      <h2>Ingresá a tu perfil</h2>
-    </div>
-    <div class="form-card">
-      <div class="form-tabs">
-        <button class="tab-btn active" onclick="showAccountTab('login')" type="button">Iniciar sesión</button>
-        <button class="tab-btn" onclick="showAccountTab('registro')" type="button">Crear cuenta</button>
-      </div>
-
-      <form id="login" class="account-panel active" onsubmit="return handleLogin(event)">
-        <div class="field-group">
-          <label for="login-email">Email</label>
-          <input id="login-email" type="email" placeholder="tu@email.com" required>
-        </div>
-        <div class="field-group">
-          <label for="login-pass">Contraseña</label>
-          <input id="login-pass" type="password" placeholder="••••••••" required>
-        </div>
-        <button class="form-submit" type="submit">Ingresar</button>
-        <p class="form-msg"></p>
-      </form>
-
-      <form id="registro" class="account-panel" onsubmit="return handleRegistro(event)">
-        <div class="field-group">
-          <label for="reg-nombre">Nombre y apellido</label>
-          <input id="reg-nombre" type="text" placeholder="Nombre completo" required>
-        </div>
-        <div class="field-group">
-          <label for="reg-tipo">Tipo de perfil</label>
-          <select id="reg-tipo" required>
-            <option value="">Elegí una opción</option>
-            <option value="productor">Productor</option>
-            <option value="empresario">Empresario / comprador</option>
-            <option value="prestador">Prestador de servicios</option>
-          </select>
-        </div>
-        <div class="field-group">
-          <label for="reg-email">Email</label>
-          <input id="reg-email" type="email" placeholder="tu@email.com" required>
-        </div>
-        <div class="field-group">
-          <label for="reg-pass">Contraseña</label>
-          <input id="reg-pass" type="password" placeholder="Mínimo 6 caracteres" required minlength="6">
-        </div>
-        <button class="form-submit" type="submit">Crear cuenta</button>
-        <p class="form-msg"></p>
-      </form>
-
-      <p class="form-foot-note">Al crear tu cuenta te llega un email de confirmación de Supabase. Cualquier consulta la podés hacer directo por <a href="#contacto" style="color:var(--green-sage); font-weight:600;">contacto</a>.</p>
-    </div>
-  </div>
-</section>
-
-<section id="mi-perfil" class="section-alt" style="display:none;">
-  <div class="wrap">
-    <div class="section-head">
-      <span class="eyebrow">Tu perfil</span>
-      <h2 id="perfil-saludo">Hola</h2>
-      <p style="margin-top:10px;">Estos son los datos que ven productores, compradores y prestadores cuando interactúan con vos. Los podés editar cuando quieras.</p>
-    </div>
-    <div id="perfil-roles"></div>
-    <button class="btn-ghost" onclick="cerrarSesion()" type="button">Cerrar sesión</button>
   </div>
 </section>
 
@@ -378,254 +309,6 @@
 </footer>
 
 <script>
-  // ======================================================
-  // CONFIGURACIÓN DE SUPABASE
-  // Reemplazá estos dos valores por los de tu proyecto:
-  // Project Settings → API → Project URL / anon public key
-  // ======================================================
-  const SUPABASE_URL = 'https://yolccrvajsaltnfzvglr.supabase.co';
-  const SUPABASE_ANON_KEY = 'sb_publishable_lt6djx886Pwd8aqreZ7TSg_97WUM0Wf';
-
-  const supabaseClient = window.supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
-
-  function showAccountTab(id){
-    const card = document.getElementById(id).closest('.form-card');
-    card.querySelectorAll('.account-panel').forEach(p => p.classList.remove('active'));
-    card.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
-    document.getElementById(id).classList.add('active');
-    event.target.classList.add('active');
-  }
-
-  function showMsg(form, text, isError){
-    const msg = form.querySelector('.form-msg');
-    msg.textContent = text;
-    msg.style.color = isError ? '#B3413E' : 'var(--green-sage)';
-    msg.classList.add('show');
-  }
-
-  // Traduce la opción elegida en el formulario al nombre de rol
-  // que usamos adentro de la tabla "roles" en la base de datos.
-  const MAPA_ROLES = {
-    'productor': 'productor',
-    'empresario': 'comprador',
-    'prestador': 'proveedor_servicio'
-  };
-
-  async function handleRegistro(event){
-    event.preventDefault();
-    const form = event.target;
-    const nombre = document.getElementById('reg-nombre').value;
-    const tipo = document.getElementById('reg-tipo').value;
-    const email = document.getElementById('reg-email').value;
-    const password = document.getElementById('reg-pass').value;
-    const rol = MAPA_ROLES[tipo];
-
-    showMsg(form, 'Creando tu cuenta...', false);
-
-    // Creamos el usuario en el sistema de autenticación de Supabase.
-    // Le pasamos nombre y rol como "metadata": esos datos los va a
-    // leer el trigger de la base de datos para armar automáticamente
-    // la fila en "usuarios", el rol, y la ficha correspondiente
-    // (productor / comprador / proveedor de servicios).
-    const { data, error } = await supabaseClient.auth.signUp({
-      email,
-      password,
-      options: {
-        data: { nombre: nombre, rol: rol }
-      }
-    });
-
-    if (error){
-      showMsg(form, 'Error: ' + error.message, true);
-      return false;
-    }
-
-    showMsg(form, 'Cuenta creada. Revisá tu email para confirmarla antes de ingresar.', false);
-    form.reset();
-    return false;
-  }
-
-  async function handleLogin(event){
-    event.preventDefault();
-    const form = event.target;
-    const email = document.getElementById('login-email').value;
-    const password = document.getElementById('login-pass').value;
-
-    showMsg(form, 'Ingresando...', false);
-
-    const { data, error } = await supabaseClient.auth.signInWithPassword({ email, password });
-
-    if (error){
-      showMsg(form, 'Error: ' + error.message, true);
-      return false;
-    }
-
-    await cargarPerfil(data.user.id);
-    document.getElementById('mi-perfil').scrollIntoView({ behavior: 'smooth' });
-    return false;
-  }
-
-  // ======================================================
-  // VISTA DE PERFIL POR ROL
-  // Cada rol tiene su propia tabla y sus propios campos.
-  // Un mismo usuario puede tener más de un rol, por eso
-  // armamos una tarjeta por cada rol que tenga asignado.
-  // ======================================================
-  const CONFIG_ROLES = {
-    productor: {
-      tabla: 'productores',
-      titulo: 'Productor',
-      campos: [
-        { id: 'nombre_finca', label: 'Nombre de la finca', tipo: 'text' },
-        { id: 'hectareas', label: 'Hectáreas', tipo: 'number' },
-        { id: 'ubicacion_finca', label: 'Ubicación de la finca', tipo: 'text' }
-      ]
-    },
-    comprador: {
-      tabla: 'compradores',
-      titulo: 'Empresario / Comprador',
-      campos: [
-        { id: 'nombre_empresa', label: 'Nombre de la empresa', tipo: 'text' },
-        { id: 'rubro', label: 'Rubro', tipo: 'text' },
-        { id: 'volumen_mensual_estimado', label: 'Volumen mensual estimado', tipo: 'text' }
-      ]
-    },
-    proveedor_servicio: {
-      tabla: 'proveedores_servicios',
-      titulo: 'Prestador de servicios',
-      campos: [
-        { id: 'nombre_empresa', label: 'Nombre de la empresa', tipo: 'text' },
-        { id: 'tipo_servicio', label: 'Tipo de servicio', tipo: 'text' },
-        { id: 'zona_cobertura', label: 'Zona de cobertura', tipo: 'text' }
-      ]
-    }
-  };
-
-  // Arma la tarjeta (formulario) para un rol puntual, ya con
-  // los datos actuales cargados, y con su propio botón de guardar.
-  function renderTarjetaRol(rol, config, fila, userId){
-    const form = document.createElement('form');
-    form.className = 'form-card';
-    form.style.marginBottom = '24px';
-    form.style.maxWidth = '560px';
-
-    const eyebrow = document.createElement('span');
-    eyebrow.className = 'eyebrow';
-    eyebrow.textContent = config.titulo;
-    form.appendChild(eyebrow);
-
-    const h3 = document.createElement('h3');
-    h3.style.marginTop = '8px';
-    h3.style.marginBottom = '18px';
-    h3.textContent = 'Datos de tu perfil';
-    form.appendChild(h3);
-
-    const inputs = {};
-    config.campos.forEach(campo => {
-      const group = document.createElement('div');
-      group.className = 'field-group';
-      const label = document.createElement('label');
-      label.textContent = campo.label;
-      const input = document.createElement('input');
-      input.type = campo.tipo;
-      input.value = (fila && fila[campo.id] != null) ? fila[campo.id] : '';
-      group.appendChild(label);
-      group.appendChild(input);
-      form.appendChild(group);
-      inputs[campo.id] = input;
-    });
-
-    const btn = document.createElement('button');
-    btn.className = 'form-submit';
-    btn.type = 'submit';
-    btn.textContent = 'Guardar cambios';
-    form.appendChild(btn);
-
-    const msg = document.createElement('p');
-    msg.className = 'form-msg';
-    form.appendChild(msg);
-
-    form.addEventListener('submit', async (e) => {
-      e.preventDefault();
-      const cambios = {};
-      config.campos.forEach(campo => {
-        const val = inputs[campo.id].value;
-        cambios[campo.id] = (campo.tipo === 'number') ? (val ? Number(val) : null) : val;
-      });
-      showMsg(form, 'Guardando...', false);
-      const { error } = await supabaseClient.from(config.tabla).update(cambios).eq('usuario_id', userId);
-      if (error){
-        showMsg(form, 'Error: ' + error.message, true);
-      } else {
-        showMsg(form, 'Cambios guardados.', false);
-      }
-    });
-
-    return form;
-  }
-
-  // Trae el nombre, los roles y los datos de cada tabla de rol,
-  // y arma la vista completa del perfil en pantalla.
-  async function cargarPerfil(userId){
-    const { data: usuario } = await supabaseClient
-      .from('usuarios')
-      .select('nombre')
-      .eq('id', userId)
-      .single();
-
-    document.getElementById('perfil-saludo').textContent =
-      usuario?.nombre ? `Hola, ${usuario.nombre}` : 'Hola';
-
-    const { data: rolesData } = await supabaseClient
-      .from('usuario_roles')
-      .select('roles(nombre)')
-      .eq('usuario_id', userId);
-
-    const nombresRoles = (rolesData || [])
-      .map(r => r.roles?.nombre)
-      .filter(Boolean);
-
-    const contenedor = document.getElementById('perfil-roles');
-    contenedor.innerHTML = '';
-
-    for (const rol of nombresRoles){
-      const config = CONFIG_ROLES[rol];
-      if (!config) continue;
-      const { data: fila } = await supabaseClient
-        .from(config.tabla)
-        .select('*')
-        .eq('usuario_id', userId)
-        .single();
-      contenedor.appendChild(renderTarjetaRol(rol, config, fila, userId));
-    }
-
-    if (nombresRoles.length === 0){
-      const p = document.createElement('p');
-      p.textContent = 'Todavía no tenés un rol asignado. Escribinos por contacto si esto no es lo esperado.';
-      contenedor.appendChild(p);
-    }
-
-    // Mostramos el perfil y ocultamos el formulario de login/registro
-    document.getElementById('cuenta').querySelector('.form-card').style.display = 'none';
-    document.getElementById('mi-perfil').style.display = 'block';
-  }
-
-  async function cerrarSesion(){
-    await supabaseClient.auth.signOut();
-    document.getElementById('mi-perfil').style.display = 'none';
-    document.getElementById('cuenta').querySelector('.form-card').style.display = 'block';
-    window.location.hash = 'cuenta';
-  }
-
-  // Si la persona ya tenía una sesión abierta (por ejemplo, si
-  // refresca la página), le mostramos su perfil directamente.
-  (async function chequearSesionActiva(){
-    const { data: { session } } = await supabaseClient.auth.getSession();
-    if (session?.user){
-      await cargarPerfil(session.user.id);
-    }
-  })();
-
   function sendToWhatsapp(event){
     event.preventDefault();
     const nombre = document.getElementById('c-nombre').value;
