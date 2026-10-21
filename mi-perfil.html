@@ -1,1 +1,382 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>AgroValle Conecta — Mi perfil</title>
+<meta name="description" content="Tu perfil en AgroValle Conecta: datos personales y de tu empresa o servicio.">
+
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700&family=Work+Sans:wght@400;500;600&family=Space+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --green-deep: #1E3A2B;
+    --green-deep-2: #16301F;
+    --green-sage: #6C8F53;
+    --green-sage-light: #9BB984;
+    --white: #FFFFFF;
+    --paper: #F5F7F1;
+    --ink: #1B2119;
+    --ink-soft: #4B564A;
+    --line: rgba(30,58,43,0.14);
+    --shadow: 0 12px 32px rgba(20,40,28,0.10);
+    --radius: 4px;
+  }
+  *{box-sizing:border-box;}
+  body{
+    margin:0; background:var(--paper); color:var(--ink);
+    font-family:'Work Sans',sans-serif; font-size:16px; line-height:1.5;
+    -webkit-font-smoothing:antialiased;
+  }
+  h1,h2,h3,h4{
+    font-family:'Space Grotesk',sans-serif; font-weight:600; margin:0;
+    color:var(--green-deep-2); letter-spacing:-0.02em;
+  }
+  .eyebrow{
+    font-family:'Space Mono',monospace; font-size:11.5px; letter-spacing:0.12em;
+    text-transform:uppercase; color:var(--green-sage); font-weight:500;
+  }
+  p{color:var(--ink-soft); margin:0;}
+
+  /* ===== BARRA DE ARRIBA ===== */
+  header.barra{
+    position:sticky; top:0; z-index:50; background:var(--white);
+    border-bottom:1px solid var(--line);
+  }
+  .barra-inner{
+    max-width:880px; margin:0 auto; padding:12px 20px;
+    display:flex; align-items:center; justify-content:space-between; gap:12px;
+  }
+  .logo{
+    font-family:'Space Grotesk',sans-serif; font-weight:700; font-size:18px;
+    color:var(--green-deep-2); text-decoration:none;
+  }
+  .barra-acciones{display:flex; gap:8px;}
+  .btn-barra{
+    display:inline-flex; align-items:center; gap:6px;
+    padding:9px 14px; border:1px solid var(--line); border-radius:var(--radius);
+    background:var(--white); color:var(--green-deep-2); cursor:pointer;
+    font-family:'Work Sans',sans-serif; font-size:14px; font-weight:500;
+    text-decoration:none;
+  }
+  .btn-barra:hover{background:var(--paper);}
+
+  /* ===== CONTENIDO ===== */
+  main{max-width:880px; margin:0 auto; padding:28px 20px 60px;}
+
+  .cabecera-perfil{
+    display:flex; align-items:center; gap:18px; flex-wrap:wrap;
+    background:var(--white); border:1px solid var(--line); border-radius:var(--radius);
+    padding:22px; box-shadow:var(--shadow);
+  }
+  .avatar{
+    width:64px; height:64px; border-radius:50%; flex:none;
+    background:var(--green-deep); color:var(--white);
+    display:flex; align-items:center; justify-content:center;
+    font-family:'Space Grotesk',sans-serif; font-size:26px; font-weight:600;
+  }
+  .cabecera-datos{flex:1; min-width:200px;}
+  .cabecera-datos h1{font-size:24px; margin:2px 0;}
+  .email{font-size:14px; word-break:break-all;}
+  .badges{display:flex; flex-wrap:wrap; gap:6px; margin-top:10px;}
+  .badge{
+    font-family:'Space Mono',monospace; font-size:11px; letter-spacing:0.06em;
+    text-transform:uppercase; padding:4px 9px; border-radius:999px;
+    background:rgba(108,143,83,0.15); color:var(--green-deep);
+  }
+
+  .tarjeta{
+    background:var(--white); border:1px solid var(--line); border-radius:var(--radius);
+    padding:22px; margin-top:18px;
+  }
+  .tarjeta h2{font-size:19px; margin:4px 0 4px;}
+  .tarjeta .sub{font-size:14px; margin-bottom:16px;}
+
+  .campo{margin-bottom:14px;}
+  .campo label{display:block; font-size:13.5px; font-weight:600; color:var(--green-deep-2); margin-bottom:5px;}
+  .campo input{
+    width:100%; padding:11px 12px; border:1px solid var(--line); border-radius:var(--radius);
+    font-family:'Work Sans',sans-serif; font-size:15px; color:var(--ink); background:var(--white);
+  }
+  .campo input:focus{outline:2px solid var(--green-sage-light); border-color:var(--green-sage);}
+
+  .btn-guardar{
+    padding:11px 20px; border:0; border-radius:var(--radius); cursor:pointer;
+    background:var(--green-deep); color:var(--white);
+    font-family:'Work Sans',sans-serif; font-size:15px; font-weight:600;
+  }
+  .btn-guardar:hover{background:var(--green-deep-2);}
+  .btn-guardar:disabled{opacity:.6; cursor:wait;}
+
+  .msg{margin-top:10px; font-size:14px; min-height:20px;}
+  .msg.ok{color:#2F6B2F;}
+  .msg.error{color:#A33A2A;}
+
+  .aviso{
+    background:rgba(108,143,83,0.10); border:1px dashed var(--green-sage);
+    border-radius:var(--radius); padding:14px 16px; font-size:14.5px;
+  }
+  .cargando{padding:40px 0; text-align:center; color:var(--ink-soft);}
+
+  @media (max-width:560px){
+    main{padding:20px 14px 50px;}
+    .cabecera-perfil, .tarjeta{padding:16px;}
+    .btn-barra span.texto{display:none;}
+  }
+</style>
+</head>
+<body>
+
+<header class="barra">
+  <div class="barra-inner">
+    <a class="logo" href="feed.html">🌱 AgroValle Conecta</a>
+    <div class="barra-acciones">
+      <a class="btn-barra" href="feed.html" title="Volver a las publicaciones">← <span class="texto">Volver</span></a>
+      <button class="btn-barra" type="button" onclick="cerrarSesion()" title="Cerrar sesión">⎋ <span class="texto">Salir</span></button>
+    </div>
+  </div>
+</header>
+
+<main>
+  <div class="cargando" id="cargando">Cargando tu perfil...</div>
+  <div id="contenido" style="display:none"></div>
+</main>
+
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+<script>
+  // ======================================================
+  // CONFIGURACIÓN DE SUPABASE (mismo proyecto que feed.html y panel.html)
+  // ======================================================
+  const SUPABASE_URL = 'https://yolccrvajsaltnfzvglr.supabase.co';
+  const SUPABASE_ANON_KEY = 'sb_publishable_lt6djx886Pwd8aqreZ7TSg_97WUM0Wf';
+  const supabaseClient = window.supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
+
+  let usuarioActual = null;
+  let T = {}; // nombres reales de las tablas
+
+  // Neutraliza textos para mostrarlos sin riesgo (< > & " ')
+  function esc(valor){
+    return String(valor ?? '')
+      .replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;')
+      .replace(/"/g, '&quot;').replace(/'/g, '&#39;');
+  }
+
+  // Igual que en feed.html: probamos el nombre en minúscula y con
+  // mayúscula inicial, y nos quedamos con el que exista de verdad.
+  async function resolverTabla(nombre){
+    const candidatos = [nombre, nombre.charAt(0).toUpperCase() + nombre.slice(1)];
+    for (const c of candidatos){
+      const { error } = await supabaseClient.from(c).select('*').limit(1);
+      if (!error) return c;
+    }
+    return nombre;
+  }
+
+  const ROLES = {
+    productor:          { etiqueta: 'Productor' },
+    comprador:          { etiqueta: 'Empresa compradora' },
+    proveedor_servicio: { etiqueta: 'Prestador de servicios' }
+  };
+
+  // ------------------------------------------------------
+  // 1) Verificar sesión. Si no hay, volvemos al login.
+  // ------------------------------------------------------
+  (async function init(){
+    try {
+      const { data: { session } } = await supabaseClient.auth.getSession();
+      if (!session?.user){ window.location.href = 'panel.html'; return; }
+      usuarioActual = session.user;
+
+      const nombres = ['usuarios', 'productores', 'compradores', 'proveedores_servicios'];
+      const resueltos = await Promise.all(nombres.map(resolverTabla));
+      nombres.forEach((n, i) => T[n] = resueltos[i]);
+
+      await dibujarPerfil();
+    } catch (e){
+      mostrarErrorGeneral();
+    }
+  })();
+
+  function mostrarErrorGeneral(){
+    document.getElementById('cargando').style.display = 'none';
+    const cont = document.getElementById('contenido');
+    cont.style.display = 'block';
+    cont.innerHTML = `
+      <div class="tarjeta">
+        <h2>No pudimos cargar tu perfil</h2>
+        <p class="sub">Puede ser un problema de conexión. Probá recargar la página en un momento.</p>
+        <a class="btn-barra" href="feed.html">← Volver a las publicaciones</a>
+      </div>`;
+  }
+
+  // ------------------------------------------------------
+  // 2) Traer datos (usuario + las fichas de cada rol) y dibujar
+  // ------------------------------------------------------
+  async function dibujarPerfil(){
+    const id = usuarioActual.id;
+
+    const [u, prod, comp, prov] = await Promise.all([
+      supabaseClient.from(T.usuarios).select('nombre').eq('id', id).maybeSingle(),
+      supabaseClient.from(T.productores).select('usuario_id').eq('usuario_id', id).maybeSingle(),
+      supabaseClient.from(T.compradores).select('nombre_empresa').eq('usuario_id', id).maybeSingle(),
+      supabaseClient.from(T.proveedores_servicios).select('nombre_empresa, tipo_servicio, zona_cobertura').eq('usuario_id', id).maybeSingle()
+    ]);
+
+    const nombre = u.data?.nombre || '';
+    const roles = [];
+    if (prod.data) roles.push('productor');
+    if (comp.data) roles.push('comprador');
+    if (prov.data) roles.push('proveedor_servicio');
+
+    const mostrado = nombre || usuarioActual.email || 'Mi perfil';
+    const inicial = mostrado.trim().charAt(0).toUpperCase();
+
+    let html = `
+      <section class="cabecera-perfil">
+        <div class="avatar">${esc(inicial)}</div>
+        <div class="cabecera-datos">
+          <span class="eyebrow">Mi perfil</span>
+          <h1>${esc(mostrado)}</h1>
+          <p class="email">${esc(usuarioActual.email || '')}</p>
+          <div class="badges">
+            ${roles.length
+              ? roles.map(r => `<span class="badge">${esc(ROLES[r].etiqueta)}</span>`).join('')
+              : '<span class="badge">Sin tipo de perfil todavía</span>'}
+          </div>
+        </div>
+      </section>
+
+      <section class="tarjeta">
+        <span class="eyebrow">Datos personales</span>
+        <h2>Tu nombre</h2>
+        <p class="sub">Así te van a ver los demás en la plataforma.</p>
+        <div class="campo">
+          <label for="p_nombre">Nombre y apellido</label>
+          <input id="p_nombre" type="text" maxlength="120" value="${esc(nombre)}">
+        </div>
+        <button class="btn-guardar" id="btn_nombre" type="button" onclick="guardarNombre()">Guardar</button>
+        <div class="msg" id="msg_nombre"></div>
+      </section>`;
+
+    if (comp.data){
+      html += `
+      <section class="tarjeta">
+        <span class="eyebrow">Empresa compradora</span>
+        <h2>Datos de tu empresa</h2>
+        <p class="sub">Los productores y prestadores ven este nombre en tus publicaciones.</p>
+        <div class="campo">
+          <label for="c_empresa">Nombre de la empresa</label>
+          <input id="c_empresa" type="text" maxlength="120" value="${esc(comp.data.nombre_empresa)}">
+        </div>
+        <button class="btn-guardar" id="btn_comprador" type="button" onclick="guardarComprador()">Guardar</button>
+        <div class="msg" id="msg_comprador"></div>
+      </section>`;
+    }
+
+    if (prov.data){
+      html += `
+      <section class="tarjeta">
+        <span class="eyebrow">Prestador de servicios</span>
+        <h2>Datos de tu servicio</h2>
+        <p class="sub">Esta información aparece en la columna de anunciantes y en tus servicios.</p>
+        <div class="campo">
+          <label for="s_empresa">Nombre de la empresa o del servicio</label>
+          <input id="s_empresa" type="text" maxlength="120" value="${esc(prov.data.nombre_empresa)}">
+        </div>
+        <div class="campo">
+          <label for="s_tipo">Tipo de servicio</label>
+          <input id="s_tipo" type="text" maxlength="120" placeholder="Ej: Flete, asesoría, cosecha..." value="${esc(prov.data.tipo_servicio)}">
+        </div>
+        <div class="campo">
+          <label for="s_zona">Zona de cobertura</label>
+          <input id="s_zona" type="text" maxlength="120" placeholder="Ej: Valle de Uco" value="${esc(prov.data.zona_cobertura)}">
+        </div>
+        <button class="btn-guardar" id="btn_proveedor" type="button" onclick="guardarProveedor()">Guardar</button>
+        <div class="msg" id="msg_proveedor"></div>
+      </section>`;
+    }
+
+    if (prod.data){
+      html += `
+      <section class="tarjeta">
+        <span class="eyebrow">Productor</span>
+        <h2>Tu ficha de productor</h2>
+        <div class="aviso">Pronto vas a poder completar acá los datos de tu finca (zona, cultivos, contacto) y ver tus publicaciones.</div>
+      </section>`;
+    }
+
+    if (!roles.length){
+      html += `
+      <section class="tarjeta">
+        <div class="aviso">Todavía no tenés un tipo de perfil. Se crea automáticamente la primera vez que publicás desde la pantalla de publicaciones.</div>
+      </section>`;
+    }
+
+    document.getElementById('cargando').style.display = 'none';
+    const cont = document.getElementById('contenido');
+    cont.innerHTML = html;
+    cont.style.display = 'block';
+  }
+
+  // ------------------------------------------------------
+  // 3) Guardar cambios. Usamos .select() al final para detectar
+  //    si la base rechazó el cambio en silencio (falta de permiso):
+  //    en ese caso no devuelve error, pero tampoco devuelve filas.
+  // ------------------------------------------------------
+  async function guardar(tabla, columnaId, cambios, btnId, msgId){
+    const btn = document.getElementById(btnId);
+    const msg = document.getElementById(msgId);
+    btn.disabled = true;
+    msg.className = 'msg'; msg.textContent = 'Guardando...';
+
+    const { data, error } = await supabaseClient
+      .from(tabla).update(cambios).eq(columnaId, usuarioActual.id).select();
+
+    btn.disabled = false;
+    if (error || !data || data.length === 0){
+      msg.className = 'msg error';
+      msg.textContent = 'No se pudo guardar. Probá de nuevo; si sigue igual, avisanos.';
+      return false;
+    }
+    msg.className = 'msg ok';
+    msg.textContent = '✔ Cambios guardados.';
+    return true;
+  }
+
+  async function guardarNombre(){
+    const nombre = document.getElementById('p_nombre').value.trim();
+    if (!nombre){
+      const m = document.getElementById('msg_nombre');
+      m.className = 'msg error'; m.textContent = 'Escribí tu nombre.';
+      return;
+    }
+    const ok = await guardar(T.usuarios, 'id', { nombre }, 'btn_nombre', 'msg_nombre');
+    if (ok){
+      document.querySelector('.cabecera-datos h1').textContent = nombre;
+      document.querySelector('.avatar').textContent = nombre.charAt(0).toUpperCase();
+    }
+  }
+
+  async function guardarComprador(){
+    const nombre_empresa = document.getElementById('c_empresa').value.trim();
+    await guardar(T.compradores, 'usuario_id', { nombre_empresa }, 'btn_comprador', 'msg_comprador');
+  }
+
+  async function guardarProveedor(){
+    const cambios = {
+      nombre_empresa: document.getElementById('s_empresa').value.trim(),
+      tipo_servicio:  document.getElementById('s_tipo').value.trim(),
+      zona_cobertura: document.getElementById('s_zona').value.trim()
+    };
+    await guardar(T.proveedores_servicios, 'usuario_id', cambios, 'btn_proveedor', 'msg_proveedor');
+  }
+
+  async function cerrarSesion(){
+    await supabaseClient.auth.signOut();
+    window.location.href = 'panel.html';
+  }
+</script>
+</body>
+</html>
 
