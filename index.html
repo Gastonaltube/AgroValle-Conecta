@@ -129,6 +129,7 @@ footer a{display:block;text-decoration:none;color:#CFE0C4;padding:3px 0}footer b
 </div></footer>
 <nav class="bn"><a href="#inicio"><span>🏠</span>Inicio</a><a href="#productos"><span>🛒</span>Productos</a><a href="#publicar"><span>➕</span>Publicar</a><a href="#servicios"><span>🧑‍🔧</span>Servicios</a><a href="#panel"><span>👤</span>Mi panel</a></nav>
 <div id="md" class="mo"></div><div id="toast" role="status"></div>
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 <script>
 const $=s=>document.querySelector(s),esc=s=>String(s==null?'':s).replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
 const CP=[['🌱','Semillas'],['🧪','Fertilizantes'],['🛡️','Agroquímicos'],['🔧','Herramientas'],['🚜','Maquinaria'],['⚙️','Repuestos'],['💧','Sistemas de riego'],['🍇','Elementos para viñedos'],['🥬','Horticultura'],['🏭','Insumos para bodegas'],['🦺','Protección'],['📦','Otros']];
@@ -157,8 +158,8 @@ I(101,'p','Cajones cosecheros plásticos','Herramientas',2800,'unidad','Tupungat
 I(102,'s','Instalación de riego presurizado','Riego',60000,'jornada','Tupungato','','A coordinar','Mi finca (demo)','Instalamos y ponemos en marcha equipos de riego presurizado.','🚰',200,0,6)]};
 S.items.filter(i=>i.id>100).forEach(i=>i.owner='me');
 let F={};
-try{const d=JSON.parse(localStorage.getItem('avc')||'{}');if(d.user)S.user=d.user;if(d.favs)S.favs=d.favs}catch(e){}
-const sv=()=>{try{localStorage.setItem('avc',JSON.stringify({user:S.user,favs:S.favs}))}catch(e){}};
+try{const d=JSON.parse(localStorage.getItem('avc')||'{}');if(d.favs)S.favs=d.favs}catch(e){}
+const sv=()=>{try{localStorage.setItem('avc',JSON.stringify({favs:S.favs}))}catch(e){}};
 const pr=i=>i.price?'$ '+i.price.toLocaleString('es-AR')+(i.unit?' / '+i.unit:''):'A convenir';
 const card=i=>`<a class="card" href="#d-${i.id}"><div class="ph" style="--h:${i.h}">${i.img?`<img src="${esc(i.img)}" alt="">`:`<span>${i.e}</span>`}${i.dest?'<b class="tag">Destacado</b>':''}</div><div class="cb"><small>${esc(i.cat)} · ${esc(i.zona)}</small><h3>${esc(i.title)}</h3><div class="pr">${pr(i)}</div><small>${esc(i.seller)}</small></div></a>`;
 const live=()=>S.items.filter(i=>!i.paus).sort((a,b)=>a.f-b.f);
@@ -205,11 +206,53 @@ function fo(inp){const fs=Array.from(inp.files).slice(0,4),u=fs.map(f=>URL.creat
 function np(e){e.preventDefault();const d=new FormData(e.target),t=d.get('t'),cat=d.get('cat'),ic=(CP.concat(CS).find(c=>c[1]===cat)||['📦'])[0];
 const it=I(S.nx++,t,d.get('title'),cat,+d.get('price')||0,d.get('unit'),d.get('zona'),t==='p'?d.get('estado'):'',t==='p'?d.get('qty'):'A coordinar',S.user.n,d.get('desc'),ic,Math.floor(Math.random()*300),0,0);it.owner='me';it.img=S.img;S.items.unshift(it);toast('Publicada correctamente');location.hash='d-'+it.id;return false}
 
-function ingresar(){return `<div class="wrap pg"><div class="box au"><div class="tb"><button class="on" id="b1" onclick="at(1)">Ingresar</button><button id="b2" onclick="at(2)">Crear cuenta</button></div><form id="fl" class="f" onsubmit="return lg(event)"><label>Email<input name="e" type="email" required placeholder="tu@email.com"></label><label>Contraseña<input name="p" type="password" required minlength="6"></label><button class="btn">Ingresar</button><small style="color:var(--ink2)">Maqueta de prueba: entra con cualquier email y contraseña.</small></form><form id="fr" class="f" style="display:none" onsubmit="return rg(event)"><label>Nombre y apellido<input name="n" required></label><label>Email<input name="e" type="email" required></label><label>Contraseña<input name="p" type="password" required minlength="6" placeholder="Mínimo 6 caracteres"></label><label>Zona<select name="z">${ZN.map(z=>`<option>${z}</option>`).join('')}</select></label><div><b style="font-size:14px">¿Qué querés hacer? Podés elegir más de uno.</b><div class="ck" style="margin-top:6px"><label><input type="checkbox" name="r" value="comprador" checked> Comprar</label><label><input type="checkbox" name="r" value="vendedor"> Vender</label><label><input type="checkbox" name="r" value="profesional"> Ofrecer servicios</label><label><input type="checkbox" name="r" value="empresa"> Soy empresa</label></div></div><button class="btn">Crear cuenta</button></form></div></div>`}
+function ingresar(){return `<div class="wrap pg"><div class="box au"><div class="tb"><button class="on" id="b1" onclick="at(1)">Ingresar</button><button id="b2" onclick="at(2)">Crear cuenta</button></div><form id="fl" class="f" onsubmit="return lg(event)"><label>Email<input name="e" type="email" required placeholder="tu@email.com"></label><label>Contraseña<input name="p" type="password" required minlength="6"></label><button class="btn">Ingresar</button><small class="fm" role="status" style="color:var(--ink2);min-height:18px"></small></form><form id="fr" class="f" style="display:none" onsubmit="return rg(event)"><label>Nombre y apellido<input name="n" required></label><label>Email<input name="e" type="email" required></label><label>Contraseña<input name="p" type="password" required minlength="6" placeholder="Mínimo 6 caracteres"></label><label>Zona<select name="z">${ZN.map(z=>`<option>${z}</option>`).join('')}</select></label><div><b style="font-size:14px">¿Qué vas a hacer principalmente?</b><div class="ck" style="margin-top:6px"><label><input type="radio" name="r" value="comprador" checked> Comprar</label><label><input type="radio" name="r" value="vendedor"> Vender</label><label><input type="radio" name="r" value="profesional"> Ofrecer servicios</label><label><input type="radio" name="r" value="empresa"> Soy empresa</label></div></div><small class="fm" role="status" style="color:var(--ink2);min-height:18px"></small><button class="btn">Crear cuenta</button></form></div></div>`}
 function at(n){$('#fl').style.display=n===1?'':'none';$('#fr').style.display=n===2?'':'none';$('#b1').classList.toggle('on',n===1);$('#b2').classList.toggle('on',n===2)}
-function entrar(u){S.user=u;sv();const b=S.back||'panel';S.back='';toast('Hola, '+u.n);location.hash=b;hdr();if(location.hash==='#'+b)route()}
-function lg(e){e.preventDefault();const m=new FormData(e.target).get('e'),n=m.split('@')[0];entrar({n:n.charAt(0).toUpperCase()+n.slice(1),e:m,roles:['comprador','vendedor'],z:'Tupungato',b:''});return false}
-function rg(e){e.preventDefault();const d=new FormData(e.target),r=d.getAll('r');entrar({n:d.get('n'),e:d.get('e'),roles:r.length?r:['comprador'],z:d.get('z'),b:''});return false}
+/* ===== LOGIN REAL (Supabase) ===== */
+const sb=window.supabase?window.supabase.createClient('https://yolccrvajsaltnfzvglr.supabase.co','sb_publishable_lt6djx886Pwd8aqreZ7TSg_97WUM0Wf'):null;
+const RMAP={vendedor:'productor',comprador:'comprador',empresa:'comprador',profesional:'proveedor_servicio'};
+const RDB={1:'vendedor',2:'comprador',3:'profesional'};
+function fmsg(f,t,err){const m=f.querySelector('.fm');if(m){m.textContent=t;m.style.color=err?'#B3413E':'var(--ink2)'}}
+function traduce(m){m=(m||'').toLowerCase();
+if(m.includes('invalid login'))return 'Email o contraseña incorrectos.';
+if(m.includes('not confirmed'))return 'Todavía no confirmaste tu email. Revisá tu bandeja de entrada (y spam).';
+if(m.includes('already registered'))return 'Ese email ya tiene una cuenta. Probá ingresar.';
+if(m.includes('password'))return 'La contraseña debe tener al menos 6 caracteres.';
+if(m.includes('rate limit'))return 'Demasiados intentos. Esperá unos minutos y probá de nuevo.';
+return 'No pudimos completar la acción. Probá de nuevo en un momento.'}
+async function cargarUsuario(ses){
+const u=ses.user,meta=u.user_metadata||{};
+let n=meta.nombre||(u.email||'').split('@')[0],z=meta.zona||'Tupungato',roles=['comprador'];
+try{
+const [a,r]=await Promise.all([sb.from('usuarios').select('nombre,ubicacion').eq('id',u.id).maybeSingle(),sb.from('usuario_roles').select('rol_id').eq('usuario_id',u.id)]);
+if(a.data){if(a.data.nombre)n=a.data.nombre;if(a.data.ubicacion)z=a.data.ubicacion;else if(meta.zona)sb.from('usuarios').update({ubicacion:meta.zona}).eq('id',u.id).then(()=>{})}
+if(r.data&&r.data.length)roles=r.data.map(x=>RDB[x.rol_id]).filter(Boolean)
+}catch(x){}
+S.user={id:u.id,n:n||'Usuario',e:u.email,z:z,b:S.user&&S.user.b||'',roles:roles}}
+function entrar(){const b=S.back||'panel';S.back='';toast('Hola, '+S.user.n);location.hash=b;hdr();if(location.hash==='#'+b)route()}
+if(sb)sb.auth.onAuthStateChange((ev,ses)=>{setTimeout(async()=>{
+if(ev==='SIGNED_OUT'){S.user=null;hdr();return}
+if(!ses)return;
+if(ev==='INITIAL_SESSION'){await cargarUsuario(ses);route()}
+else if(ev==='SIGNED_IN'&&!S.user){await cargarUsuario(ses);entrar()}
+},0)});
+async function lg(e){e.preventDefault();const f=e.target,d=new FormData(f),b=f.querySelector('button.btn');
+if(!sb){fmsg(f,'No hay conexión con el servidor. Revisá tu internet y recargá la página.',1);return false}
+b.disabled=true;fmsg(f,'Ingresando...');
+const {error}=await sb.auth.signInWithPassword({email:String(d.get('e')).trim(),password:d.get('p')});
+b.disabled=false;
+if(error)fmsg(f,traduce(error.message),1);
+return false}
+async function rg(e){e.preventDefault();const f=e.target,d=new FormData(f),b=f.querySelector('button.btn');
+if(!sb){fmsg(f,'No hay conexión con el servidor. Revisá tu internet y recargá la página.',1);return false}
+const rol=RMAP[d.get('r')]||'comprador';
+b.disabled=true;fmsg(f,'Creando tu cuenta...');
+const {data,error}=await sb.auth.signUp({email:String(d.get('e')).trim(),password:d.get('p'),options:{data:{nombre:String(d.get('n')).trim(),rol:rol,zona:d.get('z')}}});
+b.disabled=false;
+if(error){fmsg(f,traduce(error.message),1);return false}
+if(data.user&&data.user.identities&&data.user.identities.length===0){fmsg(f,'Ese email ya tiene una cuenta. Probá ingresar.',1);return false}
+if(!data.session){fmsg(f,'¡Cuenta creada! Te mandamos un email para confirmarla. Abrilo y después volvé a ingresar.');f.reset()}
+return false}
 
 function panel(){if(!S.user){S.back='panel';return ingresar()}const u=S.user,mine=S.items.filter(i=>i.owner==='me'),T=[['pub','Mis publicaciones'],['fav','Favoritos'],['msg','Consultas'],['per','Mi perfil']];
 return `<div class="wrap pg"><div class="pl"><aside class="box" style="align-self:start"><span class="av" style="width:56px;height:56px;font-size:24px">${esc(u.n.charAt(0).toUpperCase())}</span><h3 style="margin-top:8px">${esc(u.n)}</h3><small style="color:var(--ink2)">${esc(u.e)}<br>${esc(u.z)}, Mendoza</small><div style="margin:10px 0">${u.roles.map(r=>`<span class="pill">${esc(r)}</span>`).join('')}</div><p style="font-size:14px"><b>${mine.length}</b> publicaciones · <b>${S.favs.length}</b> favoritos</p><p style="margin-top:12px"><button class="btn o" onclick="so()">Cerrar sesión</button></p></aside><section><div class="tb">${T.map(t=>`<button class="${S.tab===t[0]?'on':''}" onclick="S.tab='${t[0]}';route()">${t[1]}</button>`).join('')}</div>${pt(mine)}</section></div></div>`}
@@ -220,8 +263,11 @@ if(S.tab==='msg')return [['Carlos R.','Hola, ¿el kit de riego incluye cinta?','
 return `<form class="f" onsubmit="return gp(event)"><label>Nombre<input name="n" value="${esc(u.n)}" required></label><label>Zona<select name="z">${ZN.map(z=>`<option${z===u.z?' selected':''}>${z}</option>`).join('')}</select></label><label>Presentación<textarea name="b" rows="4" placeholder="Contá quién sos, qué hacés y cuánta experiencia tenés">${esc(u.b||'')}</textarea></label><button class="btn">Guardar cambios</button></form>`}
 function ps(id){const i=S.items.find(x=>x.id===id);i.paus=!i.paus;route();toast(i.paus?'Publicación pausada':'Publicación activa')}
 function dl(id){if(confirm('¿Eliminar esta publicación?')){S.items=S.items.filter(x=>x.id!==id);route();toast('Publicación eliminada')}}
-function gp(e){e.preventDefault();const d=new FormData(e.target);Object.assign(S.user,{n:d.get('n'),z:d.get('z'),b:d.get('b')});sv();route();toast('Cambios guardados');return false}
-function so(){S.user=null;sv();location.hash='inicio';hdr();toast('Cerraste sesión')}
+async function gp(e){e.preventDefault();const d=new FormData(e.target),n=String(d.get('n')).trim(),z=d.get('z');
+const {error}=await sb.from('usuarios').update({nombre:n,ubicacion:z}).eq('id',S.user.id);
+if(error){toast('No se pudo guardar. Probá de nuevo.');return false}
+Object.assign(S.user,{n:n,z:z,b:d.get('b')});route();toast('Cambios guardados');return false}
+async function so(){if(sb)await sb.auth.signOut();S.user=null;S.back='';location.hash='inicio';hdr();toast('Cerraste sesión')}
 
 function nosotros(){return `<div class="wrap pg"><section class="pan d" style="padding:44px 30px"><h1 style="color:#fff;font-size:clamp(28px,4vw,42px);max-width:640px;line-height:1.1">La historia detrás de Agro Valle Conecta</h1><p style="max-width:560px;margin:14px 0 0">Una idea que nació en casa, mirando de cerca cómo se trabaja en el agro del Valle de Uco.</p></section>
 <div class="sto" style="margin-top:34px"><div><h2 style="margin-bottom:14px">Todo empezó con mi papá</h2><p>Hace muchísimos años veo a mi papá trabajar de comisionista en el agro del Valle de Uco. Crecí viendo lo difícil que podía ser cerrar una operación: siempre aparecían complicaciones en el medio.</p><div class="qt">“No tuve que buscar el problema: lo conocía desde casa.”</div><p>Cuando necesité encontrar un problema real del agro de la zona, ya lo tenía adelante. Como estudié programación y agronomía, entendí que podía juntar las dos cosas.</p><p>Así nació Agro Valle Conecta: un lugar donde productores, empresas y profesionales se encuentran, publican lo que tienen y se contactan de forma simple y directa, para que hacer un trato en el agro local deje de ser un problema.</p></div>
