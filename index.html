@@ -301,7 +301,7 @@ async function rg(e){e.preventDefault();const f=e.target,d=new FormData(f),b=f.q
 if(!sb){fmsg(f,'No hay conexión con el servidor. Revisá tu internet y recargá la página.',1);return false}
 const rol=RMAP[d.get('r')]||'comprador';
 b.disabled=true;fmsg(f,'Creando tu cuenta...');
-const {data,error}=await sb.auth.signUp({email:String(d.get('e')).trim(),password:d.get('p'),options:{data:{nombre:String(d.get('n')).trim(),rol:rol,zona:d.get('z')}}});
+const {data,error}=await sb.auth.signUp({email:String(d.get('e')).trim(),password:d.get('p'),options:{emailRedirectTo:location.origin+location.pathname,data:{nombre:String(d.get('n')).trim(),rol:rol,zona:d.get('z')}}});
 b.disabled=false;
 if(error){fmsg(f,traduce(error.message),1);return false}
 if(data.user&&data.user.identities&&data.user.identities.length===0){fmsg(f,'Ese email ya tiene una cuenta. Probá ingresar.',1);return false}
