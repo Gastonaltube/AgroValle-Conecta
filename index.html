@@ -285,7 +285,7 @@ async function cargarAnuncios(){if(!sb)return;
 try{const {data,error}=await sb.from('anuncios').select('id,usuario_id,tipo,titulo,categoria,descripcion,precio,unidad,zona,estado_producto,cantidad,whatsapp,activo,creado_en,vendedor,anuncio_imagenes(url,orden)').order('creado_en',{ascending:false}).limit(200);
 if(error||!data)return;
 S.items=data.map(aItem).concat(DEMO);
-if(!['#publicar','#ingresar'].includes(location.hash))route()}catch(x){}}
+if(!(['#publicar','#ingresar'].includes(location.hash)||(/^#e-/.test(location.hash)&&$('#fe'))))route()}catch(x){}}
 function achicar(file){return new Promise((ok,ko)=>{const u=URL.createObjectURL(file),im=new Image();
 im.onload=()=>{try{const k=Math.min(1,1280/Math.max(im.naturalWidth,im.naturalHeight)),c=document.createElement('canvas');c.width=Math.max(1,Math.round(im.naturalWidth*k));c.height=Math.max(1,Math.round(im.naturalHeight*k));c.getContext('2d').drawImage(im,0,0,c.width,c.height);c.toBlob(bl=>{URL.revokeObjectURL(u);bl?ok(bl):ko(new Error('toBlob'))},'image/jpeg',.82)}catch(x){ko(x)}};
 im.onerror=()=>{URL.revokeObjectURL(u);ko(new Error('img'))};im.src=u})}
@@ -311,7 +311,7 @@ return false}
 function panel(){if(!S.user){S.back='panel';return ingresar()}const u=S.user,mine=S.items.filter(i=>i.uid&&i.uid===u.id),T=[['pub','Mis publicaciones'],['fav','Favoritos'],['msg','Consultas'],['per','Mi perfil']];
 return `<div class="wrap pg"><div class="pl"><aside class="box" style="align-self:start"><span class="av" style="width:56px;height:56px;font-size:24px">${esc(u.n.charAt(0).toUpperCase())}</span><h3 style="margin-top:8px">${esc(u.n)}</h3><small style="color:var(--ink2)">${esc(u.e)}<br>${esc(u.z)}, Mendoza</small><div style="margin:10px 0">${u.roles.map(r=>`<span class="pill">${esc(r)}</span>`).join('')}</div><p style="font-size:14px"><b>${mine.length}</b> publicaciones · <b>${S.favs.length}</b> favoritos</p><p style="margin-top:12px"><button class="btn o" onclick="so()">Cerrar sesión</button></p></aside><section><div class="tb">${T.map(t=>`<button class="${S.tab===t[0]?'on':''}" onclick="S.tab='${t[0]}';S.cons=null;route()">${t[1]}</button>`).join('')}</div>${pt(mine)}</section></div></div>`}
 function pt(mine){const u=S.user;
-if(S.tab==='pub')return `<p style="margin-bottom:14px"><a class="btn" href="#publicar">Nueva publicación</a></p>`+(mine.length?mine.map(i=>`<div class="rw"><span class="em2">${i.e}</span><div class="t"><b>${esc(i.title)}</b><br><small>${pr(i)} · ${i.paus?'Pausada':'Activa'}</small></div><a class="btn o" href="#d-${i.id}">Ver</a><button class="btn o" onclick="ps('${esc(i.id)}')">${i.paus?'Activar':'Pausar'}</button><button class="btn o" onclick="dl('${esc(i.id)}')">Eliminar</button></div>`).join(''):'<p class="em">Todavía no publicaste nada. Empezá con tu primera publicación.</p>');
+if(S.tab==='pub')return `<p style="margin-bottom:14px"><a class="btn" href="#publicar">Nueva publicación</a></p>`+(mine.length?mine.map(i=>`<div class="rw"><span class="em2">${i.e}</span><div class="t"><b>${esc(i.title)}</b><br><small>${pr(i)} · ${i.paus?'Pausada':'Activa'}</small></div><a class="btn o" href="#d-${i.id}">Ver</a><a class="btn o" href="#e-${i.id}">Editar</a><button class="btn o" onclick="ps('${esc(i.id)}')">${i.paus?'Activar':'Pausar'}</button><button class="btn o" onclick="dl('${esc(i.id)}')">Eliminar</button></div>`).join(''):'<p class="em">Todavía no publicaste nada. Empezá con tu primera publicación.</p>');
 if(S.tab==='fav'){const f=S.items.filter(i=>S.favs.includes(String(i.id)));return f.length?`<div class="grid">${f.map(card).join('')}</div>`:'<p class="em">No guardaste favoritos. Tocá “Guardar” en cualquier publicación.</p>'}
 if(S.tab==='msg')return bandeja();
 return `<form class="f" onsubmit="return gp(event)"><label>Nombre<input name="n" value="${esc(u.n)}" required></label><label>Zona<select name="z">${ZN.map(z=>`<option${z===u.z?' selected':''}>${z}</option>`).join('')}</select></label><label>Presentación<textarea name="b" rows="4" placeholder="Contá quién sos, qué hacés y cuánta experiencia tenés">${esc(u.b||'')}</textarea></label><button class="btn">Guardar cambios</button></form>`}
@@ -335,6 +335,26 @@ async function ps(id){const i=S.items.find(x=>String(x.id)===String(id));if(!i||
 const {error}=await sb.from('anuncios').update({activo:!!i.paus}).eq('id',i.id);
 if(error){toast('No se pudo cambiar. Probá de nuevo.');return}
 i.paus=!i.paus;route();toast(i.paus?'Publicación pausada':'Publicación activa')}
+function editar(id){
+if(!S.user){S.back='e-'+id;return ingresar()}
+const i=S.items.find(x=>String(x.id)===String(id));
+if(!i)return '<div class="wrap pg"><p class="em">Cargando tu publicación...</p><p><a class="btn o" href="#panel">Volver a mi panel</a></p></div>';
+if(i.uid!==S.user.id)return '<div class="wrap pg"><p class="em">Solo podés editar tus propias publicaciones.</p><p><a class="btn" href="#panel">Ir a mi panel</a></p></div>';
+const esP=i.t==='p',C=esP?CP:CS,wa=String(i.wa||'').replace(/^549/,'');
+return `<div class="wrap pg"><h1>Editar publicación</h1><p class="sub">Cambiá lo que necesites y guardá. Las fotos se mantienen como están.</p><form id="fe" class="f" onsubmit="return ge(event,'${esc(i.id)}')"><label>Título<input name="title" required maxlength="80" value="${esc(i.title)}"></label><div class="row"><label>Categoría<select name="cat">${C.map(c=>`<option${c[1]===i.cat?' selected':''}>${c[1]}</option>`).join('')}</select></label><label>Zona<select name="zona">${ZN.map(z=>`<option${z===i.zona?' selected':''}>${z}</option>`).join('')}</select></label></div><div class="row"><label>Precio en pesos<input name="price" type="number" min="0" placeholder="Vacío = a convenir" value="${i.price?esc(i.price):''}"></label><label>Unidad o modalidad<input name="unit" placeholder="kg, bolsa, hora, ha" value="${esc(i.unit)}"></label></div>${esP?`<div class="row"><label>Cantidad<input name="qty" placeholder="Ej: 20 unidades" value="${esc(i.qty)}"></label><label>Estado<select name="estado"><option${i.estado==='Nuevo'?' selected':''}>Nuevo</option><option${i.estado==='Usado'?' selected':''}>Usado</option></select></label></div>`:''}<label>WhatsApp de contacto<input name="wa" type="tel" required inputmode="numeric" placeholder="Código de área + número, sin 0 ni 15. Ej: 2622314168" value="${esc(wa)}"></label><label>Descripción<textarea name="desc" rows="4" required>${esc(i.desc)}</textarea></label><small class="fm" role="status" style="color:var(--ink2);min-height:18px"></small><button class="btn">Guardar cambios</button> <a class="btn o" href="#panel">Cancelar</a></form></div>`}
+
+async function ge(e,id){e.preventDefault();const f=e.target,d=new FormData(f),b=f.querySelector('button.btn'),i=S.items.find(x=>String(x.id)===String(id));
+if(!sb||!S.user||!i||i.uid!==S.user.id){fmsg(f,'No se pudo guardar. Volvé a ingresar e intentá de nuevo.',1);return false}
+const esP=i.t==='p';
+let wa=String(d.get('wa')||'').replace(/\D/g,'').replace(/^0+/,'');
+if(/^54(?!9)/.test(wa))wa='549'+wa.slice(2);else if(!wa.startsWith('54'))wa='549'+wa;
+if(!/^549\d{10}$/.test(wa)){fmsg(f,'Revisá el WhatsApp: código de área + número, sin 0 ni 15. Ej: 2622314168',1);return false}
+const row={titulo:String(d.get('title')).trim(),categoria:d.get('cat'),descripcion:String(d.get('desc')).trim(),precio:d.get('price')===''?null:+d.get('price'),unidad:String(d.get('unit')||'').trim()||null,zona:d.get('zona'),estado_producto:esP?d.get('estado'):null,cantidad:esP?(String(d.get('qty')||'').trim()||null):null,whatsapp:wa};
+b.disabled=true;fmsg(f,'Guardando...');
+const {data,error}=await sb.from('anuncios').update(row).eq('id',i.id).select('id');
+if(error||!data||!data.length){b.disabled=false;fmsg(f,'No se pudo guardar. Revisá los datos e intentá de nuevo.',1);return false}
+await cargarAnuncios();toast('Cambios guardados');location.hash='d-'+i.id;return false}
+
 async function dl(id){const i=S.items.find(x=>String(x.id)===String(id));if(!i||!S.user||i.uid!==S.user.id||!sb)return;
 if(!confirm('¿Eliminar esta publicación?'))return;
 const {error}=await sb.from('anuncios').delete().eq('id',i.id);
@@ -365,8 +385,8 @@ function historia(){return `<div class="wrap pg"><section class="pan d" style="p
 <div class="chp" style="grid-template-columns:1fr"><div><h2>Lo que viene</h2><p>Empezamos en el Valle de Uco porque es mi casa y conozco sus problemas. Pero la idea no termina acá: queremos llegar a otras zonas de Mendoza y del país, sumar más herramientas y que cada trato en el agro sea más simple.</p><p>Esta plataforma también es un reconocimiento a un oficio que durante años hizo posibles muchísimos negocios: el de los comisionistas, como mi papá.</p></div></div>
 <div class="box" style="display:flex;gap:18px;align-items:center;flex-wrap:wrap"><span class="av" style="width:64px;height:64px;font-size:28px">G</span><div style="flex:1;min-width:220px"><b>Gastón</b><br><small style="color:var(--ink2)">Creador de Agro Valle Conecta · Tupungato, Valle de Uco, Mendoza</small><div style="margin-top:6px"><span class="pill">Agronomía</span><span class="pill">Programación</span><span class="pill">Valle de Uco</span></div></div><a class="btn w" href="https://wa.me/5492622314168" target="_blank" rel="noopener">Escribime por WhatsApp</a><a class="btn" href="#ingresar">Crear mi cuenta</a></div></div>`}
 const V={inicio,productos:()=>lst('p'),servicios:()=>lst('s'),buscar:()=>lst('a'),empresas,nosotros:historia,publicar,ingresar,panel};
-function route(){const h=(location.hash||'#inicio').slice(1),m=h.match(/^d-([0-9a-f-]+)$/i);S.post=null;let html;
-try{html=m?det(m[1]):(V[h]||inicio)()}catch(x){html='<p class="em">Algo salió mal. Volvé al inicio.</p>'}
+function route(){const h=(location.hash||'#inicio').slice(1),m=h.match(/^d-([0-9a-f-]+)$/i),me=h.match(/^e-([0-9a-f-]+)$/i);S.post=null;let html;
+try{html=m?det(m[1]):me?editar(me[1]):(V[h]||inicio)()}catch(x){html='<p class="em">Algo salió mal. Volvé al inicio.</p>'}
 $('#app').innerHTML=html;if(S.post)S.post();hdr();scrollTo(0,0)}
 addEventListener('hashchange',route);route();
 </script>
