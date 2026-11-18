@@ -1,0 +1,469 @@
+<!DOCTYPE html>
+<html lang="es-AR">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Agro Valle Conecta — Marketplace agropecuario del Valle de Uco</title>
+<meta name="description" content="Comprá, vendé y contratá servicios agropecuarios en Mendoza y el Valle de Uco.">
+<meta name="theme-color" content="#16301F">
+<link rel="canonical" href="https://gastonaltube.github.io/AgroValle-Conecta/">
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'%3E%3Ctext y='.9em' font-size='90'%3E🌱%3C/text%3E%3C/svg%3E">
+<meta property="og:type" content="website">
+<meta property="og:locale" content="es_AR">
+<meta property="og:site_name" content="Agro Valle Conecta">
+<meta property="og:title" content="Agro Valle Conecta — Marketplace agropecuario del Valle de Uco">
+<meta property="og:description" content="Comprá, vendé y contratá servicios agropecuarios en Mendoza y el Valle de Uco.">
+<meta property="og:url" content="https://gastonaltube.github.io/AgroValle-Conecta/">
+<meta property="og:image" content="https://gastonaltube.github.io/AgroValle-Conecta/avc-compartir.jpg">
+<meta name="twitter:card" content="summary_large_image">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="preconnect" href="https://yolccrvajsaltnfzvglr.supabase.co" crossorigin>
+<link rel="preload" as="image" href="avc-hero-valle.webp" fetchpriority="high">
+<link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@500;600;700&family=Work+Sans:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+:root{--g:#1E3A2B;--g2:#16301F;--s:#6C8F53;--sl:#E4EDDC;--bg:#F5F7F1;--card:#fff;--ink:#1B2119;--ink2:#4B564A;--line:rgba(30,58,43,.15);--acc:#C8892B;--btn:#1E3A2B;--btnt:#fff;--sh:0 10px 28px rgba(20,40,28,.12);box-sizing:border-box;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}
+@media(prefers-color-scheme:dark){:root:not([data-theme="light"]){--g:#9BC27E;--g2:#E6F0DC;--sl:#24352A;--bg:#121A15;--card:#1A251E;--ink:#E8EEE4;--ink2:#A9B6A5;--line:rgba(200,225,190,.16);--btn:#6C8F53;--btnt:#0E1610;--sh:0 10px 28px rgba(0,0,0,.45)}}
+:root[data-theme="dark"]{--g:#9BC27E;--g2:#E6F0DC;--sl:#24352A;--bg:#121A15;--card:#1A251E;--ink:#E8EEE4;--ink2:#A9B6A5;--line:rgba(200,225,190,.16);--btn:#6C8F53;--btnt:#0E1610;--sh:0 10px 28px rgba(0,0,0,.45)}
+html{scroll-padding-top:env(safe-area-inset-top,0px)}
+*{box-sizing:border-box;margin:0}
+body{font:16px/1.5 'Work Sans',system-ui,sans-serif;background:var(--bg);color:var(--ink)}
+body::before{content:"";position:fixed;inset:0 0 auto;height:env(safe-area-inset-top,0px);background:var(--card);z-index:60}
+a{color:inherit}
+h1,h2,h3{font-family:'Space Grotesk',sans-serif;color:var(--g2);letter-spacing:-.02em}
+.wrap{max-width:1180px;margin:0 auto;padding:0 18px}
+header{position:sticky;top:env(safe-area-inset-top,0px);z-index:50;background:var(--card);border-bottom:1px solid var(--line)}
+.hd{display:flex;align-items:center;gap:12px;padding-top:10px;padding-bottom:10px;flex-wrap:wrap}
+.logo{font:700 19px 'Space Grotesk';color:var(--g2);text-decoration:none}.logo b{color:var(--s)}
+.sb{flex:1;min-width:220px;display:flex;background:var(--bg);border:1px solid var(--line);border-radius:24px;padding:2px 4px 2px 16px}
+.sb input{flex:1;border:0;background:none;outline:0;font:inherit;color:var(--ink);padding:8px 0;min-width:0}
+.sb button{border:0;background:none;cursor:pointer;padding:6px 10px;font-size:16px}
+.nv{display:flex;gap:2px}
+.nv a,.ac{padding:8px 12px;border-radius:8px;text-decoration:none;color:var(--ink2);font-weight:600;font-size:14px}
+.nv a:hover,.nv a.on{background:var(--sl);color:var(--g2)}
+.av{display:inline-flex;width:34px;height:34px;border-radius:50%;background:var(--btn);color:var(--btnt);align-items:center;justify-content:center;font:600 15px 'Space Grotesk'}
+.btn{display:inline-block;background:var(--btn);color:var(--btnt);border:0;padding:11px 20px;border-radius:8px;font:600 15px 'Space Grotesk';cursor:pointer;text-decoration:none}
+.btn.o{background:none;color:var(--g2);border:1.5px solid var(--g)}
+.btn.w{background:#25D366;color:#06210f}
+.ic{border:1px solid var(--line);background:none;color:var(--ink);border-radius:8px;width:36px;height:36px;cursor:pointer;font-size:16px}
+:focus-visible{outline:3px solid var(--acc);outline-offset:2px}
+.hero{margin-top:18px;border-radius:18px;padding:54px 30px;color:#fff;background:linear-gradient(120deg,#16301F 0%,#2C5B3C 55%,#6C8F53 100%);position:relative;overflow:hidden}
+.hero{min-height:340px}
+.hero h1{color:#fff;font-size:clamp(30px,5vw,50px);line-height:1.08;max-width:640px}
+.hero p{max-width:540px;margin:14px 0 22px;color:#E4EDDC;font-size:17px}
+.hs{display:flex;gap:8px;max-width:600px;background:#fff;border-radius:12px;padding:6px;position:relative;z-index:1}
+.hs input{flex:1;border:0;outline:0;font:inherit;padding:8px 12px;min-width:0;color:#1B2119;background:none}
+.chips{display:flex;gap:8px;flex-wrap:wrap;margin-top:16px;position:relative;z-index:1}
+.chips a{background:rgba(255,255,255,.16);color:#fff;text-decoration:none;padding:6px 14px;border-radius:20px;font-size:14px}
+.sec{padding:30px 0 6px}.sec h2{font-size:25px}.sub{color:var(--ink2);margin:4px 0 16px}
+.cats{display:grid;grid-template-columns:repeat(auto-fill,minmax(138px,1fr));gap:12px}
+.cat{background:var(--card);border:1px solid var(--line);border-radius:12px;padding:16px 8px;text-align:center;text-decoration:none;font-weight:600;font-size:14px}
+.cat span{display:block;font-size:30px}.cat:hover{border-color:var(--s);background:var(--sl)}
+.grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(230px,1fr));gap:16px}
+.card{background:var(--card);border:1px solid var(--line);border-radius:12px;overflow:hidden;text-decoration:none;display:flex;flex-direction:column}
+.card:hover{box-shadow:var(--sh)}
+.ph{height:150px;display:flex;align-items:center;justify-content:center;font-size:56px;position:relative;background:linear-gradient(135deg,hsl(var(--h) 45% 80%),hsl(var(--h) 40% 62%))}
+.ph img{width:100%;height:100%;object-fit:cover;position:absolute;inset:0}
+.tag{position:absolute;top:10px;left:10px;background:var(--acc);color:#fff;font:600 12px 'Space Grotesk';padding:3px 10px;border-radius:20px}
+.cb{padding:12px 14px 14px;display:flex;flex-direction:column;gap:3px}.cb small{color:var(--ink2);font-size:13px}
+.cb h3{font-size:16px;line-height:1.3}.pr{font:700 18px 'Space Grotesk';color:var(--g2)}
+.two{display:grid;grid-template-columns:1fr 1fr;gap:18px;margin-top:30px}
+@media(max-width:760px){.two{grid-template-columns:1fr}}
+.pan{border-radius:16px;padding:28px;background:var(--sl)}.pan h2{font-size:22px;margin-bottom:8px}.pan p{color:var(--ink2);margin-bottom:16px}
+.pan.d{background:var(--g);color:#fff}.pan.d h2{color:#fff}.pan.d p{color:#D5E4CB}.pan.d .btn{background:#fff;color:#16301F}
+.st{display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:16px}
+.box{background:var(--card);border:1px solid var(--line);border-radius:12px;padding:18px}
+.box h3{font-size:17px;margin:6px 0 4px}.box p{color:var(--ink2);font-size:15px}
+.pg{padding-top:24px;padding-bottom:20px}.pg h1{font-size:30px}
+.fl{display:flex;gap:10px;flex-wrap:wrap;margin:6px 0 18px}
+select,input,textarea{font:inherit;background:var(--card);color:var(--ink);border:1px solid var(--line);border-radius:8px;padding:9px 11px;max-width:100%}
+.det{display:grid;grid-template-columns:1.1fr 1fr;gap:28px;padding:24px 0}
+@media(max-width:800px){.det{grid-template-columns:1fr}}
+.ph.big{height:340px;border-radius:14px;font-size:110px}
+.dl{display:grid;grid-template-columns:auto 1fr;gap:6px 20px;margin:14px 0}.dl dt{color:var(--ink2)}.dl dd{font-weight:600;margin:0}
+.acts{display:flex;gap:10px;flex-wrap:wrap;margin-top:14px}
+.sel{display:flex;gap:12px;align-items:center;margin-top:18px}.sel .av{width:46px;height:46px;font-size:19px}
+.f{display:grid;gap:14px;max-width:640px}.f label{font-weight:600;font-size:14px;display:grid;gap:5px}
+.row{display:grid;grid-template-columns:1fr 1fr;gap:12px}
+@media(max-width:560px){.row{grid-template-columns:1fr}}
+.tp{display:flex;gap:18px;flex-wrap:wrap}.tp label{display:flex;gap:6px;align-items:center}
+.ck{display:flex;gap:14px;flex-wrap:wrap;border:1px solid var(--line);border-radius:8px;padding:10px 12px}.ck label{display:flex;gap:6px;align-items:center;font-weight:500}
+.pvw{display:flex;gap:8px;flex-wrap:wrap}.pvw img{width:78px;height:78px;object-fit:cover;border-radius:8px}
+.au{max-width:480px;margin:10px auto}
+.tb{display:flex;gap:4px;border-bottom:1px solid var(--line);overflow-x:auto;margin-bottom:18px}
+.tb button{background:none;border:0;border-bottom:3px solid transparent;padding:12px 16px;font:600 15px 'Space Grotesk';color:var(--ink2);cursor:pointer;white-space:nowrap}
+.tb button.on{color:var(--g2);border-color:var(--g)}
+.pl{display:grid;grid-template-columns:260px 1fr;gap:24px}
+@media(max-width:800px){.pl{grid-template-columns:1fr}}
+.rw{display:flex;gap:12px;align-items:center;background:var(--card);border:1px solid var(--line);border-radius:12px;padding:12px;margin-bottom:10px;flex-wrap:wrap}
+.rw .t{flex:1;min-width:170px}.rw small{color:var(--ink2)}.rw .em2{font-size:30px}
+.rw .btn{padding:7px 13px;font-size:13.5px}
+.pill{display:inline-block;background:var(--sl);color:var(--g2);padding:3px 10px;border-radius:20px;font-size:13px;font-weight:600;margin:2px 4px 2px 0}
+.em{padding:40px;text-align:center;color:var(--ink2);grid-column:1/-1}
+footer{background:#16301F;color:#CFE0C4;padding:30px 0 22px;margin-top:40px}
+footer .wrap{display:grid;grid-template-columns:2fr 1fr 1fr 1fr;gap:20px;font-size:14.5px}
+@media(max-width:760px){footer .wrap{grid-template-columns:1fr 1fr}}
+footer a{display:block;text-decoration:none;color:#CFE0C4;padding:3px 0}footer b{color:#fff;font-family:'Space Grotesk'}
+.bn{display:none;position:fixed;bottom:0;left:0;right:0;background:var(--card);border-top:1px solid var(--line);z-index:50;padding-bottom:env(safe-area-inset-bottom,0px)}
+.bn a{flex:1;text-align:center;padding:7px 0;text-decoration:none;color:var(--ink2);font-size:12px;font-weight:600}.bn a span{display:block;font-size:20px}.bn a.on{color:var(--g2)}
+@media(max-width:760px){.bn{display:flex}.nv,.hbtn{display:none}body{padding-bottom:62px}.hero{padding:36px 20px}}
+.mo{position:fixed;inset:0;background:rgba(0,0,0,.5);display:none;align-items:center;justify-content:center;z-index:80;padding:16px}.mo.open{display:flex}
+.mb{background:var(--card);border-radius:14px;padding:22px;max-width:460px;width:100%;position:relative}.mb h3{margin-bottom:12px}
+.x{position:absolute;top:8px;right:12px;border:0;background:none;font-size:26px;cursor:pointer;color:var(--ink2)}
+#toast{position:fixed;left:50%;bottom:84px;transform:translateX(-50%);background:#16301F;color:#fff;padding:10px 18px;border-radius:24px;opacity:0;pointer-events:none;transition:opacity .25s;z-index:90;max-width:90%;text-align:center}#toast.s{opacity:1}
+.sto{display:grid;grid-template-columns:1.4fr 1fr;gap:28px;align-items:start}
+@media(max-width:800px){.sto{grid-template-columns:1fr}}
+.sto p{margin-bottom:14px;font-size:17px;max-width:62ch;color:var(--ink2)}
+.qt{border-left:4px solid var(--s);padding:6px 0 6px 18px;margin:22px 0;font:600 22px/1.35 'Space Grotesk';color:var(--g2)}
+.me{text-align:center}.me .av{width:84px;height:84px;font-size:36px}
+.chp{display:grid;grid-template-columns:1fr 1fr;gap:30px;align-items:center;margin:40px 0}
+.chp.r>div:first-child{order:2}
+@media(max-width:800px){.chp{grid-template-columns:1fr;gap:16px}.chp.r>div:first-child{order:0}}
+.chp h2{margin-bottom:12px}.chp p{margin-bottom:12px;font-size:17px;color:var(--ink2);max-width:60ch}
+.il{border-radius:14px;overflow:hidden;border:1px solid var(--line)}
+.slot{display:grid;place-items:center;text-align:center;min-height:190px;border:2px dashed var(--line);border-radius:14px;padding:14px;background:var(--card);color:var(--ink2);font-size:14px;position:relative;overflow:hidden;cursor:pointer}
+.slot input{position:absolute;inset:0;opacity:0;cursor:pointer}.slot img{position:absolute;inset:0;width:100%;height:100%;object-fit:cover}
+@media(prefers-reduced-motion:reduce){*{transition:none!important}}
+.legal{max-width:760px}.legal h1{margin-bottom:4px}.legal h2{font-size:19px;margin:26px 0 8px}.legal p,.legal li{color:var(--ink2);line-height:1.65}.legal p{margin:8px 0}.legal ul{padding-left:22px;margin:8px 0}.legal li{margin:4px 0}.legal small{color:var(--ink2)}.legal .aviso{border:1px solid var(--line);border-radius:12px;padding:12px 16px;margin:16px 0}
+</style>
+</head>
+<body>
+<header><div class="wrap hd">
+<a class="logo" href="#inicio">🌱 Agro Valle <b>Conecta</b></a>
+<form class="sb" onsubmit="return bus(this.q.value)"><input name="q" placeholder="Buscar productos, servicios, empresas…" aria-label="Buscar"><button aria-label="Buscar">🔍</button></form>
+<nav class="nv"><a href="#productos">Productos</a><a href="#servicios">Servicios</a><a href="#empresas">Empresas</a><a href="#nosotros">Nosotros</a></nav>
+<a class="btn hbtn" href="#publicar">Publicar</a>
+<a id="acc" class="ac" href="#ingresar">Ingresar</a>
+<button class="ic" onclick="tema()" aria-label="Cambiar entre modo claro y oscuro">◐</button>
+</div></header>
+<main id="app"></main>
+<footer><div class="wrap">
+<div><b>Agro Valle Conecta</b><p style="margin-top:6px">El mercado del agro del Valle de Uco. Tupungato, Mendoza, Argentina.</p></div>
+<div><b>Explorar</b><a href="#productos">Productos</a><a href="#servicios">Servicios</a><a href="#empresas">Empresas</a><a href="explorar/">Todos los anuncios</a><a href="#nosotros">Nosotros</a></div>
+<div><b>Tu cuenta</b><a href="#ingresar">Ingresar</a><a href="#publicar">Publicar</a><a href="#panel">Mi panel</a></div>
+<div><b>Contacto</b><a href="https://wa.me/5492622314168" target="_blank" rel="noopener">WhatsApp</a><a href="#terminos">Términos y condiciones</a><a href="#privacidad">Política de privacidad</a></div>
+</div></footer>
+<nav class="bn"><a href="#inicio"><span>🏠</span>Inicio</a><a href="#productos"><span>🛒</span>Productos</a><a href="#publicar"><span>➕</span>Publicar</a><a href="#servicios"><span>🧑‍🔧</span>Servicios</a><a href="#panel"><span>👤</span>Mi panel</a></nav>
+<div id="md" class="mo"></div><div id="toast" role="status"></div>
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+<script>
+const $=s=>document.querySelector(s),esc=s=>String(s==null?'':s).replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
+const CP=[['🌱','Semillas'],['🧪','Fertilizantes'],['🛡️','Agroquímicos'],['🔧','Herramientas'],['🚜','Maquinaria'],['⚙️','Repuestos'],['💧','Sistemas de riego'],['🍇','Elementos para viñedos'],['🥬','Horticultura'],['🏭','Insumos para bodegas'],['🦺','Protección'],['📦','Otros']];
+const CS=[['🌿','Asesoramiento agronómico'],['✂️','Poda'],['🧺','Cosecha'],['💨','Pulverización'],['🚰','Riego'],['🚛','Transporte'],['🚜','Maquinaria con operario'],['🛠️','Reparaciones'],['📋','Servicios técnicos']];
+const ZN=['Tupungato','Tunuyán','San Carlos','Luján de Cuyo','Mendoza Capital','San Rafael'];
+const I=(id,t,title,cat,price,unit,zona,estado,qty,seller,desc,e,h,dest,f)=>({id,t,title,cat,price,unit,zona,estado,qty,seller,desc,e,h,dest,f});
+const IMG1="avc-hero-valle.webp",IMG2="avc-vinedo-otono.webp",IMG3="avc-banner-agro.webp";
+const E=[['Semillas del Valle','Semillas y plantines','Tupungato','🌱','Selección de semillas y plantines para horticultura del Valle de Uco.'],['AgroInsumos Uco','Fertilizantes y agroquímicos','Tunuyán','🧪','Insumos para finca con entrega en toda la zona.'],['Riego Andino','Sistemas de riego','Tupungato','💧','Proyecto e instalación de riego por goteo y aspersión.'],['Cooperativa Uco','Cooperativa de productores','Tupungato','🤝','Mallas, insumos y comercialización conjunta.'],['Agroservicios Cordillera','Servicios con maquinaria','San Carlos','🚜','Pulverización, labores y cosecha con equipos propios.'],['Taller Agrotec','Reparaciones y repuestos','Tunuyán','🛠️','Bombas, motores y maquinaria agrícola.']];
+let S={user:null,favs:[],q:'',t:'a',pc:'',tab:'pub',back:'',img:'',nx:200,items:[
+I(1,'p','Semilla de zanahoria híbrida','Semillas',18500,'kg','Tupungato','Nuevo','50 kg','Semillas del Valle','Híbrido de alto rendimiento, buena sanidad y uniformidad. Lote certificado.','🥕',30,1,2),
+I(2,'p','Fertilizante NPK 15-15-15','Fertilizantes',42000,'bolsa 50 kg','Tunuyán','Nuevo','200 bolsas','AgroInsumos Uco','Fertilizante granulado balanceado para vid y hortalizas. Retiro o entrega.','🧪',120,0,5),
+I(3,'p','Tractor frutero 75 HP','Maquinaria',14500000,'','San Carlos','Usado','1 unidad','Finca Los Álamos','Muy buen estado, 3.200 horas. Se acepta recorrerlo y probarlo en finca.','🚜',20,1,1),
+I(4,'p','Kit de riego por goteo para 1 ha','Sistemas de riego',380000,'kit','Tupungato','Nuevo','15 kits','Riego Andino','Incluye cinta, filtros, válvulas y accesorios. Asesoramiento de instalación.','💧',200,1,3),
+I(5,'p','Tijeras de poda profesionales','Herramientas',28000,'unidad','Tunuyán','Nuevo','40 unidades','Ferretería Rural','Acero templado, mango ergonómico. Repuestos disponibles.','🔧',50,0,8),
+I(6,'p','Malla antigranizo 5 x 100 m','Elementos para viñedos',210000,'rollo','Tupungato','Nuevo','12 rollos','Cooperativa Uco','Malla de alta resistencia, protección UV. Precio especial por cantidad.','🍇',280,0,6),
+I(7,'p','Bomba centrífuga 5 HP','Repuestos',320000,'','Luján de Cuyo','Usado','2 unidades','Taller Agrotec','Revisadas y probadas, con garantía de taller de 3 meses.','⚙️',210,0,12),
+I(8,'p','Plantines de tomate (bandeja de 200)','Horticultura',22000,'bandeja','Luján de Cuyo','Nuevo','80 bandejas','Vivero La Huerta','Plantines sanos con certificado fitosanitario. Pedidos por semana.','🍅',5,0,4),
+I(9,'p','Kit de protección para aplicación','Protección',34000,'kit','San Rafael','Nuevo','25 kits','Ferretería Rural','Traje, máscara con filtros, guantes y antiparras.','🦺',0,0,9),
+I(10,'s','Asesoramiento agronómico en viñedos','Asesoramiento agronómico',45000,'visita','Tupungato','','Lunes a sábado','Ing. Lucía Moretti','Diagnóstico de lote, plan de fertilización y manejo sanitario. 12 años de experiencia en Valle de Uco.','🌿',110,1,2),
+I(11,'s','Poda en seco y atado, cuadrilla','Poda',9000,'hora','Tunuyán','','Abril a septiembre','Cuadrilla El Pampa','Cuadrilla de 8 personas con herramientas propias. Presupuesto sin cargo.','✂️',90,0,4),
+I(12,'s','Pulverización con equipo autopropulsado','Pulverización',35000,'ha','San Carlos','','Todo el año','Agroservicios Cordillera','Aplicación precisa con control de deriva. Cubrimos todo el Valle de Uco.','💨',190,1,3),
+I(13,'s','Cosecha mecánica de uva','Cosecha',120000,'ha','Tupungato','','Enero a abril','Cosechas del Sur','Cosechadora autopropulsada con operador. Reserva con anticipación.','🧺',300,0,7),
+I(14,'s','Transporte de uva a bodega','Transporte',0,'','Mendoza Capital','','Temporada de cosecha','Fletes Uco','Camiones volcadores y fletes a convenir según destino.','🚛',45,0,6),
+I(15,'s','Reparación de bombas y motores','Reparaciones',15000,'hora','Tunuyán','','Lunes a viernes','Taller Agrotec','Diagnóstico en taller o en finca, con repuestos originales.','🛠️',150,0,10),
+I(101,'p','Cajones cosecheros plásticos','Herramientas',2800,'unidad','Tupungato','Usado','300 unidades','Mi finca (demo)','Cajones de 20 kg en buen estado. Retiro por la finca.','📦',60,0,3),
+I(102,'s','Instalación de riego presurizado','Riego',60000,'jornada','Tupungato','','A coordinar','Mi finca (demo)','Instalamos y ponemos en marcha equipos de riego presurizado.','🚰',200,0,6)]};
+S.items.forEach(i=>{i.ej=true});const DEMO=S.items.slice();
+let F={};
+try{const d=JSON.parse(localStorage.getItem('avc')||'{}');if(d.favs)S.favs=d.favs.map(String)}catch(e){}
+const sv=()=>{try{localStorage.setItem('avc',JSON.stringify({favs:S.favs}))}catch(e){}};
+const UUID=/^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$/i;
+const pr=i=>i.price?'$ '+i.price.toLocaleString('es-AR')+(i.unit?' / '+esc(i.unit):''):'A convenir';
+const card=i=>`<a class="card" href="#d-${i.id}"><div class="ph" style="--h:${i.h}">${i.img?`<img src="${esc(i.img)}" loading="lazy" decoding="async" alt="">`:`<span>${i.e}</span>`}${i.dest?'<b class="tag">Destacado</b>':''}</div><div class="cb"><small>${esc(i.cat)} · ${esc(i.zona)}${i.ej?' · Ejemplo':''}</small><h3>${esc(i.title)}</h3><div class="pr">${pr(i)}</div><small>${esc(i.seller)}</small></div></a>`;
+const live=()=>{const A=S.items.filter(i=>!i.paus),R=A.filter(i=>!i.ej);return (R.length<8?A:R).sort((a,b)=>a.f-b.f)};
+function toast(m){const t=$('#toast');t.textContent=m;t.classList.add('s');clearTimeout(toast.t);toast.t=setTimeout(()=>t.classList.remove('s'),2800)}
+function tema(){const r=document.documentElement,d=matchMedia('(prefers-color-scheme: dark)').matches,c=r.dataset.theme||(d?'dark':'light');r.dataset.theme=c==='dark'?'light':'dark'}
+function mo(h){const m=$('#md');m.innerHTML='<div class="mb"><button class="x" onclick="cm()" aria-label="Cerrar">×</button>'+h+'</div>';m.classList.add('open')}
+function cm(){$('#md').classList.remove('open')}
+function bus(q){S.q=q.trim();if(location.hash==='#buscar')route();else location.hash='buscar';return false}
+function hdr(){const a=$('#acc');a.innerHTML=S.user?'<span class="av">'+esc(S.user.n.charAt(0).toUpperCase())+'</span>':'Ingresar';a.href=S.user?'#panel':'#ingresar';document.querySelectorAll('.nv a,.bn a').forEach(x=>x.classList.toggle('on',x.getAttribute('href')===location.hash))}
+
+function inicio(){const dp=live().filter(i=>i.dest).slice(0,4),rc=live().slice(0,8);
+return `<div class="wrap"><section class="hero" style="background:linear-gradient(110deg,rgba(14,36,22,.88) 0%,rgba(22,48,31,.62) 55%,rgba(22,48,31,.25) 100%),url(${IMG1}) center/cover"><h1>El mercado del agro, conectado.</h1><p>Comprá insumos y maquinaria, vendé tu producción y contratá servicios técnicos con gente del Valle de Uco.</p><form class="hs" onsubmit="return bus(this.q.value)"><input name="q" placeholder="¿Qué estás buscando? Ej: riego, poda, tractor" aria-label="Buscar"><button class="btn">Buscar</button></form><div class="chips">${['Riego','Poda','Tractor','Semillas','Asesoramiento'].map(c=>`<a href="#buscar" onclick="S.q='${c}'">${c}</a>`).join('')}</div></section>
+<section class="sec"><h2>Productos por categoría</h2><p class="sub">Encontrá insumos, herramientas y maquinaria.</p><div class="cats">${CP.map(c=>`<a class="cat" href="#productos" onclick="S.pc='${c[1]}'"><span>${c[0]}</span>${c[1]}</a>`).join('')}</div></section>
+<section class="sec"><h2>Servicios por rubro</h2><p class="sub">Profesionales y prestadores de la zona.</p><div class="cats">${CS.map(c=>`<a class="cat" href="#servicios" onclick="S.pc='${c[1]}'"><span>${c[0]}</span>${c[1]}</a>`).join('')}</div></section>
+${dp.length?`<section class="sec"><h2>Publicaciones destacadas</h2><p class="sub">Las más vistas esta semana.</p><div class="grid">${dp.map(card).join('')}</div></section>`:''}
+<section class="sec"><h2>Publicadas recientemente</h2><p class="sub">Novedades de productores, empresas y profesionales.</p><div class="grid">${rc.map(card).join('')}</div><p style="margin-top:16px"><a class="btn o" href="#buscar" onclick="S.q=''">Ver todas las publicaciones</a></p></section>
+<div class="two"><div class="pan"><h2>Para empresas y comercios</h2><p>Creá el perfil de tu empresa, publicá tu catálogo y recibí consultas de productores de toda la zona.</p><a class="btn" href="#ingresar">Crear perfil de empresa</a></div><div class="pan d"><h2>Para profesionales y técnicos</h2><p>Mostrá tu experiencia, tu zona de trabajo y tu disponibilidad. Que te encuentren los que te necesitan.</p><a class="btn" href="#ingresar">Ofrecer mis servicios</a></div></div>
+<section class="sec"><h2>Cómo funciona</h2><p class="sub">Tres pasos, sin vueltas.</p><div class="st"><div class="box"><span style="font-size:30px">🔎</span><h3>1. Buscá</h3><p>Escribí lo que necesitás o recorré las categorías. Filtrá por zona y precio.</p></div><div class="box"><span style="font-size:30px">💬</span><h3>2. Contactá</h3><p>Escribile directo al vendedor por WhatsApp o enviá tu consulta desde la publicación.</p></div><div class="box"><span style="font-size:30px">🤝</span><h3>3. Cerrá el trato</h3><p>Acordá precio, entrega y fecha. Después, publicá vos lo que tengas para ofrecer.</p></div></div></section>
+<section class="sec"><div class="box" style="display:flex;gap:18px;align-items:center;flex-wrap:wrap"><span class="av" style="width:56px;height:56px;font-size:24px">G</span><div style="flex:1;min-width:220px"><h2 style="font-size:21px">Una idea que nació en casa</h2><p style="color:var(--ink2)">Mi papá es comisionista en el Valle de Uco. Ver lo difícil que era cerrar una operación me llevó a crear esta plataforma.</p></div><a class="btn o" href="#nosotros">Conocé la historia</a></div></section>
+<section class="sec"><div class="box" style="text-align:center;padding:30px"><h2>¿Tenés algo para vender u ofrecer?</h2><p class="sub">Publicar es gratis en esta etapa de prueba.</p><a class="btn" href="#publicar">Publicar ahora</a></div></section></div>`}
+
+function lst(t){S.t=t;F={cat:S.pc};S.pc='';if(t!=='a')S.q='';S.post=rr;
+const cs=(t==='p'?CP:t==='s'?CS:CP.concat(CS)).map(c=>c[1]);
+return `<div class="wrap pg"><h1>${t==='p'?'Productos e insumos':t==='s'?'Servicios técnicos':S.q?'Resultados para “'+esc(S.q)+'”':'Todas las publicaciones'}</h1><p class="sub" id="cnt"></p><div class="fl"><select aria-label="Categoría" onchange="F.cat=this.value;rr()"><option value="">Todas las categorías</option>${cs.map(c=>`<option${F.cat===c?' selected':''}>${c}</option>`).join('')}</select><select aria-label="Zona" onchange="F.z=this.value;rr()"><option value="">Toda la zona</option>${ZN.map(z=>`<option>${z}</option>`).join('')}</select>${t!=='s'?'<select aria-label="Estado" onchange="F.est=this.value;rr()"><option value="">Nuevo y usado</option><option>Nuevo</option><option>Usado</option></select>':''}<input type="number" min="0" placeholder="Precio máx. $" aria-label="Precio máximo" onchange="F.max=+this.value;rr()"><select aria-label="Orden" onchange="F.o=this.value;rr()"><option value="">Más recientes</option><option value="a">Menor precio</option><option value="d">Mayor precio</option></select></div><div class="grid" id="res"></div></div>`}
+function rr(){const q=S.q.toLowerCase();let L=live().filter(i=>(S.t==='a'||i.t===S.t)&&(!F.cat||i.cat===F.cat)&&(!F.z||i.zona===F.z)&&(!F.est||i.estado===F.est)&&(!F.max||!i.price||i.price<=F.max)&&(!q||(i.title+i.cat+i.seller+i.desc+i.zona).toLowerCase().includes(q)));
+if(F.o==='a')L.sort((a,b)=>a.price-b.price);if(F.o==='d')L.sort((a,b)=>b.price-a.price);
+$('#cnt').textContent=L.length+(L.length===1?' resultado':' resultados');
+$('#res').innerHTML=L.length?L.map(card).join(''):'<p class="em">No encontramos publicaciones. Probá con otra palabra o quitá algún filtro.</p>'}
+
+function empresas(){return `<div class="wrap pg"><h1>Empresas y comercios</h1><p class="sub">Conocé a quienes ya forman parte de la red.</p><div class="grid">${E.map(e=>`<div class="box"><span style="font-size:36px">${e[3]}</span><h3>${e[0]}</h3><small style="color:var(--ink2)">${e[1]} · ${e[2]}</small><p style="margin:8px 0 14px">${e[4]}</p><a class="btn o" href="#buscar" onclick="S.q='${e[0]}'">Ver publicaciones</a></div>`).join('')}</div></div>`}
+
+function det(id){const i=S.items.find(x=>String(x.id)===String(id));if(!i)return inicio();const fv=S.favs.includes(String(id)),num=i.wa||(i.ej?'5492622314168':''),wa='https://wa.me/'+num+'?text='+encodeURIComponent('Hola, vi “'+i.title+'” en Agro Valle Conecta y quiero consultar.');
+const rel=live().filter(x=>x.t===i.t&&String(x.id)!==String(id)).slice(0,4);
+return `<div class="wrap"><p style="padding-top:16px"><a href="#${i.t==='p'?'productos':'servicios'}">← Volver al listado</a></p><div class="det"><div class="ph big" style="--h:${i.h}">${i.img?`<img src="${esc(i.img)}" alt="">`:`<span>${i.e}</span>`}</div><div><small style="color:var(--ink2)">${esc(i.cat)}${i.ej?' · Ejemplo (publicación de muestra)':''}</small><h1 style="font-size:28px">${esc(i.title)}</h1><div class="pr" style="font-size:28px;margin-top:6px">${pr(i)}</div><dl class="dl"><dt>${i.t==='p'?'Cantidad':'Disponibilidad'}</dt><dd>${esc(i.qty||(i.t==='s'?'A coordinar':'-'))}</dd>${i.t==='p'?`<dt>Estado</dt><dd>${esc(i.estado)}</dd>`:''}<dt>Ubicación</dt><dd>${esc(i.zona)}, Mendoza</dd><dt>Publicado</dt><dd>${i.f?'hace '+i.f+' días':'hoy'}</dd></dl><p style="color:var(--ink2)">${esc(i.desc)}</p>${i.imgs&&i.imgs.length>1?'<div class="pvw" style="margin:10px 0">'+i.imgs.map(u=>'<a href="'+esc(u)+'" target="_blank" rel="noopener"><img src="'+esc(u)+'" alt="Foto del anuncio" loading="lazy"></a>').join('')+'</div>':''}<div class="sel"><span class="av">${esc(i.seller.charAt(0).toUpperCase())}</span><div><b>${esc(i.seller)}</b><br><small style="color:var(--ink2)">${i.t==='p'?'Vendedor':'Profesional o empresa'}${i.ej?' · ★ 4,8 · Perfil verificado':''}</small></div></div><div class="acts">${num?`<a class="btn w" href="${esc(wa)}" target="_blank" rel="noopener">Contactar por WhatsApp</a>`:''}${(i.ej||!S.user||i.uid!==S.user.id)?`<button class="btn" onclick="cs('${esc(id)}')">Enviar consulta</button>`:''}<button class="btn o" onclick="fv('${esc(id)}')">${fv?'♥ Guardada':'♡ Guardar'}</button><button class="btn o" onclick="shr()">Compartir</button></div></div></div>${rel.length?`<section class="sec"><h2>Más ${i.t==='p'?'productos':'servicios'}</h2><div class="grid" style="margin-top:14px">${rel.map(card).join('')}</div></section>`:''}</div>`}
+function cs(id){const i=S.items.find(x=>String(x.id)===String(id));if(!i)return;
+if(!i.ej&&!S.user){S.back='d-'+id;toast('Ingresá para enviar tu consulta');location.hash='ingresar';return}
+mo(`<h3>Consultar a ${esc(i.seller)}</h3><form class="f" onsubmit="return se(event,'${esc(id)}')"><label>Mensaje<textarea name="m" rows="4" required minlength="3" maxlength="1000">Hola, me interesa “${esc(i.title)}”. ¿Sigue disponible?</textarea></label><small style="color:var(--ink2)">El vendedor va a ver tu nombre y tu email para poder responderte.</small><small class="fm" role="status" style="color:var(--ink2);min-height:18px"></small><button class="btn">Enviar consulta</button></form>`)}
+async function se(e,id){e.preventDefault();const f=e.target,b=f.querySelector('button.btn'),i=S.items.find(x=>String(x.id)===String(id));
+if(!i)return false;
+if(i.ej){cm();toast('Esta es una publicación de ejemplo. Probá con una publicación real.');return false}
+if(!sb||!S.user){toast('Ingresá para enviar tu consulta');return false}
+const m=String(new FormData(f).get('m')||'').trim();
+if(m.length<3){fmsg(f,'Escribí un mensaje un poquito más largo.',1);return false}
+b.disabled=true;fmsg(f,'Enviando…');
+const {error}=await sb.from('consultas').insert({anuncio_id:i.id,mensaje:m});
+b.disabled=false;
+if(error){fmsg(f,'No se pudo enviar. Probá de nuevo en un rato.',1);return false}
+cm();toast('Consulta enviada. El vendedor la va a ver en su panel.');return false}
+function fv(id){id=String(id);const k=S.favs.indexOf(id);k<0?S.favs.push(id):S.favs.splice(k,1);sv();favDb(id,k<0);const y=scrollY;route();scrollTo(0,y);toast(k<0?'Guardada en favoritos':'Quitada de favoritos')}
+function shr(){try{navigator.share?navigator.share({title:document.title,url:location.href}):navigator.clipboard.writeText(location.href).then(()=>toast('Enlace copiado'))}catch(e){toast('Copiá el enlace desde la barra del navegador')}}
+
+function publicar(){if(!S.user){S.back='publicar';toast('Ingresá para poder publicar');return ingresar()}S.img='';S.files=[];
+return `<div class="wrap pg"><h1>Publicar</h1><p class="sub">Completá los datos. Tu publicación se muestra a todos los visitantes del sitio.</p><form class="f" onsubmit="return np(event)"><div class="tp"><label><input type="radio" name="t" value="p" checked onchange="ct(this.value)"> Producto o insumo</label><label><input type="radio" name="t" value="s" onchange="ct(this.value)"> Servicio</label></div><label>Título<input name="title" required maxlength="80" placeholder="Ej: Tractor frutero 75 HP"></label><div class="row"><label>Categoría<select name="cat" id="pcat">${CP.map(c=>`<option>${c[1]}</option>`).join('')}</select></label><label>Zona<select name="zona">${ZN.map(z=>`<option>${z}</option>`).join('')}</select></label></div><div class="row"><label>Precio en pesos<input name="price" type="number" min="0" placeholder="Vacío = a convenir"></label><label>Unidad o modalidad<input name="unit" placeholder="kg, bolsa, hora, ha"></label></div><div class="row" id="ex"><label>Cantidad<input name="qty" placeholder="Ej: 20 unidades"></label><label>Estado<select name="estado"><option>Nuevo</option><option>Usado</option></select></label></div><label>WhatsApp de contacto<input name="wa" type="tel" required inputmode="numeric" placeholder="Código de área + número, sin 0 ni 15. Ej: 2622314168"></label><label>Descripción<textarea name="desc" rows="4" required placeholder="Contá características, estado y condiciones de entrega"></textarea></label><label>Fotos (hasta 4)<input type="file" accept="image/*" multiple onchange="fo(this)"></label><div class="pvw" id="pv"></div><small style="color:var(--ink2)">Al publicar aceptás los <a href="#terminos" target="_blank" rel="noopener">Términos y condiciones</a>. Tu nombre y tu WhatsApp se van a ver en el anuncio para cualquier visitante.</small><small class="fm" role="status" style="color:var(--ink2);min-height:18px"></small><button class="btn">Publicar ahora</button></form></div>`}
+function ct(v){$('#pcat').innerHTML=(v==='p'?CP:CS).map(c=>`<option>${c[1]}</option>`).join('');$('#ex').style.display=v==='p'?'':'none'}
+function fo(inp){if(inp.files.length>4)toast('Se usan las primeras 4 fotos');const fs=Array.from(inp.files).filter(f=>f.type.startsWith('image/')).slice(0,4),u=fs.map(f=>URL.createObjectURL(f));S.files=fs;S.img=u[0]||'';$('#pv').innerHTML=u.map(x=>`<img src="${x}" alt="Foto elegida">`).join('')}
+async function np(e){e.preventDefault();const f=e.target,d=new FormData(f),b=f.querySelector('button.btn');
+if(!sb||!S.user){fmsg(f,'Necesitás ingresar para publicar.',1);return false}
+const esP=d.get('t')==='p';
+let wa=String(d.get('wa')||'').replace(/\D/g,'').replace(/^0+/,'');
+if(/^54(?!9)/.test(wa))wa='549'+wa.slice(2);else if(!wa.startsWith('54'))wa='549'+wa;
+if(!/^549\d{10}$/.test(wa)){fmsg(f,'Revisá el WhatsApp: código de área + número, sin 0 ni 15. Ej: 2622314168',1);return false}
+const row={tipo:esP?'producto':'servicio',titulo:String(d.get('title')).trim(),categoria:d.get('cat'),descripcion:String(d.get('desc')).trim(),precio:d.get('price')===''?null:+d.get('price'),unidad:String(d.get('unit')||'').trim()||null,zona:d.get('zona'),estado_producto:esP?d.get('estado'):null,cantidad:esP?(String(d.get('qty')||'').trim()||null):null,whatsapp:wa};
+b.disabled=true;fmsg(f,'Publicando...');
+const {data:a,error}=await sb.from('anuncios').insert(row).select('id').single();
+if(error){b.disabled=false;fmsg(f,/máximo de 50/.test(error.message)?'Llegaste al máximo de 50 anuncios por cuenta.':'No se pudo publicar. Revisá los datos e intentá de nuevo.',1);return false}
+let fallidas=0;const fs=(S.files||[]).slice(0,4),rows=[];
+for(let i=0;i<fs.length;i++){try{fmsg(f,'Subiendo foto '+(i+1)+' de '+fs.length+'...');
+const blob=await achicar(fs[i]),ruta=S.user.id+'/'+a.id+'/'+Date.now()+'_'+i+'.jpg';
+const {error:eu}=await sb.storage.from('publicaciones-imagenes').upload(ruta,blob,{contentType:'image/jpeg'});
+if(eu)throw eu;
+rows.push({anuncio_id:a.id,url:sb.storage.from('publicaciones-imagenes').getPublicUrl(ruta).data.publicUrl,orden:i})}catch(x){fallidas++}}
+if(rows.length){const {error:ei}=await sb.from('anuncio_imagenes').insert(rows);if(ei)fallidas+=rows.length}
+await cargarAnuncios();S.files=[];
+toast(fallidas?'Publicada, pero '+fallidas+(fallidas===1?' foto no se pudo subir.':' fotos no se pudieron subir.'):'Publicada correctamente');
+location.hash='d-'+a.id;return false}
+
+function terminos(){return `<div class="wrap pg legal"><h1>Términos y condiciones</h1><small>Última actualización: 17 de noviembre de 2026</small>
+<p>Estos términos explican cómo se usa Agro Valle Conecta. Al crear una cuenta o publicar, aceptás lo que dicen acá. Si no estás de acuerdo, no uses el sitio.</p>
+<h2>1. Qué es Agro Valle Conecta</h2>
+<p>Es una plataforma gratuita de avisos del sector agropecuario del Valle de Uco y alrededores. Productores, empresas y profesionales publican productos y servicios y se contactan entre sí. Está a cargo de Gastón Altube, de Tupungato, Mendoza, Argentina.</p>
+<p>Agro Valle Conecta solo facilita el encuentro entre las partes: no compra ni vende, no cobra ni recibe pagos, no entrega mercadería y no es parte de los acuerdos que hagan los usuarios.</p>
+<h2>2. Tu cuenta</h2>
+<ul><li>Tenés que ser mayor de 18 años.</li><li>Tus datos tienen que ser verdaderos y estar actualizados, y el email tiene que ser tuyo.</li><li>Cuidá tu contraseña: lo que se haga desde tu cuenta se considera hecho por vos.</li><li>Una persona, una cuenta. Si publicás en nombre de una empresa, tenés que poder representarla.</li></ul>
+<h2>3. Qué podés publicar</h2>
+<p>Podés publicar productos, insumos, maquinaria o servicios agropecuarios que realmente tengas o puedas ofrecer, con información veraz: precio, estado, cantidad, zona y fotos propias o autorizadas. No está permitido:</p>
+<ul><li>Publicar algo falso o engañoso, o que no tengas intención de entregar o prestar.</li><li>Ofrecer productos prohibidos o que exijan habilitaciones que no tenés. Por ejemplo, los agroquímicos y fitosanitarios solo pueden ofrecerse si cumplís con los registros y habilitaciones que exige la normativa (como los del SENASA).</li><li>Subir fotos o textos de otras personas sin su permiso, o contenido ofensivo, discriminatorio o ilegal.</li><li>Publicar datos personales de terceros sin su consentimiento.</li><li>Repetir avisos, hacer spam o usar el sitio para algo distinto de ofrecer o buscar productos y servicios del agro.</li></ul>
+<h2>4. Cómo se contactan los usuarios</h2>
+<p>El contacto se hace por WhatsApp o por las consultas del sitio. Lo que acuerden (precio, forma de pago, entrega, garantía, facturación) es solo entre comprador y vendedor, y cada uno responde por lo que ofrece y promete.</p>
+<div class="aviso"><b>Recomendaciones:</b> verificá a la otra persona y el producto antes de pagar; desconfiá de precios demasiado bajos y de pedidos de adelantos sin respaldo; dejá lo acordado por escrito.</div>
+<h2>5. El contenido que publicás</h2>
+<p>Seguís siendo dueño de tus textos y fotos. Al publicarlos nos das un permiso gratuito y no exclusivo para mostrarlos en el sitio mientras estén publicados. Podés pausarlos o borrarlos cuando quieras desde Mi panel.</p>
+<h2>6. Moderación</h2>
+<p>Podemos pausar o eliminar publicaciones, y suspender cuentas, que incumplan estos términos o la ley. En casos graves, podemos hacerlo sin aviso previo. Si ves algo que no corresponde, avisanos por WhatsApp y lo revisamos.</p>
+<h2>7. Costo</h2>
+<p>Hoy usar Agro Valle Conecta es gratis. Si en el futuro se ofrecen servicios pagos (por ejemplo, avisos destacados), lo vamos a informar antes y de forma clara.</p>
+<h2>8. Responsabilidad</h2>
+<p>Hacemos lo posible para que el sitio funcione bien, pero se ofrece “tal como está” y puede tener interrupciones o errores. No controlamos ni garantizamos la calidad, la legalidad, la disponibilidad ni el precio de lo que publican los usuarios, y no respondemos por los acuerdos, pagos o entregas entre ellos, en la medida en que la ley lo permita. Esto no limita los derechos que la ley les reconoce a los consumidores.</p>
+<h2>9. Cambios en estos términos</h2>
+<p>Podemos actualizar estos términos. La versión vigente es la que está publicada acá, con su fecha. Si el cambio es importante, lo vamos a avisar en el sitio.</p>
+<h2>10. Ley aplicable</h2>
+<p>Estos términos se rigen por las leyes de la República Argentina. Para cualquier conflicto serán competentes los tribunales ordinarios de la provincia de Mendoza, sin perjuicio de los derechos que la ley les reconozca a los consumidores.</p>
+<h2>11. Contacto</h2>
+<p>Para consultas, denuncias o reclamos: <a href="https://wa.me/5492622314168" target="_blank" rel="noopener">escribinos por WhatsApp</a>.</p>
+<p><a href="#privacidad">Ver también la Política de privacidad</a></p></div>`}
+function privacidad(){return `<div class="wrap pg legal"><h1>Política de privacidad</h1><small>Última actualización: 17 de noviembre de 2026</small>
+<p>Acá te contamos qué datos tuyos guardamos, para qué los usamos y qué derechos tenés, conforme a la Ley 25.326 de Protección de los Datos Personales de la República Argentina.</p>
+<h2>1. Quién es el responsable</h2>
+<p>Agro Valle Conecta, a cargo de Gastón Altube, Tupungato, Mendoza, Argentina. Contacto: <a href="https://wa.me/5492622314168" target="_blank" rel="noopener">WhatsApp</a>.</p>
+<h2>2. Qué datos guardamos</h2>
+<ul><li><b>De tu cuenta:</b> nombre, email, zona, el tipo de uso que elegiste al registrarte (comprar, vender, servicios o empresa) y tu contraseña, que se guarda cifrada: nosotros no podemos verla.</li><li><b>De tus publicaciones:</b> título, descripción, precio, zona, estado, cantidad, número de WhatsApp y fotos.</li><li><b>De las consultas:</b> el mensaje que enviás, junto con tu nombre y tu email.</li><li><b>Tus favoritos.</b></li><li><b>Datos técnicos básicos</b> (como la dirección IP y registros de uso) que generan los servicios que usamos para que el sitio funcione y sea seguro.</li></ul>
+<h2>2.1 Para qué los usamos</h2>
+<p>Para crear y mantener tu cuenta, mostrar tus publicaciones, permitir que otros usuarios te contacten, cuidar la seguridad del sitio y prevenir abusos. No vendemos tus datos ni mostramos publicidad de terceros.</p>
+<h2>3. Qué datos son públicos</h2>
+<div class="aviso">Cuando publicás, <b>tu nombre, el número de WhatsApp que cargás, la descripción y las fotos del anuncio pueden ser vistos por cualquier persona</b>, tenga o no cuenta. Los buscadores podrían mostrarlos. Cargá solo el teléfono que quieras hacer público.</div>
+<p>Tu email y tus mensajes no son públicos. Cuando enviás una consulta, quien publicó el anuncio ve tu nombre, tu email y tu mensaje.</p>
+<h2>4. Con quién se comparten</h2>
+<p>Usamos proveedores para que el sitio funcione:</p>
+<ul><li><b>Supabase:</b> base de datos, cuentas de usuario y almacenamiento de fotos. Sus servidores para este sitio están en São Paulo, Brasil.</li><li><b>GitHub Pages:</b> alojamiento de la página.</li><li><b>Google Fonts y jsDelivr:</b> tipografías y una librería del sitio. Al cargarlas, tu navegador se conecta con esos servicios.</li></ul>
+<p>Esto implica que tus datos pueden almacenarse o tratarse fuera de Argentina. No los compartimos con otros terceros, salvo que una autoridad competente lo exija por ley.</p>
+<h2>5. Cuánto tiempo los conservamos</h2>
+<p>Mientras tu cuenta esté activa. Si borrás una publicación, se elimina junto con sus fotos. Si querés eliminar tu cuenta y tus datos, pedilo por WhatsApp. Podemos conservar lo mínimo que la ley exija.</p>
+<h2>6. Tus derechos</h2>
+<p>Podés pedir acceder a tus datos, corregirlos, actualizarlos o eliminarlos escribiéndonos por <a href="https://wa.me/5492622314168" target="_blank" rel="noopener">WhatsApp</a>. Respondemos dentro de los plazos de la ley (10 días corridos para informarte tus datos y 5 días hábiles para corregirlos o eliminarlos).</p>
+<p>El titular de los datos personales tiene la facultad de ejercer el derecho de acceso a los mismos en forma gratuita a intervalos no inferiores a seis meses, salvo que acredite un interés legítimo al efecto (art. 14, inc. 3, Ley 25.326).</p>
+<p>La Agencia de Acceso a la Información Pública, en su carácter de Órgano de Control de la Ley 25.326, tiene la atribución de atender las denuncias y reclamos que interpongan quienes resulten afectados en sus derechos por el incumplimiento de las normas vigentes en materia de protección de datos personales.</p>
+<h2>7. Seguridad</h2>
+<p>Usamos conexión cifrada (HTTPS), contraseñas cifradas y reglas de acceso que impiden que un usuario modifique los datos de otro. Ningún sistema es 100 % seguro, pero trabajamos para cuidar tu información.</p>
+<h2>8. Cookies y almacenamiento del navegador</h2>
+<p>Usamos el almacenamiento de tu navegador solo para mantener tu sesión iniciada y recordar tus favoritos. No usamos cookies de publicidad ni de seguimiento.</p>
+<h2>9. Menores de edad</h2>
+<p>El sitio es solo para mayores de 18 años.</p>
+<h2>10. Cambios</h2>
+<p>Si cambiamos esta política, publicaremos la nueva versión acá con su fecha, y avisaremos en el sitio si el cambio es importante.</p>
+<p><a href="#terminos">Ver también los Términos y condiciones</a></p></div>`}
+function ingresar(){return `<div class="wrap pg"><div class="box au"><div class="tb"><button class="on" id="b1" onclick="at(1)">Ingresar</button><button id="b2" onclick="at(2)">Crear cuenta</button></div><form id="fl" class="f" onsubmit="return lg(event)"><label>Email<input name="e" type="email" required placeholder="tu@email.com"></label><label>Contraseña<input name="p" type="password" required minlength="6"></label><button class="btn">Ingresar</button><small class="fm" role="status" style="color:var(--ink2);min-height:18px"></small></form><form id="fr" class="f" style="display:none" onsubmit="return rg(event)"><label>Nombre y apellido<input name="n" required></label><label>Email<input name="e" type="email" required></label><label>Contraseña<input name="p" type="password" required minlength="6" placeholder="Mínimo 6 caracteres"></label><label>Zona<select name="z">${ZN.map(z=>`<option>${z}</option>`).join('')}</select></label><div><b style="font-size:14px">¿Qué vas a hacer principalmente?</b><div class="ck" style="margin-top:6px"><label><input type="radio" name="r" value="comprador" checked> Comprar</label><label><input type="radio" name="r" value="vendedor"> Vender</label><label><input type="radio" name="r" value="profesional"> Ofrecer servicios</label><label><input type="radio" name="r" value="empresa"> Soy empresa</label></div></div><label style="display:flex;gap:8px;align-items:flex-start;font-size:14px;font-weight:500"><input type="checkbox" name="ac" required style="width:auto;padding:0;margin-top:3px;flex:none"><span>Soy mayor de 18 años y acepto los <a href="#terminos" target="_blank" rel="noopener">Términos y condiciones</a> y la <a href="#privacidad" target="_blank" rel="noopener">Política de privacidad</a>.</span></label><small class="fm" role="status" style="color:var(--ink2);min-height:18px"></small><button class="btn">Crear cuenta</button></form></div></div>`}
+function at(n){$('#fl').style.display=n===1?'':'none';$('#fr').style.display=n===2?'':'none';$('#b1').classList.toggle('on',n===1);$('#b2').classList.toggle('on',n===2)}
+/* ===== LOGIN REAL (Supabase) ===== */
+const sb=window.supabase?window.supabase.createClient('https://yolccrvajsaltnfzvglr.supabase.co','sb_publishable_lt6djx886Pwd8aqreZ7TSg_97WUM0Wf'):null;
+const RMAP={vendedor:'productor',comprador:'comprador',empresa:'comprador',profesional:'proveedor_servicio'};
+const RDB={1:'vendedor',2:'comprador',3:'profesional'};
+function fmsg(f,t,err){const m=f.querySelector('.fm');if(m){m.textContent=t;m.style.color=err?'#B3413E':'var(--ink2)'}}
+function traduce(m){m=(m||'').toLowerCase();
+if(m.includes('invalid login'))return 'Email o contraseña incorrectos.';
+if(m.includes('not confirmed'))return 'Todavía no confirmaste tu email. Revisá tu bandeja de entrada (y spam).';
+if(m.includes('already registered'))return 'Ese email ya tiene una cuenta. Probá ingresar.';
+if(m.includes('password'))return 'La contraseña debe tener al menos 6 caracteres.';
+if(m.includes('rate limit'))return 'Demasiados intentos. Esperá unos minutos y probá de nuevo.';
+return 'No pudimos completar la acción. Probá de nuevo en un momento.'}
+async function cargarUsuario(ses){
+const u=ses.user,meta=u.user_metadata||{};
+let n=meta.nombre||(u.email||'').split('@')[0],z=meta.zona||'Tupungato',roles=['comprador'];
+try{
+const [a,r]=await Promise.all([sb.from('usuarios').select('nombre,ubicacion').eq('id',u.id).maybeSingle(),sb.from('usuario_roles').select('rol_id').eq('usuario_id',u.id)]);
+if(a.data){if(a.data.nombre)n=a.data.nombre;if(a.data.ubicacion)z=a.data.ubicacion;else if(meta.zona)sb.from('usuarios').update({ubicacion:meta.zona}).eq('id',u.id).then(()=>{})}
+if(r.data&&r.data.length)roles=r.data.map(x=>RDB[x.rol_id]).filter(Boolean)
+}catch(x){}
+S.user={id:u.id,n:n||'Usuario',e:u.email,z:z,b:S.user&&S.user.b||'',roles:roles}}
+function entrar(){const b=S.back||'panel';S.back='';toast('Hola, '+S.user.n);location.hash=b;hdr();if(location.hash==='#'+b)route()}
+if(sb)sb.auth.onAuthStateChange((ev,ses)=>{setTimeout(async()=>{
+if(ev==='SIGNED_OUT'){S.user=null;limpiarFavs();hdr();cargarAnuncios();return}
+if(!ses)return;
+if(ev==='INITIAL_SESSION'){await cargarUsuario(ses);await sincFavs();await cargarAnuncios();route()}
+else if(ev==='SIGNED_IN'&&!S.user){await cargarUsuario(ses);await sincFavs();await cargarAnuncios();entrar()}
+},0)});
+
+/* ===== ANUNCIOS REALES (Supabase) ===== */
+const ICON=n=>(CP.concat(CS).find(c=>c[1]===n)||['📦'])[0];
+function aItem(r){const im=(r.anuncio_imagenes||[]).slice().sort((a,b)=>a.orden-b.orden).map(x=>x.url);
+return {id:r.id,uid:r.usuario_id,t:r.tipo==='producto'?'p':'s',title:r.titulo,cat:r.categoria,price:r.precio==null?0:+r.precio,unit:r.unidad||'',zona:r.zona,estado:r.estado_producto||'',qty:r.cantidad||'',seller:r.vendedor||'Vendedor',desc:r.descripcion||'',e:ICON(r.categoria),h:parseInt(String(r.id).slice(0,4),16)%280,dest:0,f:Math.max(0,Math.floor((Date.now()-new Date(r.creado_en))/864e5)),img:im[0]||'',imgs:im,wa:/^[0-9]{8,15}$/.test(r.whatsapp||'')?r.whatsapp:'',paus:!r.activo}}
+async function favDb(id,alta){if(!sb||!S.user||!UUID.test(id))return;
+try{const r=alta?await sb.from('favoritos').insert({anuncio_id:id}):await sb.from('favoritos').delete().eq('anuncio_id',id).eq('usuario_id',S.user.id);
+if(r.error&&r.error.code!=='23505')toast('No se pudo guardar en tu cuenta. Probá de nuevo.')}catch(x){}}
+async function sincFavs(){if(!sb||!S.user)return;
+try{const {data,error}=await sb.from('favoritos').select('anuncio_id');if(error||!data)return;
+const srv=data.map(x=>String(x.anuncio_id)),falta=S.favs.filter(x=>UUID.test(x)&&!srv.includes(x));
+const ok=(await Promise.all(falta.map(async a=>{const r=await sb.from('favoritos').insert({anuncio_id:a});return r.error?null:a}))).filter(Boolean);
+S.favs=Array.from(new Set(S.favs.filter(x=>!UUID.test(x)).concat(srv,ok)));sv()}catch(x){}}
+function limpiarFavs(){S.favs=S.favs.filter(x=>!UUID.test(x));sv()}
+async function cargarAnuncios(){if(!sb)return;
+try{const {data,error}=await sb.from('anuncios').select('id,usuario_id,tipo,titulo,categoria,descripcion,precio,unidad,zona,estado_producto,cantidad,whatsapp,activo,creado_en,vendedor,anuncio_imagenes(url,orden)').order('creado_en',{ascending:false}).limit(200);
+if(error||!data)return;
+S.items=data.map(aItem).concat(DEMO);
+if(!(['#publicar','#ingresar'].includes(location.hash)||(/^#e-/.test(location.hash)&&$('#fe'))))route()}catch(x){}}
+function achicar(file){return new Promise((ok,ko)=>{const u=URL.createObjectURL(file),im=new Image();
+im.onload=()=>{try{const k=Math.min(1,1200/Math.max(im.naturalWidth,im.naturalHeight)),c=document.createElement('canvas');c.width=Math.max(1,Math.round(im.naturalWidth*k));c.height=Math.max(1,Math.round(im.naturalHeight*k));c.getContext('2d').drawImage(im,0,0,c.width,c.height);c.toBlob(bl=>{URL.revokeObjectURL(u);bl?ok(bl):ko(new Error('toBlob'))},'image/jpeg',.8)}catch(x){ko(x)}};
+im.onerror=()=>{URL.revokeObjectURL(u);ko(new Error('img'))};im.src=u})}
+if(sb)cargarAnuncios();
+async function lg(e){e.preventDefault();const f=e.target,d=new FormData(f),b=f.querySelector('button.btn');
+if(!sb){fmsg(f,'No hay conexión con el servidor. Revisá tu internet y recargá la página.',1);return false}
+b.disabled=true;fmsg(f,'Ingresando...');
+const {error}=await sb.auth.signInWithPassword({email:String(d.get('e')).trim(),password:d.get('p')});
+b.disabled=false;
+if(error)fmsg(f,traduce(error.message),1);
+return false}
+async function rg(e){e.preventDefault();const f=e.target,d=new FormData(f),b=f.querySelector('button.btn');
+if(!sb){fmsg(f,'No hay conexión con el servidor. Revisá tu internet y recargá la página.',1);return false}
+if(!d.get('ac')){fmsg(f,'Para crear tu cuenta tenés que aceptar los Términos y la Política de privacidad.',1);return false}
+const rol=RMAP[d.get('r')]||'comprador';
+b.disabled=true;fmsg(f,'Creando tu cuenta...');
+const {data,error}=await sb.auth.signUp({email:String(d.get('e')).trim(),password:d.get('p'),options:{emailRedirectTo:location.origin+location.pathname,data:{nombre:String(d.get('n')).trim(),rol:rol,zona:d.get('z'),acepto_terminos:'2026-11-17',acepto_en:new Date().toISOString()}}});
+b.disabled=false;
+if(error){fmsg(f,traduce(error.message),1);return false}
+if(data.user&&data.user.identities&&data.user.identities.length===0){fmsg(f,'Ese email ya tiene una cuenta. Probá ingresar.',1);return false}
+if(!data.session){fmsg(f,'¡Cuenta creada! Te mandamos un email para confirmarla. Abrilo y después volvé a ingresar.');f.reset()}
+return false}
+
+function panel(){if(!S.user){S.back='panel';return ingresar()}const u=S.user,mine=S.items.filter(i=>i.uid&&i.uid===u.id),T=[['pub','Mis publicaciones'],['fav','Favoritos'],['msg','Consultas'],['per','Mi perfil']];
+return `<div class="wrap pg"><div class="pl"><aside class="box" style="align-self:start"><span class="av" style="width:56px;height:56px;font-size:24px">${esc(u.n.charAt(0).toUpperCase())}</span><h3 style="margin-top:8px">${esc(u.n)}</h3><small style="color:var(--ink2)">${esc(u.e)}<br>${esc(u.z)}, Mendoza</small><div style="margin:10px 0">${u.roles.map(r=>`<span class="pill">${esc(r)}</span>`).join('')}</div><p style="font-size:14px"><b>${mine.length}</b> publicaciones · <b>${S.favs.length}</b> favoritos</p><p style="margin-top:12px"><button class="btn o" onclick="so()">Cerrar sesión</button></p></aside><section><div class="tb">${T.map(t=>`<button class="${S.tab===t[0]?'on':''}" onclick="S.tab='${t[0]}';S.cons=null;route()">${t[1]}</button>`).join('')}</div>${pt(mine)}</section></div></div>`}
+function pt(mine){const u=S.user;
+if(S.tab==='pub')return `<p style="margin-bottom:14px"><a class="btn" href="#publicar">Nueva publicación</a></p>`+(mine.length?mine.map(i=>`<div class="rw"><span class="em2">${i.e}</span><div class="t"><b>${esc(i.title)}</b><br><small>${pr(i)} · ${i.paus?'Pausada':'Activa'}</small></div><a class="btn o" href="#d-${i.id}">Ver</a><a class="btn o" href="#e-${i.id}">Editar</a><button class="btn o" onclick="ps('${esc(i.id)}')">${i.paus?'Activar':'Pausar'}</button><button class="btn o" onclick="dl('${esc(i.id)}')">Eliminar</button></div>`).join(''):'<p class="em">Todavía no publicaste nada. Empezá con tu primera publicación.</p>');
+if(S.tab==='fav'){const f=S.items.filter(i=>S.favs.includes(String(i.id)));return f.length?`<div class="grid">${f.map(card).join('')}</div>`:'<p class="em">No guardaste favoritos. Tocá “Guardar” en cualquier publicación.</p>'}
+if(S.tab==='msg')return bandeja();
+return `<form class="f" onsubmit="return gp(event)"><label>Nombre<input name="n" value="${esc(u.n)}" required></label><label>Zona<select name="z">${ZN.map(z=>`<option${z===u.z?' selected':''}>${z}</option>`).join('')}</select></label><label>Presentación<textarea name="b" rows="4" placeholder="Contá quién sos, qué hacés y cuánta experiencia tenés">${esc(u.b||'')}</textarea></label><button class="btn">Guardar cambios</button></form>`}
+async function cargarConsultas(){if(!sb||!S.user||S.cargC)return;S.cargC=1;
+try{const {data,error}=await sb.from('consultas').select('id,anuncio_id,remitente_id,remitente_nombre,remitente_email,mensaje,leida,creado_en').order('creado_en',{ascending:false}).limit(100);
+S.cons=error||!data?[]:data;S.consErr=!!error||!data}catch(x){S.cons=[];S.consErr=true}
+S.cargC=0;if(S.tab==='msg'&&location.hash==='#panel')route()}
+function bandeja(){
+if(S.cons==null){cargarConsultas();return '<p class="em">Cargando tus consultas…</p>'}
+if(S.consErr)return '<p class="em">No pudimos cargar tus consultas. Probá de nuevo en un rato.</p>';
+const u=S.user,tit=id=>{const a=S.items.find(x=>String(x.id)===String(id));return a?a.title:'Publicación'},
+fe=d=>new Date(d).toLocaleDateString('es-AR',{day:'numeric',month:'short'}),
+rec=S.cons.filter(c=>c.remitente_id!==u.id),env=S.cons.filter(c=>c.remitente_id===u.id);
+const R=rec.map(c=>`<div class="rw"><div class="t"><b>${esc(c.remitente_nombre||'Interesado')}</b> · <small>${esc(tit(c.anuncio_id))} · ${fe(c.creado_en)}${c.leida?'':' · <b>Nueva</b>'}</small><br>${esc(c.mensaje)}${c.remitente_email?`<br><small><a href="mailto:${esc(c.remitente_email)}?subject=${encodeURIComponent('Sobre tu consulta: '+tit(c.anuncio_id))}">Responder por email</a></small>`:''}</div>${c.leida?'':`<button class="btn o" onclick="ml('${esc(c.id)}')">Marcar como leída</button>`}</div>`).join('');
+const E=env.map(c=>`<div class="rw"><div class="t"><b>${esc(tit(c.anuncio_id))}</b> · <small>${fe(c.creado_en)}</small><br>${esc(c.mensaje)}</div><a class="btn o" href="#d-${esc(c.anuncio_id)}">Ver publicación</a></div>`).join('');
+return `<h3 style="margin-bottom:10px">Recibidas</h3>${R||'<p class="em">Todavía no recibiste consultas.</p>'}<h3 style="margin:18px 0 10px">Enviadas</h3>${E||'<p class="em">Todavía no enviaste consultas.</p>'}`}
+async function ml(id){if(!sb)return;const {error}=await sb.from('consultas').update({leida:true}).eq('id',id);
+if(error){toast('No se pudo marcar. Probá de nuevo.');return}
+const c=(S.cons||[]).find(x=>x.id===id);if(c)c.leida=true;route()}
+async function ps(id){const i=S.items.find(x=>String(x.id)===String(id));if(!i||!S.user||i.uid!==S.user.id||!sb)return;
+const {error}=await sb.from('anuncios').update({activo:!!i.paus}).eq('id',i.id);
+if(error){toast('No se pudo cambiar. Probá de nuevo.');return}
+i.paus=!i.paus;route();toast(i.paus?'Publicación pausada':'Publicación activa')}
+function editar(id){
+if(!S.user){S.back='e-'+id;return ingresar()}
+const i=S.items.find(x=>String(x.id)===String(id));
+if(!i)return '<div class="wrap pg"><p class="em">Cargando tu publicación...</p><p><a class="btn o" href="#panel">Volver a mi panel</a></p></div>';
+if(i.uid!==S.user.id)return '<div class="wrap pg"><p class="em">Solo podés editar tus propias publicaciones.</p><p><a class="btn" href="#panel">Ir a mi panel</a></p></div>';
+const esP=i.t==='p',C=esP?CP:CS,wa=String(i.wa||'').replace(/^549/,'');
+return `<div class="wrap pg"><h1>Editar publicación</h1><p class="sub">Cambiá lo que necesites y guardá. Las fotos se mantienen como están.</p><form id="fe" class="f" onsubmit="return ge(event,'${esc(i.id)}')"><label>Título<input name="title" required maxlength="80" value="${esc(i.title)}"></label><div class="row"><label>Categoría<select name="cat">${C.map(c=>`<option${c[1]===i.cat?' selected':''}>${c[1]}</option>`).join('')}</select></label><label>Zona<select name="zona">${ZN.map(z=>`<option${z===i.zona?' selected':''}>${z}</option>`).join('')}</select></label></div><div class="row"><label>Precio en pesos<input name="price" type="number" min="0" placeholder="Vacío = a convenir" value="${i.price?esc(i.price):''}"></label><label>Unidad o modalidad<input name="unit" placeholder="kg, bolsa, hora, ha" value="${esc(i.unit)}"></label></div>${esP?`<div class="row"><label>Cantidad<input name="qty" placeholder="Ej: 20 unidades" value="${esc(i.qty)}"></label><label>Estado<select name="estado"><option${i.estado==='Nuevo'?' selected':''}>Nuevo</option><option${i.estado==='Usado'?' selected':''}>Usado</option></select></label></div>`:''}<label>WhatsApp de contacto<input name="wa" type="tel" required inputmode="numeric" placeholder="Código de área + número, sin 0 ni 15. Ej: 2622314168" value="${esc(wa)}"></label><label>Descripción<textarea name="desc" rows="4" required>${esc(i.desc)}</textarea></label><small class="fm" role="status" style="color:var(--ink2);min-height:18px"></small><button class="btn">Guardar cambios</button> <a class="btn o" href="#panel">Cancelar</a></form></div>`}
+
+async function ge(e,id){e.preventDefault();const f=e.target,d=new FormData(f),b=f.querySelector('button.btn'),i=S.items.find(x=>String(x.id)===String(id));
+if(!sb||!S.user||!i||i.uid!==S.user.id){fmsg(f,'No se pudo guardar. Volvé a ingresar e intentá de nuevo.',1);return false}
+const esP=i.t==='p';
+let wa=String(d.get('wa')||'').replace(/\D/g,'').replace(/^0+/,'');
+if(/^54(?!9)/.test(wa))wa='549'+wa.slice(2);else if(!wa.startsWith('54'))wa='549'+wa;
+if(!/^549\d{10}$/.test(wa)){fmsg(f,'Revisá el WhatsApp: código de área + número, sin 0 ni 15. Ej: 2622314168',1);return false}
+const row={titulo:String(d.get('title')).trim(),categoria:d.get('cat'),descripcion:String(d.get('desc')).trim(),precio:d.get('price')===''?null:+d.get('price'),unidad:String(d.get('unit')||'').trim()||null,zona:d.get('zona'),estado_producto:esP?d.get('estado'):null,cantidad:esP?(String(d.get('qty')||'').trim()||null):null,whatsapp:wa};
+b.disabled=true;fmsg(f,'Guardando...');
+const {data,error}=await sb.from('anuncios').update(row).eq('id',i.id).select('id');
+if(error||!data||!data.length){b.disabled=false;fmsg(f,'No se pudo guardar. Revisá los datos e intentá de nuevo.',1);return false}
+await cargarAnuncios();toast('Cambios guardados');location.hash='d-'+i.id;return false}
+
+async function dl(id){const i=S.items.find(x=>String(x.id)===String(id));if(!i||!S.user||i.uid!==S.user.id||!sb)return;
+if(!confirm('¿Eliminar esta publicación?'))return;
+const {error}=await sb.from('anuncios').delete().eq('id',i.id);
+if(error){toast('No se pudo eliminar. Probá de nuevo.');return}
+try{const rutas=(i.imgs||[]).map(u=>decodeURIComponent(u.split('/publicaciones-imagenes/')[1]||'')).filter(Boolean);if(rutas.length)await sb.storage.from('publicaciones-imagenes').remove(rutas)}catch(x){}
+S.items=S.items.filter(x=>x!==i);route();toast('Publicación eliminada')}
+async function gp(e){e.preventDefault();const d=new FormData(e.target),n=String(d.get('n')).trim(),z=d.get('z');
+const {error}=await sb.from('usuarios').update({nombre:n,ubicacion:z}).eq('id',S.user.id);
+if(error){toast('No se pudo guardar. Probá de nuevo.');return false}
+Object.assign(S.user,{n:n,z:z,b:d.get('b')});await sb.from('anuncios').update({vendedor:n}).eq('usuario_id',S.user.id);await cargarAnuncios();route();toast('Cambios guardados');return false}
+async function so(){if(sb)await sb.auth.signOut();S.user=null;S.cons=null;limpiarFavs();S.back='';location.hash='inicio';hdr();toast('Cerraste sesión')}
+
+function nosotros(){return `<div class="wrap pg"><section class="pan d" style="padding:44px 30px"><h1 style="color:#fff;font-size:clamp(28px,4vw,42px);max-width:640px;line-height:1.1">La historia detrás de Agro Valle Conecta</h1><p style="max-width:560px;margin:14px 0 0">Una idea que nació en casa, mirando de cerca cómo se trabaja en el agro del Valle de Uco.</p></section>
+<div class="sto" style="margin-top:34px"><div><h2 style="margin-bottom:14px">Todo empezó con mi papá</h2><p>Hace muchísimos años veo a mi papá trabajar de comisionista en el agro del Valle de Uco. Crecí viendo lo difícil que podía ser cerrar una operación: siempre aparecían complicaciones en el medio.</p><div class="qt">“No tuve que buscar el problema: lo conocía desde casa.”</div><p>Cuando necesité encontrar un problema real del agro de la zona, ya lo tenía adelante. Como estudié programación y agronomía, entendí que podía juntar las dos cosas.</p><p>Así nació Agro Valle Conecta: un lugar donde productores, empresas y profesionales se encuentran, publican lo que tienen y se contactan de forma simple y directa, para que hacer un trato en el agro local deje de ser un problema.</p></div>
+<aside class="box me"><span class="av">G</span><h3 style="margin-top:10px">Gastón</h3><small style="color:var(--ink2)">Creador de Agro Valle Conecta<br>Tupungato, Valle de Uco, Mendoza</small><div style="margin:12px 0"><span class="pill">Agronomía</span><span class="pill">Programación</span><span class="pill">Valle de Uco</span></div><a class="btn w" href="https://wa.me/5492622314168" target="_blank" rel="noopener">Escribime por WhatsApp</a></aside></div>
+<section class="sec"><div class="st"><div class="box"><span style="font-size:30px">🧩</span><h3>El problema</h3><p>Concretar una transacción en el agro local suele estar lleno de complicaciones para quienes compran, venden y intermedian.</p></div><div class="box"><span style="font-size:30px">💡</span><h3>La idea</h3><p>Una plataforma única para publicar, buscar y contactarse directo, con perfiles de productores, empresas y profesionales.</p></div><div class="box"><span style="font-size:30px">🌎</span><h3>Hacia dónde vamos</h3><p>Empezamos en el Valle de Uco, pensando en crecer a otras zonas de Mendoza y del país.</p></div></div></section>
+<div class="box" style="text-align:center;padding:30px;margin-top:20px"><h2>Sumate a la red</h2><p class="sub">Publicá lo tuyo o encontrá lo que necesitás.</p><a class="btn" href="#ingresar">Crear mi cuenta</a></div></div>`}
+const SVA=`<svg viewBox="0 0 800 260" role="img" aria-label="Viñedos del Valle de Uco con la cordillera de los Andes de fondo" style="width:100%;height:auto;display:block"><defs><linearGradient id="sk" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#F6D9A8"/><stop offset="1" stop-color="#FBEFD5"/></linearGradient></defs><rect width="800" height="260" fill="url(#sk)"/><circle cx="640" cy="72" r="30" fill="#F2B544"/><path d="M0 170L110 70L180 125L290 40L400 135L500 80L610 150L720 90L800 140V260H0Z" fill="#8FA3B8"/><path d="M290 40L262 74L280 69L292 84L306 68L322 76ZM110 70L90 94L106 89L118 100L130 88ZM500 80L482 102L498 97L512 108L526 96Z" fill="#fff"/><path d="M0 192Q200 152 400 187T800 177V260H0Z" fill="#6C8F53"/><path d="M0 260L380 194M110 260L388 194M230 260L396 194M360 260L400 194M480 260L404 194M600 260L412 194M720 260L420 194M800 260L430 194" stroke="#2C5B3C" stroke-width="5" fill="none"/></svg>`;
+const SVB=`<svg viewBox="0 0 600 300" role="img" aria-label="Camioneta recorriendo un camino rural entre álamos" style="width:100%;height:auto;display:block"><rect width="600" height="300" fill="#E9F1F5"/><circle cx="90" cy="70" r="28" fill="#F2B544"/><path d="M0 215Q150 165 300 205T600 195V300H0Z" fill="#9BB984"/><rect y="232" width="600" height="68" fill="#5B6458"/><path d="M0 266H600" stroke="#F5F7F1" stroke-width="4" stroke-dasharray="26 20"/><g fill="#2C5B3C"><rect x="500" y="150" width="8" height="80" fill="#5A4632"/><ellipse cx="504" cy="130" rx="20" ry="50"/><rect x="550" y="165" width="7" height="65" fill="#5A4632"/><ellipse cx="553" cy="148" rx="16" ry="42"/></g><rect x="150" y="176" width="232" height="52" rx="8" fill="#C8892B"/><path d="M172 176L202 134H272L302 176Z" fill="#C8892B"/><path d="M210 141H266L284 173H192Z" fill="#DCEAF2"/><rect x="312" y="154" width="24" height="22" fill="#6C8F53"/><rect x="340" y="154" width="24" height="22" fill="#8C5E1B"/><circle cx="204" cy="228" r="24" fill="#222"/><circle cx="204" cy="228" r="10" fill="#BBB"/><circle cx="336" cy="228" r="24" fill="#222"/><circle cx="336" cy="228" r="10" fill="#BBB"/></svg>`;
+const SVC=`<svg viewBox="0 0 600 320" role="img" aria-label="Productores, empresas y profesionales conectados a través de Agro Valle Conecta" style="width:100%;height:auto;display:block"><rect width="600" height="320" fill="#F5F7F1"/><g stroke="#6C8F53" stroke-width="3" stroke-dasharray="7 6"><path d="M300 160L110 80M300 160L490 80M300 160L300 262"/></g><circle cx="300" cy="160" r="56" fill="#1E3A2B"/><text x="300" y="155" text-anchor="middle" font-size="28">🌱</text><text x="300" y="178" text-anchor="middle" font-size="13" font-weight="700" fill="#fff" font-family="Space Grotesk,sans-serif">Agro Valle</text><g fill="#E4EDDC" stroke="#6C8F53" stroke-width="3"><circle cx="110" cy="80" r="46"/><circle cx="490" cy="80" r="46"/><circle cx="300" cy="262" r="44"/></g><g text-anchor="middle" font-family="Work Sans,sans-serif" font-size="13" font-weight="600" fill="#16301F"><text x="110" y="78" font-size="26">🌾</text><text x="110" y="98">Productores</text><text x="490" y="78" font-size="26">🏭</text><text x="490" y="98">Empresas</text><text x="300" y="260" font-size="26">🧑‍🔧</text><text x="300" y="280">Profesionales</text></g></svg>`;
+function fp(inp){if(!inp.files[0])return;inp.parentNode.insertAdjacentHTML('afterbegin','<img src="'+URL.createObjectURL(inp.files[0])+'" alt="Foto subida">')}
+function historia(){return `<div class="wrap pg"><section class="pan d" style="padding:70px 30px;background:linear-gradient(110deg,rgba(14,36,22,.85),rgba(22,48,31,.35)),url(${IMG3}) center/cover"><h1 style="color:#fff;font-size:clamp(28px,4vw,44px);max-width:660px;line-height:1.1">La historia detrás de Agro Valle Conecta</h1><p style="max-width:580px;margin:14px 0 0">Una idea que nació en casa, mirando de cerca cómo se trabaja en el agro del Valle de Uco.</p></section>
+<div class="chp"><div><h2>Crecí escuchando hablar de cosechas</h2><p>En mi casa el agro nunca fue un tema aparte: era la conversación de todos los días. Mi papá trabaja de comisionista en el Valle de Uco desde hace muchísimos años, y yo crecí viendo cómo una cosecha, una partida de insumos o un servicio pasaban de una mano a otra gracias a su trabajo.</p><p>Un comisionista conecta a quien tiene con quien necesita. Es un oficio de confianza, de conocer a la gente y de estar siempre disponible.</p></div><div class="il"><img src="${IMG2}" loading="lazy" decoding="async" alt="Viñedo en otoño con la cordillera nevada del Valle de Uco" style="width:100%;height:auto;display:block"></div></div>
+<div class="chp r"><div><h2>El problema que veía en casa</h2><p>Cada vez que había que concretar una operación aparecían las complicaciones: encontrar a la persona indicada, ponerse de acuerdo, asegurarse de que todo siguiera en pie.</p><p>Con los años entendí que no era un problema solo de él. Les pasa a productores, empresas y prestadores de servicios de toda la zona. Muchos buenos tratos se complicaban no por la calidad del producto, sino por lo difícil que era conectarse.</p></div><div class="il">${SVB}</div></div>
+<div class="qt" style="text-align:center;border:0;padding:10px 0;margin:30px auto;max-width:700px">“No tuve que buscar el problema del agro: lo conocía desde casa.”</div>
+<div class="chp"><div><h2>Dos carreras, una misma idea</h2><p>Con el tiempo estudié agronomía y también programación. Una me enseñó cómo funciona el campo; la otra, cómo se construyen herramientas para resolver problemas.</p><p>Cuando necesité elegir un problema real del agro del Valle de Uco, ya lo tenía adelante. Ahí entendí que podía juntar las dos cosas y hacer algo útil para mi papá, y para todos los que trabajan como él.</p></div><div class="row"><label class="slot"><input type="file" accept="image/*" onchange="fp(this)"><span>📷<br>Foto de mi papá trabajando<br><small>Tocá para subirla</small></span></label><label class="slot"><input type="file" accept="image/*" onchange="fp(this)"><span>📷<br>Foto mía<br><small>Tocá para subirla</small></span></label></div></div>
+<div class="chp r"><div><h2>Nace Agro Valle Conecta</h2><p>La idea es simple: un lugar donde cada uno publica lo que ofrece o lo que necesita, y los demás lo encuentran. Productores que venden, empresas que buscan insumos, técnicos que ofrecen su trabajo, todos en el mismo mercado.</p><p>Cada persona tiene su perfil, cada publicación tiene su contacto directo y cada búsqueda se filtra por zona, categoría y precio. Menos vueltas, más negocios.</p></div><div class="il">${SVC}</div></div>
+<div class="chp" style="grid-template-columns:1fr"><div><h2>Lo que viene</h2><p>Empezamos en el Valle de Uco porque es mi casa y conozco sus problemas. Pero la idea no termina acá: queremos llegar a otras zonas de Mendoza y del país, sumar más herramientas y que cada trato en el agro sea más simple.</p><p>Esta plataforma también es un reconocimiento a un oficio que durante años hizo posibles muchísimos negocios: el de los comisionistas, como mi papá.</p></div></div>
+<div class="box" style="display:flex;gap:18px;align-items:center;flex-wrap:wrap"><span class="av" style="width:64px;height:64px;font-size:28px">G</span><div style="flex:1;min-width:220px"><b>Gastón</b><br><small style="color:var(--ink2)">Creador de Agro Valle Conecta · Tupungato, Valle de Uco, Mendoza</small><div style="margin-top:6px"><span class="pill">Agronomía</span><span class="pill">Programación</span><span class="pill">Valle de Uco</span></div></div><a class="btn w" href="https://wa.me/5492622314168" target="_blank" rel="noopener">Escribime por WhatsApp</a><a class="btn" href="#ingresar">Crear mi cuenta</a></div></div>`}
+const V={inicio,productos:()=>lst('p'),servicios:()=>lst('s'),buscar:()=>lst('a'),empresas,nosotros:historia,publicar,ingresar,panel,terminos,privacidad};
+function route(){const h=(location.hash||'#inicio').slice(1),m=h.match(/^d-([0-9a-f-]+)$/i),me=h.match(/^e-([0-9a-f-]+)$/i);S.post=null;let html;
+try{html=m?det(m[1]):me?editar(me[1]):(V[h]||inicio)()}catch(x){html='<p class="em">Algo salió mal. Volvé al inicio.</p>'}
+$('#app').innerHTML=html;if(S.post)S.post();hdr();scrollTo(0,0)}
+addEventListener('hashchange',route);route();
+</script>
+</body>
+</html>
