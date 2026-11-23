@@ -76,6 +76,13 @@ header{position:sticky;top:env(safe-area-inset-top,0px);z-index:50;background:va
 .box h3{font-size:17px;margin:6px 0 4px}.box p{color:var(--ink2);font-size:15px}
 .pg{padding-top:24px;padding-bottom:20px}.pg h1{font-size:30px}
 .fl{display:flex;gap:10px;flex-wrap:wrap;margin:6px 0 18px}
+.fl input[type=number]{width:140px}
+.fk{display:flex;gap:6px;align-items:center;font-size:14px;padding:0 4px}
+.fh{display:none;margin:6px 0 10px}
+.fch{display:flex;gap:8px;flex-wrap:wrap;margin:-6px 0 14px}.fch:empty{display:none}
+.fx{background:var(--sl);border:1px solid var(--line);border-radius:999px;padding:5px 12px;font:500 13.5px 'Work Sans',sans-serif;color:var(--ink);cursor:pointer}
+.fx.lm{background:none;border-color:transparent;color:var(--g2);font-weight:600}
+@media(max-width:700px){.fh{display:block}.fl{display:none;grid-template-columns:1fr 1fr;gap:8px}.fl.sh{display:grid}.fl select,.fl input[type=number]{width:100%}.fk{grid-column:1/-1}}
 select,input,textarea{font:inherit;background:var(--card);color:var(--ink);border:1px solid var(--line);border-radius:8px;padding:9px 11px;max-width:100%}
 .det{display:grid;grid-template-columns:1.1fr 1fr;gap:28px;padding:24px 0}
 @media(max-width:800px){.det{grid-template-columns:1fr}}
@@ -198,13 +205,27 @@ ${dp.length?`<section class="sec"><h2>Publicaciones destacadas</h2><p class="sub
 <section class="sec"><div class="box" style="display:flex;gap:18px;align-items:center;flex-wrap:wrap"><span class="av" style="width:56px;height:56px;font-size:24px">G</span><div style="flex:1;min-width:220px"><h2 style="font-size:21px">Una idea que nació en casa</h2><p style="color:var(--ink2)">Mi papá es comisionista en el Valle de Uco. Ver lo difícil que era cerrar una operación me llevó a crear esta plataforma.</p></div><a class="btn o" href="#nosotros">Conocé la historia</a></div></section>
 <section class="sec"><div class="box" style="text-align:center;padding:30px"><h2>¿Tenés algo para vender u ofrecer?</h2><p class="sub">Publicar es gratis en esta etapa de prueba.</p><a class="btn" href="#publicar">Publicar ahora</a></div></section></div>`}
 
+const nz=s=>String(s||'').normalize('NFD').replace(/[\u0300-\u036f]/g,'').toLowerCase();
+function fbar(){const t=S.t,cs=(t==='p'?CP:t==='s'?CS:CP.concat(CS)).map(c=>c[1]);
+return `<select aria-label="Categoría" onchange="sf('cat',this.value)"><option value="">Todas las categorías</option>${cs.map(c=>`<option${F.cat===c?' selected':''}>${c}</option>`).join('')}</select><select aria-label="Zona" onchange="sf('z',this.value)"><option value="">Toda la zona</option>${ZN.map(z=>`<option${F.z===z?' selected':''}>${z}</option>`).join('')}</select>${t!=='s'?`<select aria-label="Estado" onchange="sf('est',this.value)"><option value="">Nuevo y usado</option><option${F.est==='Nuevo'?' selected':''}>Nuevo</option><option${F.est==='Usado'?' selected':''}>Usado</option></select>`:''}<input type="number" min="0" inputmode="numeric" placeholder="Precio mín. $" aria-label="Precio mínimo" value="${F.min||''}" onchange="sf('min',+this.value)"><input type="number" min="0" inputmode="numeric" placeholder="Precio máx. $" aria-label="Precio máximo" value="${F.max||''}" onchange="sf('max',+this.value)"><select aria-label="Fecha de publicación" onchange="sf('dias',+this.value)"><option value="">Cualquier fecha</option><option value="7"${F.dias===7?' selected':''}>Últimos 7 días</option><option value="30"${F.dias===30?' selected':''}>Últimos 30 días</option></select><select aria-label="Orden" onchange="sf('o',this.value)"><option value="">Más recientes</option><option value="a"${F.o==='a'?' selected':''}>Menor precio</option><option value="d"${F.o==='d'?' selected':''}>Mayor precio</option></select><label class="fk"><input type="checkbox"${F.foto?' checked':''} onchange="sf('foto',this.checked)"> Solo con foto</label>`}
+function sf(k,v){if(v)F[k]=v;else delete F[k];rr()}
+function cf(k){delete F[k];fb()}
+function lf(){F={};fb()}
+function fb(){$('#fb').innerHTML=fbar();rr()}
+function ft(){$('#fb').classList.toggle('sh')}
+function fch(){const L=[],m=n=>'$'+n.toLocaleString('es-AR');
+if(F.cat)L.push(['cat',F.cat]);if(F.z)L.push(['z',F.z]);if(F.est)L.push(['est',F.est]);if(F.min)L.push(['min','Desde '+m(F.min)]);if(F.max)L.push(['max','Hasta '+m(F.max)]);if(F.dias)L.push(['dias','Últimos '+F.dias+' días']);if(F.foto)L.push(['foto','Con foto']);
+$('#fch').innerHTML=L.map(x=>`<button class="fx" onclick="cf('${x[0]}')">${esc(x[1])} ✕</button>`).join('')+(L.length>1?'<button class="fx lm" onclick="lf()">Limpiar filtros</button>':'');
+$('#fn').textContent=L.length?' ('+L.length+')':'';return L.length}
 function lst(t){S.t=t;F={cat:S.pc};S.pc='';if(t!=='a')S.q='';S.post=rr;
-const cs=(t==='p'?CP:t==='s'?CS:CP.concat(CS)).map(c=>c[1]);
-return `<div class="wrap pg"><h1>${t==='p'?'Productos e insumos':t==='s'?'Servicios técnicos':S.q?'Resultados para “'+esc(S.q)+'”':'Todas las publicaciones'}</h1><p class="sub" id="cnt"></p><div class="fl"><select aria-label="Categoría" onchange="F.cat=this.value;rr()"><option value="">Todas las categorías</option>${cs.map(c=>`<option${F.cat===c?' selected':''}>${c}</option>`).join('')}</select><select aria-label="Zona" onchange="F.z=this.value;rr()"><option value="">Toda la zona</option>${ZN.map(z=>`<option>${z}</option>`).join('')}</select>${t!=='s'?'<select aria-label="Estado" onchange="F.est=this.value;rr()"><option value="">Nuevo y usado</option><option>Nuevo</option><option>Usado</option></select>':''}<input type="number" min="0" placeholder="Precio máx. $" aria-label="Precio máximo" onchange="F.max=+this.value;rr()"><select aria-label="Orden" onchange="F.o=this.value;rr()"><option value="">Más recientes</option><option value="a">Menor precio</option><option value="d">Mayor precio</option></select></div><div class="grid" id="res"></div></div>`}
-function rr(){const q=S.q.toLowerCase();let L=live().filter(i=>(S.t==='a'||i.t===S.t)&&(!F.cat||i.cat===F.cat)&&(!F.z||i.zona===F.z)&&(!F.est||i.estado===F.est)&&(!F.max||!i.price||i.price<=F.max)&&(!q||(i.title+i.cat+i.seller+i.desc+i.zona).toLowerCase().includes(q)));
-if(F.o==='a')L.sort((a,b)=>a.price-b.price);if(F.o==='d')L.sort((a,b)=>b.price-a.price);
+return `<div class="wrap pg"><h1>${t==='p'?'Productos e insumos':t==='s'?'Servicios técnicos':S.q?'Resultados para “'+esc(S.q)+'”':'Todas las publicaciones'}</h1><p class="sub" id="cnt"></p><div class="fh"><button class="btn o" onclick="ft()">⚙️ Filtros<span id="fn"></span></button></div><div class="fl" id="fb">${fbar()}</div><div class="fch" id="fch"></div><div class="grid" id="res"></div></div>`}
+function rr(){const ws=nz(S.q).split(/\s+/).filter(Boolean),pf=F.min||F.max;
+let L=live().filter(i=>(S.t==='a'||i.t===S.t)&&(!F.cat||i.cat===F.cat)&&(!F.z||i.zona===F.z)&&(!F.est||i.estado===F.est)&&(!pf||i.price>0)&&(!F.min||i.price>=F.min)&&(!F.max||i.price<=F.max)&&(!F.foto||i.img)&&(!F.dias||i.f<=F.dias)&&(!ws.length||ws.every(w=>nz(i.title+' '+i.cat+' '+i.seller+' '+i.desc+' '+i.zona+' '+i.unit).includes(w))));
+const np=(a,b)=>(!a.price)-(!b.price);
+if(F.o==='a')L.sort((a,b)=>np(a,b)||a.price-b.price);if(F.o==='d')L.sort((a,b)=>np(a,b)||b.price-a.price);
+const n=fch();
 $('#cnt').textContent=L.length+(L.length===1?' resultado':' resultados');
-$('#res').innerHTML=L.length?L.map(card).join(''):'<p class="em">No encontramos publicaciones. Probá con otra palabra o quitá algún filtro.</p>'}
+$('#res').innerHTML=L.length?L.map(card).join(''):'<p class="em">No encontramos publicaciones. Probá con otra palabra o quitá algún filtro.</p>'+(n?'<p><button class="btn o" onclick="lf()">Limpiar filtros</button></p>':'')}
 
 function empresas(){return `<div class="wrap pg"><h1>Empresas y comercios</h1><p class="sub">Conocé a quienes ya forman parte de la red.</p><div class="grid">${E.map(e=>`<div class="box"><span style="font-size:36px">${e[3]}</span><h3>${e[0]}</h3><small style="color:var(--ink2)">${e[1]} · ${e[2]}</small><p style="margin:8px 0 14px">${e[4]}</p><a class="btn o" href="#buscar" onclick="S.q='${e[0]}'">Ver publicaciones</a></div>`).join('')}</div></div>`}
 
