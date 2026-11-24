@@ -21,7 +21,7 @@ jobs:
     runs-on: ubuntu-latest
     environment:
       name: github-pages
-      url: ${{ steps.deployment.outputs.page_url }}
+      url: ${{ steps.reintento.outputs.page_url || steps.deployment.outputs.page_url }}
     steps:
       - uses: actions/checkout@v6
 
@@ -32,6 +32,10 @@ jobs:
           key: caudales-sin-coincidencia-exacta
           restore-keys: |
             caudales-
+
+      - name: Instalar lector de PDF
+        continue-on-error: true
+        run: command -v pdftotext >/dev/null || (sudo apt-get update -qq && sudo apt-get install -y -qq poppler-utils)
 
       - name: Actualizar caudales de los rios
         id: caudales
@@ -67,4 +71,13 @@ jobs:
 
       - id: deployment
         if: steps.armar.outcome == 'success'
+        uses: actions/deploy-pages@v5
+        continue-on-error: true
+
+      - name: Esperar antes de reintentar la publicacion
+        if: steps.armar.outcome == 'success' && steps.deployment.outcome == 'failure'
+        run: sleep 30
+
+      - id: reintento
+        if: steps.armar.outcome == 'success' && steps.deployment.outcome == 'failure'
         uses: actions/deploy-pages@v5
