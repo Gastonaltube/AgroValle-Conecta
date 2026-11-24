@@ -83,6 +83,16 @@ header{position:sticky;top:env(safe-area-inset-top,0px);z-index:50;background:va
 .fx{background:var(--sl);border:1px solid var(--line);border-radius:999px;padding:5px 12px;font:500 13.5px 'Work Sans',sans-serif;color:var(--ink);cursor:pointer}
 .fx.lm{background:none;border-color:transparent;color:var(--g2);font-weight:600}
 @media(max-width:700px){.fh{display:block}.fl{display:none;grid-template-columns:1fr 1fr;gap:8px}.fl.sh{display:grid}.fl select,.fl input[type=number]{width:100%}.fk{grid-column:1/-1}}
+.cg{display:grid;grid-template-columns:repeat(auto-fit,minmax(250px,1fr));gap:14px;margin:6px 0 18px}
+.cn{display:flex;gap:14px;align-items:center;flex-wrap:wrap}.cn .big{font-size:54px;line-height:1}.cn .tm{font:700 38px 'Space Grotesk',sans-serif}
+.sv{background:var(--card);border:1px solid var(--line);border-left:6px solid var(--line);border-radius:12px;padding:14px 16px}
+.sv0{border-left-color:#4C9A3F}.sv1{border-left-color:#D9A21B}.sv2{border-left-color:#C8402F}
+.sv h3{font-size:16px;margin:0 0 2px}.sv .lv{font:700 20px 'Space Grotesk',sans-serif;margin:2px 0 6px}.sv small{color:var(--ink2);display:block}
+.dr{display:flex;gap:6px;margin-top:8px;flex-wrap:wrap}.dd{font-size:11px;text-align:center;color:var(--ink2);min-width:34px}
+.tw{overflow-x:auto;margin:6px 0 18px}.tw table{border-collapse:collapse;width:100%;min-width:560px;background:var(--card);border:1px solid var(--line)}
+.tw th,.tw td{padding:9px 10px;text-align:center;border-bottom:1px solid var(--line);font-size:14px;white-space:nowrap}.tw th{color:var(--ink2);font-weight:600}.tw td:first-child,.tw th:first-child{text-align:left;font-weight:600}
+.cav{font-size:13.5px;color:var(--ink2);margin-top:14px}.cav a{color:var(--g2)}
+.cal{background:rgba(200,137,43,.18);border:1px solid var(--acc);border-radius:10px;padding:10px 14px;margin:0 0 14px}
 select,input,textarea{font:inherit;background:var(--card);color:var(--ink);border:1px solid var(--line);border-radius:8px;padding:9px 11px;max-width:100%}
 .det{display:grid;grid-template-columns:1.1fr 1fr;gap:28px;padding:24px 0}
 @media(max-width:800px){.det{grid-template-columns:1fr}}
@@ -138,7 +148,7 @@ footer a{display:block;text-decoration:none;color:#CFE0C4;padding:3px 0}footer b
 <header><div class="wrap hd">
 <a class="logo" href="#inicio">🌱 Agro Valle <b>Conecta</b></a>
 <form class="sb" onsubmit="return bus(this.q.value)"><input name="q" placeholder="Buscar productos, servicios, empresas…" aria-label="Buscar"><button aria-label="Buscar">🔍</button></form>
-<nav class="nv"><a href="#productos">Productos</a><a href="#servicios">Servicios</a><a href="#empresas">Empresas</a><a href="#nosotros">Nosotros</a></nav>
+<nav class="nv"><a href="#productos">Productos</a><a href="#servicios">Servicios</a><a href="#clima">Clima</a><a href="#empresas">Empresas</a><a href="#nosotros">Nosotros</a></nav>
 <a class="btn hbtn" href="#publicar">Publicar</a>
 <a id="acc" class="ac" href="#ingresar">Ingresar</a>
 <button class="ic" onclick="tema()" aria-label="Cambiar entre modo claro y oscuro">◐</button>
@@ -146,11 +156,11 @@ footer a{display:block;text-decoration:none;color:#CFE0C4;padding:3px 0}footer b
 <main id="app"></main>
 <footer><div class="wrap">
 <div><b>Agro Valle Conecta</b><p style="margin-top:6px">El mercado del agro del Valle de Uco. Tupungato, Mendoza, Argentina.</p></div>
-<div><b>Explorar</b><a href="#productos">Productos</a><a href="#servicios">Servicios</a><a href="#empresas">Empresas</a><a href="explorar/">Todos los anuncios</a><a href="#nosotros">Nosotros</a></div>
+<div><b>Explorar</b><a href="#productos">Productos</a><a href="#servicios">Servicios</a><a href="#clima">Clima</a><a href="#empresas">Empresas</a><a href="explorar/">Todos los anuncios</a><a href="#nosotros">Nosotros</a></div>
 <div><b>Tu cuenta</b><a href="#ingresar">Ingresar</a><a href="#publicar">Publicar</a><a href="#panel">Mi panel</a></div>
 <div><b>Contacto</b><a href="https://wa.me/5492622314168" target="_blank" rel="noopener">WhatsApp</a><a href="#terminos">Términos y condiciones</a><a href="#privacidad">Política de privacidad</a></div>
 </div></footer>
-<nav class="bn"><a href="#inicio"><span>🏠</span>Inicio</a><a href="#productos"><span>🛒</span>Productos</a><a href="#publicar"><span>➕</span>Publicar</a><a href="#servicios"><span>🧑‍🔧</span>Servicios</a><a href="#panel"><span>👤</span>Mi panel</a></nav>
+<nav class="bn"><a href="#inicio"><span>🏠</span>Inicio</a><a href="#productos"><span>🛒</span>Productos</a><a href="#publicar"><span>➕</span>Publicar</a><a href="#servicios"><span>🧑‍🔧</span>Servicios</a><a href="#clima"><span>🌦️</span>Clima</a><a href="#panel"><span>👤</span>Mi panel</a></nav>
 <div id="md" class="mo"></div><div id="toast" role="status"></div>
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 <script>
@@ -483,7 +493,30 @@ function historia(){return `<div class="wrap pg"><section class="pan d" style="p
 <div class="chp r"><div><h2>Nace Agro Valle Conecta</h2><p>La idea es simple: un lugar donde cada uno publica lo que ofrece o lo que necesita, y los demás lo encuentran. Productores que venden, empresas que buscan insumos, técnicos que ofrecen su trabajo, todos en el mismo mercado.</p><p>Cada persona tiene su perfil, cada publicación tiene su contacto directo y cada búsqueda se filtra por zona, categoría y precio. Menos vueltas, más negocios.</p></div><div class="il">${SVC}</div></div>
 <div class="chp" style="grid-template-columns:1fr"><div><h2>Lo que viene</h2><p>Empezamos en el Valle de Uco porque es mi casa y conozco sus problemas. Pero la idea no termina acá: queremos llegar a otras zonas de Mendoza y del país, sumar más herramientas y que cada trato en el agro sea más simple.</p><p>Esta plataforma también es un reconocimiento a un oficio que durante años hizo posibles muchísimos negocios: el de los comisionistas, como mi papá.</p></div></div>
 <div class="box" style="display:flex;gap:18px;align-items:center;flex-wrap:wrap"><span class="av" style="width:64px;height:64px;font-size:28px">G</span><div style="flex:1;min-width:220px"><b>Gastón</b><br><small style="color:var(--ink2)">Creador de Agro Valle Conecta · Tupungato, Valle de Uco, Mendoza</small><div style="margin-top:6px"><span class="pill">Agronomía</span><span class="pill">Programación</span><span class="pill">Valle de Uco</span></div></div><a class="btn w" href="https://wa.me/5492622314168" target="_blank" rel="noopener">Escribime por WhatsApp</a><a class="btn" href="#ingresar">Crear mi cuenta</a></div></div>`}
-const V={inicio,productos:()=>lst('p'),servicios:()=>lst('s'),buscar:()=>lst('a'),empresas,nosotros:historia,publicar,ingresar,panel,terminos,privacidad};
+const ZC={'Tupungato':[-33.37,-69.15],'Tunuyán':[-33.57,-69.02],'San Carlos':[-33.77,-69.03],'Luján de Cuyo':[-33.04,-68.88],'Mendoza Capital':[-32.89,-68.83],'San Rafael':[-34.62,-68.33]},CC={};
+const WM=c=>c===0?['☀️','Despejado']:c<=2?['🌤️','Poco nublado']:c===3?['☁️','Nublado']:c<=48?['🌫️','Niebla']:c<=57?['🌦️','Llovizna']:c<=67?['🌧️','Lluvia']:c<=77?['❄️','Nieve']:c<=82?['🌧️','Chaparrones']:c<=86?['❄️','Nevada']:c===95?['⛈️','Tormenta']:['⛈️','Tormenta con granizo'];
+const SE=['🟢','🟡','🔴'],hel=m=>m<=0?[2,'Helada probable']:m<=3?[1,'Riesgo de helada']:[0,'Sin riesgo'],pul=(w,g,p,pp,tx)=>(p>=1||w>20||g>35)?[2,'No conviene']:(w>12||g>25||pp>=40||tx>=30)?[1,'Con precaución']:[0,'Buenas condiciones'];
+function clima(){if(!S.cz)S.cz=(S.user&&ZC[S.user.z])?S.user.z:'Tupungato';S.post=cl;
+return `<div class="wrap pg"><h1>🌦️ Clima para el agro</h1><p class="sub">Pronóstico, heladas, condiciones para pulverizar y agua para riego.</p><div class="fl"><select aria-label="Zona" onchange="S.cz=this.value;cl()">${ZN.map(z=>`<option${z===S.cz?' selected':''}>${z}</option>`).join('')}</select></div><div id="cw"><p class="em">Cargando pronóstico…</p></div><p class="cav"><b>Importante:</b> los semáforos son orientativos y salen de un modelo de pronóstico, no de una estación en tu finca. Antes de pulverizar o regar, tené en cuenta la etiqueta del producto y las condiciones reales del lote. Datos: <a href="https://open-meteo.com/" target="_blank" rel="noopener">Open-Meteo.com</a> (licencia CC BY 4.0). Avisos oficiales: <a href="https://www.smn.gob.ar/" target="_blank" rel="noopener">Servicio Meteorológico Nacional</a>.</p></div>`}
+async function cl(){const z=S.cz,box=$('#cw');if(!box||!ZC[z])return;const c=CC[z];
+if(c&&Date.now()-c.t<9e5){clv(c.d,z);return}
+box.innerHTML='<p class="em">Cargando pronóstico…</p>';
+try{const p=ZC[z],u='https://api.open-meteo.com/v1/forecast?latitude='+p[0]+'&longitude='+p[1]+'&timezone=America%2FArgentina%2FMendoza&forecast_days=7&current=temperature_2m,relative_humidity_2m,wind_speed_10m,wind_gusts_10m,precipitation,weather_code&hourly=soil_temperature_6cm&daily=weather_code,temperature_2m_max,temperature_2m_min,precipitation_sum,precipitation_probability_max,wind_speed_10m_max,wind_gusts_10m_max,et0_fao_evapotranspiration';
+const ac=new AbortController(),to=setTimeout(()=>ac.abort(),12000);const r=await fetch(u,{signal:ac.signal});clearTimeout(to);if(!r.ok)throw 0;const d=await r.json();if(!d.daily||!d.current)throw 0;CC[z]={t:Date.now(),d};if(S.cz===z&&$('#cw'))clv(d,z)}
+catch(x){const b=$('#cw');if(b&&S.cz===z)b.innerHTML='<p class="em">No pudimos cargar el pronóstico ahora. Revisá tu conexión y probá de nuevo.</p><p><button class="btn o" onclick="cl()">Reintentar</button></p>'}}
+function clv(d,z){const c=d.current,D=d.daily,w=WM(c.weather_code),f=(x,k)=>x==null?'–':(+x).toFixed(k||0),
+i=d.hourly&&d.hourly.time?d.hourly.time.indexOf(String(c.time).slice(0,13)+':00'):-1,st=i>=0?d.hourly.soil_temperature_6cm[i]:null,
+H=D.time.map((_,k)=>hel(D.temperature_2m_min[k])),P=D.time.map((_,k)=>pul(D.wind_speed_10m_max[k],D.wind_gusts_10m_max[k],D.precipitation_sum[k],D.precipitation_probability_max[k],D.temperature_2m_max[k])),
+sm=a=>a.reduce((t,x)=>t+(+x||0),0),et=sm(D.et0_fao_evapotranspiration),ll=sm(D.precipitation_sum),gr=D.weather_code.some(x=>x>=96),
+dia=k=>k===0?'Hoy':new Date(D.time[k]+'T12:00:00').toLocaleDateString('es-AR',{weekday:'short',day:'numeric'});
+$('#cw').innerHTML=`${gr?'<div class="cal">⛈️ <b>El pronóstico incluye tormentas con posible granizo.</b> Mirá qué día en la tabla y consultá los avisos oficiales.</div>':''}
+<div class="cg"><div class="box"><h3>Ahora en ${esc(z)}</h3><div class="cn"><span class="big">${w[0]}</span><span class="tm">${f(c.temperature_2m,1)}°C</span></div><p style="margin:6px 0 8px">${w[1]}</p><small style="color:var(--ink2);display:block">💧 Humedad ${f(c.relative_humidity_2m)}% · 💨 Viento ${f(c.wind_speed_10m)} km/h (ráfagas ${f(c.wind_gusts_10m)})</small><small style="color:var(--ink2);display:block">🌱 Suelo a 6 cm: ${f(st,1)}°C · Actualizado ${esc(String(c.time).slice(11,16))}</small></div>
+<div class="sv sv${H[0][0]}"><h3>🧊 Heladas</h3><div class="lv">${SE[H[0][0]]} ${H[0][1]}</div><small>Mínima de hoy: ${f(D.temperature_2m_min[0],1)}°C</small><div class="dr">${H.map((h,k)=>`<span class="dd" title="${esc(dia(k))}: ${h[1]}">${esc(dia(k).slice(0,3))}<br>${SE[h[0]]}</span>`).join('')}</div></div>
+<div class="sv sv${P[0][0]}"><h3>💨 Pulverización hoy</h3><div class="lv">${SE[P[0][0]]} ${P[0][1]}</div><small>Viento máx. ${f(D.wind_speed_10m_max[0])} km/h · ráfagas ${f(D.wind_gusts_10m_max[0])} km/h</small><small>Lluvia ${f(D.precipitation_sum[0],1)} mm · prob. ${f(D.precipitation_probability_max[0])}%</small><small>Máxima ${f(D.temperature_2m_max[0],1)}°C</small></div>
+<div class="sv sv0"><h3>💧 Agua para riego</h3><div class="lv">${f(D.et0_fao_evapotranspiration[0],1)} mm hoy</div><small>El cultivo de referencia pierde esa agua por evapotranspiración (ET₀).</small><small>Próximos 7 días: pierde ~${f(et)} mm · lluvia prevista ${f(ll)} mm</small><small>Para tu cultivo, multiplicá por su coeficiente (Kc).</small></div></div>
+<h2 style="font-size:20px;margin:6px 0">Próximos 7 días</h2><div class="tw"><table><thead><tr><th>Día</th><th></th><th>Mín / Máx</th><th>Lluvia</th><th>Viento máx.</th><th>Helada</th><th>Pulveriz.</th></tr></thead><tbody>${D.time.map((_,k)=>`<tr><td>${esc(dia(k))}</td><td>${WM(D.weather_code[k])[0]}</td><td>${f(D.temperature_2m_min[k])}° / ${f(D.temperature_2m_max[k])}°</td><td>${f(D.precipitation_sum[k],1)} mm (${f(D.precipitation_probability_max[k])}%)</td><td>${f(D.wind_speed_10m_max[k])} km/h</td><td>${SE[H[k][0]]}</td><td>${SE[P[k][0]]}</td></tr>`).join('')}</tbody></table></div>
+<small style="color:var(--ink2)">🟢 favorable · 🟡 con precaución · 🔴 desfavorable. Helada: mínima ≤ 3 °C = riesgo, ≤ 0 °C = probable. Pulverización: según viento, ráfagas, lluvia y calor.</small>`}
+const V={inicio,clima,productos:()=>lst('p'),servicios:()=>lst('s'),buscar:()=>lst('a'),empresas,nosotros:historia,publicar,ingresar,panel,terminos,privacidad};
 function route(){const h=(location.hash||'#inicio').slice(1),m=h.match(/^d-([0-9a-f-]+)$/i),me=h.match(/^e-([0-9a-f-]+)$/i);S.post=null;let html;
 try{html=m?det(m[1]):me?editar(me[1]):(V[h]||inicio)()}catch(x){html='<p class="em">Algo salió mal. Volvé al inicio.</p>'}
 $('#app').innerHTML=html;if(S.post)S.post();hdr();scrollTo(0,0)}
